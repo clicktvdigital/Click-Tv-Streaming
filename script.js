@@ -1345,7 +1345,7 @@ function renderCarrito() {
     contenedor.innerHTML = `<p class="carrito-vacio">Tu carrito está vacío. Explora el catálogo y agrega tus servicios favoritos. 🛍️</p>`;
   } else {
     contenedor.innerHTML = carrito.map((item) => `
-      <div class="carrito-item">
+      <div class="carrito-item" data-producto="${item.productoId}">
         <span class="carrito-item__icono">${item.icono}</span>
         <div class="carrito-item__info">
           <div class="carrito-item__title-row">

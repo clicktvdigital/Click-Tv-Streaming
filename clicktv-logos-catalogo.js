@@ -94,6 +94,52 @@
     }
     card.dataset.ctvLogoReady = '1';
   }
+  // Usar los mismos emblemas en las compras y renovaciones del carrito.
+  function decorateCartRow(row) {
+    if (row.dataset.ctvCartLogoReady === '1') return;
+    const icon = row.querySelector('.carrito-item__icono');
+    if (!icon) return;
+    const id = row.getAttribute('data-producto') || '';
+    const name = row.querySelector('.carrito-item__nombre')?.textContent?.trim() || id;
+    const info = BRANDS[id] || defined('','','#1768ae',fallbackInitials(name));
+    const short = info.short || fallbackInitials(name);
+    icon.style.setProperty('--ctv-brand-bg',info.accent);
+    icon.classList.add('ctv-brand-badge','ctv-cart-badge');
+    icon.setAttribute('aria-hidden','true');
+    icon.textContent='';
+    const fallback = () => {
+      icon.replaceChildren();
+      const text = document.createElement('span');
+      text.className='ctv-brand-fallback';
+      text.textContent=short;
+      icon.appendChild(text);
+    };
+    if (!info.slug) fallback();
+    else {
+      const img = document.createElement('img');
+      img.alt='';
+      img.decoding='async';
+      img.loading='eager';
+      let faviconAttempted=false;
+      img.addEventListener('error', () => {
+        if (!faviconAttempted && info.domain) {
+          faviconAttempted=true;
+          img.classList.add('ctv-brand-favicon');
+          img.src='https://www.google.com/s2/favicons?domain='+encodeURIComponent(info.domain)+'&sz=128';
+        } else fallback();
+      });
+      img.src='https://cdn.jsdelivr.net/npm/simple-icons@v15/icons/'+info.slug+'.svg';
+      icon.appendChild(img);
+    }
+    row.dataset.ctvCartLogoReady='1';
+  }
+  function observeCart() {
+    const container=document.getElementById('carrito-items');
+    if (!container) return;
+    const update=()=>container.querySelectorAll('.carrito-item').forEach(decorateCartRow);
+    update();
+    new MutationObserver(update).observe(container,{childList:true});
+  }
   function init() {
     const grid = document.getElementById('catalogo-grid');
     if (!grid) return;
@@ -101,6 +147,7 @@
     update();
     const observer = new MutationObserver(update);
     observer.observe(grid,{childList:true});
+    observeCart();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',init,{once:true});
   else init();

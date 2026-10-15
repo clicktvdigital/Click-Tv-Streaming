@@ -109,3 +109,11 @@ El instalador del diseño azul fue ejecutado sobre la copia local. Git muestra:
 - Los emblemas de marcas pertenecen a sus titulares y se presentan únicamente para identificar servicios; no implican patrocinio ni distribución autorizada. Revisar el derecho a comercializar cada producto.
 - Los logos externos requieren conectividad para cargarse. Las abreviaturas permanecen legibles cuando los recursos no cargan. Para independencia total se deberán obtener archivos de logo con permiso para alojarlos localmente.
 - Sin modificación de `data.js`, `catalogo.js`, `script.js`, pasarelas ni contactos. Validar visualmente carrito, logo, filtros, radio y pantallas móviles antes de aceptar pagos.
+
+## Ajuste de carrito, avisos y remanentes verdes (15/10/2026)
+
+- `clicktv-carrito-toast-azul.css`: notificaciones legibles, azul uniforme y ubicación fija incluso con carrito abierto; mejora iconos, negrillas y fondos del panel.
+- `script.js`: se añade `data-producto` al HTML visual de la fila del carrito, **sin modificar datos, totales, acciones ni pasarelas**.
+- `clicktv-logos-catalogo.js`: el mismo identificador de producto aplica el emblema del catálogo en el carrito, también tras cambios de cantidad o renovación; si falla el logo externo aparece texto de respaldo.
+- Se conserva el verde únicamente en los enlaces/botones de WhatsApp y colores propios de métodos externos. El brillo decorativo y las sombras genéricas de la tienda son azules o neutrales.
+- Verificar visualmente en teléfonos de 320-400px el aviso al agregar un producto, las filas del carrito, el total, pagos, renovaciones y canales de soporte. No confundir `git push` o tests JS con confirmación real de pagos.

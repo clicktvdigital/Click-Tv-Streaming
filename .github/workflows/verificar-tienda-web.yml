@@ -70,6 +70,16 @@ jobs:
             echo 'Persisten verdes antiguos en style.css'; exit 1
           fi
 
+      - name: Verificar iconos del carrito y notificaciones
+        run: |
+          test -s clicktv-carrito-toast-azul.css
+          grep -Fq 'clicktv-carrito-toast-azul.css' index.html
+          grep -Fq 'data-producto="${item.productoId}"' script.js
+          grep -Fq 'observeCart();' clicktv-logos-catalogo.js
+          grep -Fq '#toast-contenedor' clicktv-carrito-toast-azul.css
+          node --check clicktv-logos-catalogo.js
+          node --check script.js
+
       - name: Validar sintaxis JavaScript
         run: |
           for archivo in data.js catalogo.js script.js clicktv-accesible.js clicktv-precios-publico-2026.js clicktv-atencion-pagos.js clicktv-pago-producto.js; do
