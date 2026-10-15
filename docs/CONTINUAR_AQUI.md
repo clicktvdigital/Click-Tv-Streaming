@@ -69,3 +69,13 @@ El instalador del diseño azul fue ejecutado sobre la copia local. Git muestra:
 - Archivos nuevos: `clicktv-pago-producto.js`, `clicktv-pago-producto.css`, cuatro `clicktv-qr-*.png`. El instalador genera un respaldo de los archivos de texto cambiados en `~/.clicktv-backups/`.
 - **Estado**: aplicado localmente cuando el usuario confirme salida de Termux; todavía requiere `git commit`, `git push`, Actions y verificación en producción. No afirmar publicación antes.
 - Pendientes: comprobar escaneo QR desde móvil, monto y titular en cada pasarela, botón Pagar plan y accesibilidad TalkBack, validar tiempo real con usuario, y evaluar backend webhooks sólo con soporte oficial.
+
+## Mejoras de interfaz y carrito (15/10/2026)
+
+- Se integran seis archivos pequeños de recursos visuales y lógica: `clicktv-final-visual.css`, `clicktv-final-visual.js` y cuatro SVG ilustrativos, sin copiar contenido de terceros.
+- Se actualiza `clicktv-accesible.js`: se retira la barra visible de aumentar letra/alto contraste, conservando funciones de accesibilidad automática y selección de planes.
+- El carrito se vuelve desplazable/legible, especialmente el bloque «¿Dónde deseas enviar tu pedido o solicitar una renovación?» y las formas de pago.
+- Se respetan pagos, cuentas, precios, activación/renovación, garantías y horarios definidos previamente.
+- Aplicación en main por el instalador `APLICAR_VISUAL_MAIN.py`, sin compilar ni publicar automáticamente; respaldo local pequeño en `~/.clicktv-backups/`.
+- **Estado:** pendiente de instalar/verificar en Termux y publicar. No asumir que Vercel lo muestra hasta obtener pruebas.
+- Siguiente: comprobar en móvil y escritorio, ejecutar GitHub Actions, revisar precios/carrito y después `git push`.

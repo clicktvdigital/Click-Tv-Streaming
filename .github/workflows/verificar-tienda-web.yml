@@ -35,6 +35,19 @@ jobs:
           grep -Fq 'clicktv-pago-producto.css' index.html
           grep -Fq 'clicktv-pago-producto.js' index.html
 
+      - name: Validar diseño visual y recursos accesibles
+        run: |
+          for f in clicktv-final-visual.css clicktv-final-visual.js clicktv-ilustracion-cine.svg clicktv-ilustracion-deportes.svg clicktv-ilustracion-television.svg clicktv-ilustracion-musica.svg; do
+            test -s "$f" || { echo "Recurso visual faltante: $f"; exit 1; }
+          done
+          grep -Fq 'clicktv-final-visual.css' index.html
+          grep -Fq 'clicktv-final-visual.js' index.html
+          grep -Fq 'CLICKTV_FINAL_VISUAL_2026' index.html
+          if grep -Eq 'Agrandar letra|Alto contraste' clicktv-accesible.js; then
+            echo 'Controles de accesibilidad visibles no deseados'; exit 1
+          fi
+          node --check clicktv-final-visual.js
+
       - name: Validar sintaxis JavaScript
         run: |
           for archivo in data.js catalogo.js script.js clicktv-accesible.js clicktv-precios-publico-2026.js clicktv-atencion-pagos.js clicktv-pago-producto.js; do

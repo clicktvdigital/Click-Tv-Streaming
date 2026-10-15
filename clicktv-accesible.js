@@ -1,34 +1,14 @@
 /* CLICK TV DIGITAL - mejoras progresivas, no reemplaza la lógica del sitio */
 (() => {
   'use strict';
-  const KEY_TEXT = 'clicktv_accesibilidad_texto_2026';
-  const KEY_CONTRAST = 'clicktv_accesibilidad_contraste_2026';
-  const store = {
-    get(k) { try { return localStorage.getItem(k) === '1'; } catch(e) { return false; } },
-    set(k,v) { try { localStorage.setItem(k, v ? '1' : '0'); } catch(e) {} }
-  };
   const on = (f) => document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded',f,{once:true}) : f();
   on(() => {
-    if (document.getElementById('clicktv-access-tools')) return;
+    // Accesibilidad integrada, sin barra de ajustes visible.
     const body = document.body;
-    if (store.get(KEY_TEXT)) body.classList.add('clicktv-large-text');
-    if (store.get(KEY_CONTRAST)) body.classList.add('clicktv-high-contrast');
     const skip = document.createElement('a');
-    skip.className='clicktv-skip'; skip.href='#streaming'; skip.textContent='Saltar directamente al catálogo de productos';
+    skip.className='clicktv-skip'; skip.href='#streaming';
+    skip.textContent='Saltar directamente al catálogo de productos';
     body.prepend(skip);
-    const bar = document.createElement('div'); bar.id='clicktv-access-tools'; bar.className='clicktv-access';
-    bar.setAttribute('role','region'); bar.setAttribute('aria-label','Opciones de accesibilidad y compra');
-    bar.innerHTML='<span class="clicktv-access__label">♿ Lectura fácil:</span>' +
-       '<button type="button" id="clicktv-texto" aria-pressed="false">A+ Agrandar letra</button>' +
-       '<button type="button" id="clicktv-contraste" aria-pressed="false">◐ Alto contraste</button>' +
-       '<a href="#streaming">🛒 Ver productos y precios</a>';
-    const header=document.querySelector('header.header');
-    if(header) header.insertAdjacentElement('beforebegin',bar); else body.insertBefore(bar,body.firstChild);
-    const btnT=document.getElementById('clicktv-texto'), btnC=document.getElementById('clicktv-contraste');
-    const sync=()=>{btnT.setAttribute('aria-pressed',String(body.classList.contains('clicktv-large-text')));btnC.setAttribute('aria-pressed',String(body.classList.contains('clicktv-high-contrast')));};
-    btnT.addEventListener('click',()=>{ const t=body.classList.toggle('clicktv-large-text');store.set(KEY_TEXT,t);sync(); });
-    btnC.addEventListener('click',()=>{ const c=body.classList.toggle('clicktv-high-contrast');store.set(KEY_CONTRAST,c);sync(); });
-    sync();
     const grid=document.getElementById('catalogo-grid');
     if(grid){grid.setAttribute('aria-label','Productos y sus precios de CLICK TV STREAMING'); const section=document.getElementById('streaming'); if(section) section.setAttribute('tabindex','-1');}
     const master=document.getElementById('buscador-maestro');

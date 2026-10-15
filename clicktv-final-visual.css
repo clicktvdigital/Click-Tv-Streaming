@@ -1,0 +1,58 @@
+/* CLICK TV STREAMING • acabado visual 2026: sin dependencias, mejora progresiva. */
+:root { --ctv-ice:#c4efff; --ctv-glow:#38baff; --ctv-deep:#06142b; }
+.ctv-discovery { position:relative; padding:clamp(2.1rem,4.6vw,4.2rem) 0; background:linear-gradient(180deg,rgba(6,20,42,.99),rgba(10,35,72,.96)); color:#f7fcff; }
+.ctv-discovery__head { max-width:58rem; margin:0 0 1.5rem; }
+.ctv-discovery__kicker { display:block; color:#8cdaff; font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:.82rem; margin-bottom:.55rem; }
+.ctv-discovery h2 { margin:0 0 .55rem; color:#fff; font-size:clamp(1.55rem,3.2vw,2.5rem); line-height:1.16; }
+.ctv-discovery__head p { color:#e7f4ff; margin:0; font-size:clamp(1rem,2vw,1.12rem); }
+.ctv-discovery__grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(.7rem,1.4vw,1.2rem); }
+.ctv-discovery__card { display:flex; flex-direction:column; gap:.75rem; min-width:0; text-decoration:none; background:linear-gradient(150deg,#102e59,#071b35); color:#fff; border:1.5px solid #397fb9; border-radius:20px; padding:clamp(.8rem,1.6vw,1.3rem); box-shadow:0 12px 25px rgba(0,4,17,.28); transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease; }
+.ctv-discovery__card:hover { transform:translateY(-4px); border-color:#7edaff; box-shadow:0 18px 32px rgba(5,103,215,.27); }
+.ctv-discovery__card:focus-visible { outline:3px solid #ffdc69; outline-offset:4px; }
+.ctv-discovery__visual { display:block; min-height:118px; width:100%; aspect-ratio:8/5; object-fit:cover; border-radius:13px; background:#0b2b59; }
+.ctv-discovery__card strong { display:block; color:#fff; font-size:clamp(1.07rem,1.6vw,1.25rem); line-height:1.2; }
+.ctv-discovery__card span { display:block; color:#e0efff; font-size:.97rem; line-height:1.4; }
+.ctv-discovery__link { margin-top:auto; font-size:.98rem; font-weight:800; color:#a7e6ff; }
+/* Portada: mismos elementos funcionales, jerarquía más clara y transiciones discretas */
+.hero { overflow:hidden; }
+.hero__content h1 { font-size:clamp(2rem,4.6vw,4.6rem); line-height:1.08; letter-spacing:-.025em; text-wrap:balance; color:#fff; }
+.hero__content > p { max-width:52ch; font-size:clamp(1.04rem,2vw,1.2rem); color:#ebf6ff; }
+.hero__actions { display:flex; flex-wrap:wrap; gap:.7rem; }
+.hero__actions .btn { min-width:min(100%,190px); }
+.hero__panel { box-shadow:0 24px 60px rgba(0,0,0,.32); }
+.hero__panel, .product-card, .clicktv-journey__card { transition:transform .23s ease,box-shadow .23s ease,border-color .23s ease; }
+.product-card:hover, .clicktv-journey__card:hover { transform:translateY(-2px); border-color:#68b9fc !important; }
+/* El carrito debe ser legible y desplazable, incluso en móviles pequeños. */
+#panel-carrito { box-sizing:border-box; max-height:100dvh; max-height:100svh; overflow-y:auto; overflow-x:hidden; overscroll-behavior:contain; scrollbar-gutter:stable; padding-bottom:max(2rem,env(safe-area-inset-bottom)); color:#f7fbff; }
+#panel-carrito :is(.cart-payment,.cart-contact-options,.cart-actions,.cart-payment__head,.cart-payment__methods,.cart-payment__detail,.cart-summary) { min-width:0; max-width:100%; box-sizing:border-box; }
+#panel-carrito .cart-contact-options { display:block !important; visibility:visible !important; overflow:visible !important; background:#0e2a4d !important; color:#fff !important; padding:1rem !important; border:2px solid #5ab9fc !important; border-radius:16px; margin-block:1.1rem; }
+#panel-carrito .cart-contact-options :is(strong,p,small),#panel-carrito .cart-payment :is(h3,p,span,small),#panel-carrito .cart-summary p { color:#f3f9ff !important; opacity:1 !important; visibility:visible !important; }
+#panel-carrito .cart-contact-options > strong { display:block; font-size:1.2rem; line-height:1.35; margin-bottom:.6rem; }
+#panel-carrito .cart-contact-options__buttons { display:grid !important; grid-template-columns:1fr; gap:.65rem; width:100%; margin-top:.8rem; }
+#panel-carrito .cart-contact-options__buttons button,#panel-carrito .cart-actions :is(button,a) { white-space:normal; overflow-wrap:anywhere; word-break:normal; line-height:1.4; min-height:54px; text-align:center; padding:.75rem .85rem; }
+#panel-carrito .cart-payment { background:#0a2445 !important; border:1.5px solid #5d9bd7; border-radius:16px; padding:clamp(.7rem,2.4vw,1.15rem); margin-block:.85rem; }
+#panel-carrito .cart-payment__head { display:flex; align-items:flex-start; gap:.7rem; }
+#panel-carrito .cart-payment__head h3 { font-size:1.22rem; line-height:1.3; margin:0 0 .45rem; }
+#panel-carrito .cart-payment__methods { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.55rem; }
+#panel-carrito .cart-payment__methods .btn-pago { white-space:normal; padding:.7rem .5rem; overflow-wrap:anywhere; line-height:1.3; color:#fff; background:#15385f; border:1px solid #71b4ed; border-radius:12px; }
+#panel-carrito .cart-payment__methods .btn-pago.activo { background:#075bbb; color:#fff; border-color:#a0d9ff; }
+#panel-carrito :is(h2,h3,label,strong,legend) { overflow-wrap:break-word; }
+#panel-carrito :is(.cart-contact-options,.cart-payment,.cart-summary) :is(p,small) { line-height:1.5; }
+#panel-carrito .cart-actions { display:grid; grid-template-columns:1fr; gap:.55rem; }
+/* Nada de herramientas flotantes que tapen el catálogo. Accesibilidad permanece en diseño base. */
+#clicktv-access-tools { display:none !important; }
+/* Tablets y teléfonos */
+@media (max-width:1000px) { .ctv-discovery__grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:560px) {
+ .ctv-discovery__grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:.65rem; }
+ .ctv-discovery__card { border-radius:15px; padding:.68rem; }
+ .ctv-discovery__visual { min-height:80px; }
+ .ctv-discovery__card strong { font-size:1rem; }
+ .ctv-discovery__card span { font-size:.87rem; }
+ .ctv-discovery__link { font-size:.9rem; }
+ .hero__actions { display:grid; grid-template-columns:1fr; }
+ .hero__actions .btn { width:100%; }
+ #panel-carrito { width:min(100vw,440px); max-width:100vw; padding-inline:clamp(.6rem,2vw,1rem); }
+ #panel-carrito .cart-payment__methods { grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion:reduce) { .ctv-discovery__card,.hero__panel,.product-card,.clicktv-journey__card { transition:none !important; transform:none !important; } }

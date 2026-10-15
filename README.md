@@ -32,7 +32,7 @@ La tienda se diseña para personas mayores y personas con discapacidad. Dar prio
 1. En teléfono y escritorio, abrir la tienda, navegar por categorías y localizar productos.
 2. Comprobar las opciones de precio, duración y dispositivos sin ambigüedad.
 3. Agregar un producto al carrito y revisar el total; probar el botón de WhatsApp sin finalizar una compra real.
-4. Probar aumento de texto, navegación con teclado y TalkBack.
+4. Probar navegación con teclado y TalkBack; los botones visibles de agrandar texto y alto contraste se retiraron a petición del negocio.
 5. Compartir la URL en WhatsApp y verificar la miniatura tras el despliegue.
 6. Confirmar que pagos, radio y enlaces previos sigan funcionando.
 
@@ -68,3 +68,12 @@ La tienda se diseña para personas mayores y personas con discapacidad. Dar prio
 - Confirmación: solo por soporte/administración después de verificar el abono. La tienda no recibe claves, datos de tarjeta ni OTP.
 - Sin backend ni webhooks: **no existe confirmación automática de pagos**. Para automatizar: crear pedidos del lado del servidor, notificaciones seguras y validación en proveedor autorizado, con secretos en variables de entorno de Vercel.
 - Trabajo en `main`, sin reinstalar dependencias ni compilar en Android. GitHub Actions valida sintaxis y presencia de archivos.
+
+## Mejoras de interfaz y carrito (15/10/2026)
+
+- `clicktv-final-visual.css/js` añade una vitrina ilustrada original (sin copiar imágenes de la competencia), categorías visuales y microtransiciones ligeras para teléfono, tablet y ordenador.
+- Ilustraciones SVG propias de cine, deportes, televisión y música; se sirven desde GitHub/Vercel y se cargan de forma diferida.
+- El carrito tiene etiquetas y bloques de contacto con contraste legible, espacio disponible y desplazamiento táctil correcto. No se alteraron cuentas, precios, pasarelas, comprobantes, radio ni pedidos.
+- Se eliminaron de la interfaz los botones «Agrandar letra» y «Alto contraste». Permanecen texto base claro, botones táctiles amplios, foco por teclado, enlace para saltar al catálogo y movimiento reducido cuando lo solicita el sistema.
+- Las afirmaciones de activación inmediata/soporte 24/7 se sustituyen por información condicional y horarios reales.
+- Mantener el repositorio en `main` y validar en GitHub Actions; no realizar compilaciones de Android.
