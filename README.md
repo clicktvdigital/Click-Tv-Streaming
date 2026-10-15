@@ -81,3 +81,13 @@ La tienda se diseña para personas mayores y personas con discapacidad. Dar prio
 - Se eliminaron de la interfaz los botones «Agrandar letra» y «Alto contraste». Permanecen texto base claro, botones táctiles amplios, foco por teclado, enlace para saltar al catálogo y movimiento reducido cuando lo solicita el sistema.
 - Las afirmaciones de activación inmediata/soporte 24/7 se sustituyen por información condicional y horarios reales.
 - Mantener el repositorio en `main` y validar en GitHub Actions; no realizar compilaciones de Android.
+
+## Renovación visual cinematográfica (15/10/2026)
+
+- `clicktv-cinematico.css` moderniza la portada, tarjetas y paleta azul. Respeta los colores identificables de WhatsApp y otros métodos.
+- Imágenes originales optimizadas WebP: `clicktv-foto-{cine,deportes,television,musica}.webp`; no dependen de terceros ni copian la web de referencia.
+- El bloque de radio, accesos y Teleamazonas se ubica debajo de las categorías; **sus ID, enlaces, funciones y contenido no se alteran**.
+- Las cuatro tarjetas conservan `data-ctv-category` y enlazan al filtro real del catálogo.
+- No se cambian `data.js`, `catalogo.js`, `script.js`, precios, cuentas, carrito, QR ni configuraciones de pago.
+- No se muestran afirmaciones de clientes conectados o compras simuladas en la portada. No afirmar activación instantánea.
+- Aún requiere inspección manual de celular y escritorio, pruebas de radio/catálogo/carrito, CI y despliegue antes de considerarse verificado.

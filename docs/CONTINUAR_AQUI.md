@@ -90,3 +90,13 @@ El instalador del diseño azul fue ejecutado sobre la copia local. Git muestra:
 - Aplicación en main por el instalador `APLICAR_VISUAL_MAIN.py`, sin compilar ni publicar automáticamente; respaldo local pequeño en `~/.clicktv-backups/`.
 - **Estado:** pendiente de instalar/verificar en Termux y publicar. No asumir que Vercel lo muestra hasta obtener pruebas.
 - Siguiente: comprobar en móvil y escritorio, ejecutar GitHub Actions, revisar precios/carrito y después `git push`.
+
+## Renovación visual cinematográfica (15/10/2026)
+
+- `clicktv-cinematico.css` moderniza la portada, tarjetas y paleta azul. Respeta los colores identificables de WhatsApp y otros métodos.
+- Imágenes originales optimizadas WebP: `clicktv-foto-{cine,deportes,television,musica}.webp`; no dependen de terceros ni copian la web de referencia.
+- El bloque de radio, accesos y Teleamazonas se ubica debajo de las categorías; **sus ID, enlaces, funciones y contenido no se alteran**.
+- Las cuatro tarjetas conservan `data-ctv-category` y enlazan al filtro real del catálogo.
+- No se cambian `data.js`, `catalogo.js`, `script.js`, precios, cuentas, carrito, QR ni configuraciones de pago.
+- No se muestran afirmaciones de clientes conectados o compras simuladas en la portada. No afirmar activación instantánea.
+- Aún requiere inspección manual de celular y escritorio, pruebas de radio/catálogo/carrito, CI y despliegue antes de considerarse verificado.

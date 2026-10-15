@@ -48,6 +48,16 @@ jobs:
           fi
           node --check clicktv-final-visual.js
 
+      - name: Verificar vitrina cinematográfica
+        run: |
+          for f in clicktv-cinematico.css clicktv-foto-cine.webp clicktv-foto-deportes.webp clicktv-foto-television.webp clicktv-foto-musica.webp; do
+            test -s "$f" || { echo "Falta recurso cinematográfico: $f"; exit 1; }
+          done
+          grep -Fq 'CLICKTV_CINEMATICO_2026' index.html
+          grep -Fq 'clicktv-cinematico.css' index.html
+          grep -Fq 'clicktv-foto-cine.webp' index.html
+          grep -Fq 'clicktv-foto-musica.webp' index.html
+
       - name: Validar sintaxis JavaScript
         run: |
           for archivo in data.js catalogo.js script.js clicktv-accesible.js clicktv-precios-publico-2026.js clicktv-atencion-pagos.js clicktv-pago-producto.js; do

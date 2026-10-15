@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <script>document.documentElement.classList.add("js");</script>
   <title>CLICK TV STREAMING | Streaming, IPTV y renovaciones en Ecuador</title>
-  <meta name="description" content="Click TV Streaming: IPTV, deportes en vivo, Netflix, Disney+, DAZN, música y aplicaciones premium con activación inmediata y soporte directo.">
+  <meta name="description" content="Click TV Streaming: IPTV, deportes en vivo, Netflix, Disney+, DAZN, música y aplicaciones premium con activación tras verificar el pago y atención directa.">
   <meta name="keywords" content="Click TV Streaming, películas, series, canales en vivo, IPTV, streaming premium, Disney Plus, Netflix, DAZN, Ecuador">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="theme-color" content="#050806">
@@ -18,7 +18,7 @@
   <meta itemprop="image" content="https://click-tv-streaming.vercel.app/click-tv-miniatura-whatsapp-2026.jpg?v=20261015-4">
 
   <meta property="og:title" content="Click TV Streaming | IPTV, deportes y streaming premium">
-  <meta property="og:description" content="Películas, series y canales de América Latina, Estados Unidos y Europa por suscripción. Activación inmediata y atención por WhatsApp.">
+  <meta property="og:description" content="Películas, series y canales de América Latina, Estados Unidos y Europa por suscripción. Activación después de validar el pago y atención por WhatsApp.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Click TV Streaming">
   <meta property="og:locale" content="es_EC">
@@ -33,7 +33,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Click TV Streaming">
-  <meta name="twitter:description" content="Películas, series y televisión en vivo por suscripción. Activación inmediata y soporte directo.">
+  <meta name="twitter:description" content="Películas, series y televisión en vivo por suscripción. Activación tras validar el pago y soporte en horarios establecidos.">
   <meta name="twitter:image" content="https://click-tv-streaming.vercel.app/click-tv-miniatura-whatsapp-2026.jpg?v=20261015-4">
   <meta name="twitter:image:src" content="https://click-tv-streaming.vercel.app/click-tv-miniatura-whatsapp-2026.jpg?v=20261015-4">
   <meta name="twitter:image:alt" content="Click TV Streaming: películas, series y canales en vivo. WhatsApp 0990056986.">
@@ -64,6 +64,8 @@
   <link rel="stylesheet" href="clicktv-atencion-pagos.css?v=20261015-2">
   <link rel="stylesheet" href="clicktv-pago-producto.css?v=20261015-1">
   <link rel="stylesheet" href="clicktv-final-visual.css?v=20261015-3">
+  <link rel="preload" href="clicktv-foto-cine.webp" as="image" type="image/webp">
+  <link rel="stylesheet" href="clicktv-cinematico.css?v=20261015-4">
 </head>
 <body>
   <div class="site-bg" aria-hidden="true">
@@ -133,7 +135,7 @@
           <option value="NIO">NIO</option>
         </select>
       </label>
-      <span>👥 <strong id="usuarios-conectados">48</strong> conectados</span>
+      <span hidden>👥 <strong id="usuarios-conectados">48</strong> conectados</span>
     </div>
 
     <nav class="navbar container">
@@ -180,8 +182,11 @@
       <div class="container hero__grid">
         <div class="hero__content reveal">
           <span class="eyebrow">💙 Activación tras verificar el pago · Horarios de atención claros</span>
-          <h1>Películas, series y televisión en un solo lugar</h1>
-          <p>Disfruta tus plataformas favoritas, deportes, TV en vivo y servicios digitales con atención directa por WhatsApp, Signal y Telegram.</p>
+          <h1>Todo tu <em>entretenimiento</em> en un solo lugar</h1>
+          <p>Películas, series, deportes, TV en vivo, música y servicios digitales. Explora nuestro catálogo y elige el plan que necesitas.</p>
+          <div class="ctvc-benefits" aria-label="Ventajas de la tienda">
+            <span>✓ Precios visibles</span><span>✓ Pagos por producto</span><span>✓ Soporte en horarios establecidos</span>
+          </div>
           <div class="master-search" role="search">
             <span aria-hidden="true">🔎</span>
             <input id="buscador-maestro" type="search" placeholder="Buscar Netflix, IPTV, DAZN, recargas, aumento de gigas..." autocomplete="off">
@@ -192,9 +197,45 @@
             <a class="btn btn--outline" href="#streaming">🎬 Ver catálogo</a>
             <a id="link-catalogo-oficial" class="btn btn--ghost" href="#clicktv-atencion">🔁 Renovar o pedir ayuda</a>
           </div>
-          <div class="activity-pill" id="actividad-reciente" role="status" aria-live="polite"><span class="activity-live"><i></i>LIVE</span><span>Cliente de Quito - Ecuador activó IPTV Premium</span></div>
+          <div class="activity-pill" hidden id="actividad-reciente" role="status" aria-live="polite"><span class="activity-live"><i></i>LIVE</span><span>Cliente de Quito - Ecuador activó IPTV Premium</span></div>
         </div>
 
+
+      </div>
+    </section>
+
+    <!-- CLICKTV_FINAL_VISUAL_2026 -->
+    <section id="clicktv-explora" class="ctv-discovery" aria-labelledby="ctv-explora-titulo">
+      <div class="container">
+        <div class="ctv-discovery__head">
+          <span class="ctv-discovery__kicker">Tu mundo sin límites · CLICK TV STREAMING</span>
+          <h2 id="ctv-explora-titulo">Encuentra lo que buscas en segundos</h2>
+          <p>Elige una categoría, compara sus planes y decide cómo pagar. Atención humana para activar o renovar tu servicio.</p>
+        </div>
+        <div class="ctv-discovery__grid">
+          <a class="ctv-discovery__card" href="#streaming" data-ctv-category="streaming">
+            <img class="ctv-discovery__visual" src="clicktv-foto-cine.webp" alt="Pantalla cinematográfica en una sala acogedora" width="408" height="255" loading="lazy" decoding="async">
+            <strong>Películas y series</strong><span>Plataformas y cuentas de entretenimiento</span><span class="ctv-discovery__link">Ver streaming →</span>
+          </a>
+          <a class="ctv-discovery__card" href="#streaming" data-ctv-category="deportes">
+            <img class="ctv-discovery__visual" src="clicktv-foto-deportes.webp" alt="Partido de fútbol iluminado en un estadio" width="408" height="255" loading="lazy" decoding="async">
+            <strong>Deportes en vivo</strong><span>Planes para seguir tus eventos favoritos</span><span class="ctv-discovery__link">Ver deportes →</span>
+          </a>
+          <a class="ctv-discovery__card" href="#streaming" data-ctv-category="iptv">
+            <img class="ctv-discovery__visual" src="clicktv-foto-television.webp" alt="Persona seleccionando canales en un televisor" width="408" height="255" loading="lazy" decoding="async">
+            <strong>TV en vivo</strong><span>Opciones para televisores y otros dispositivos</span><span class="ctv-discovery__link">Ver IPTV →</span>
+          </a>
+          <a class="ctv-discovery__card" href="#streaming" data-ctv-category="musica">
+            <img class="ctv-discovery__visual" src="clicktv-foto-musica.webp" alt="Auriculares y teléfono con reproductor de música" width="408" height="255" loading="lazy" decoding="async">
+            <strong>Música</strong><span>Escucha tus canciones y listas preferidas</span><span class="ctv-discovery__link">Ver música →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+    <!-- CLICKTV_CINEMATICO_2026 -->
+    <section class="ctvc-utilities" aria-labelledby="ctvc-servicios-titulo">
+      <div class="container">
+        <h2 id="ctvc-servicios-titulo" class="ctvc-utilities__heading">Atención, radio y televisión desde un solo lugar</h2>
         <div class="hero__panel glass-card reveal">
           <h2>📺 Acceso rápido</h2>
           <p>Atención directa: <strong>Ventas 0939166222 · Soporte y respaldo 0990056986 🇪🇨</strong></p>
@@ -293,34 +334,6 @@
       </div>
     </section>
 
-    <!-- CLICKTV_FINAL_VISUAL_2026 -->
-    <section id="clicktv-explora" class="ctv-discovery" aria-labelledby="ctv-explora-titulo">
-      <div class="container">
-        <div class="ctv-discovery__head">
-          <span class="ctv-discovery__kicker">Tu mundo sin límites · CLICK TV STREAMING</span>
-          <h2 id="ctv-explora-titulo">Encuentra lo que buscas en segundos</h2>
-          <p>Elige una categoría, compara sus planes y decide cómo pagar. Atención humana para activar o renovar tu servicio.</p>
-        </div>
-        <div class="ctv-discovery__grid">
-          <a class="ctv-discovery__card" href="#streaming" data-ctv-category="streaming">
-            <img class="ctv-discovery__visual" src="clicktv-ilustracion-cine.svg" alt="Pantalla de películas y series" width="408" height="255" loading="lazy" decoding="async">
-            <strong>Películas y series</strong><span>Plataformas y cuentas de entretenimiento</span><span class="ctv-discovery__link">Ver streaming →</span>
-          </a>
-          <a class="ctv-discovery__card" href="#streaming" data-ctv-category="deportes">
-            <img class="ctv-discovery__visual" src="clicktv-ilustracion-deportes.svg" alt="Balón deportivo ilustrado" width="408" height="255" loading="lazy" decoding="async">
-            <strong>Deportes en vivo</strong><span>Planes para seguir tus eventos favoritos</span><span class="ctv-discovery__link">Ver deportes →</span>
-          </a>
-          <a class="ctv-discovery__card" href="#streaming" data-ctv-category="iptv">
-            <img class="ctv-discovery__visual" src="clicktv-ilustracion-television.svg" alt="Televisor ilustrado" width="408" height="255" loading="lazy" decoding="async">
-            <strong>TV en vivo</strong><span>Opciones para televisores y otros dispositivos</span><span class="ctv-discovery__link">Ver IPTV →</span>
-          </a>
-          <a class="ctv-discovery__card" href="#streaming" data-ctv-category="musica">
-            <img class="ctv-discovery__visual" src="clicktv-ilustracion-musica.svg" alt="Notas musicales ilustradas" width="408" height="255" loading="lazy" decoding="async">
-            <strong>Música</strong><span>Escucha tus canciones y listas preferidas</span><span class="ctv-discovery__link">Ver música →</span>
-          </a>
-        </div>
-      </div>
-    </section>
 
 
     <section id="como-comprar" class="section section--compact">
