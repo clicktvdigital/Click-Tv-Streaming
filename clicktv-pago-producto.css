@@ -1,0 +1,39 @@
+/* CLICK TV STREAMING – flujo de pago por plan, accesible, responsive y en azul de la marca. */
+.ctv-pg-pay-button { display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:.7rem 1rem;background:#106cf0;color:#fff;border:2px solid #8dd9ff;border-radius:13px;font-size:1rem;font-weight:800;cursor:pointer;white-space:normal;text-align:center;line-height:1.3;}
+.ctv-pg-pay-button:hover {background:#0b56be;}
+.ctv-pg-pay-button:focus-visible,.ctv-pg-dialog a:focus-visible,.ctv-pg-dialog button:focus-visible,.ctv-pg-dialog input:focus-visible {outline:4px solid #ffe58c;outline-offset:4px;}
+.ctv-pg-dialog {width:min(94vw,780px);max-width:780px;max-height:90vh;margin:auto;padding:clamp(1rem,3vw,1.65rem);overflow:auto;border:3px solid #59aeff;border-radius:18px;background:#071b35;color:#f5faff;box-shadow:0 30px 100px #000c;font-size:1.05rem;line-height:1.55;}
+.ctv-pg-dialog::backdrop {background:rgba(0,0,0,.84);}
+.ctv-pg-dialog h2 {font-size:clamp(1.45rem,4vw,2.1rem);color:#fff;margin:.3rem 0 1rem;}
+.ctv-pg-dialog h3 {font-size:1.18rem;color:#fff;margin:.7rem 0;}
+.ctv-pg-dialog p {margin:.7rem 0;color:#e7f3ff;}
+.ctv-pg-dialog fieldset {border:1px solid #4b91dc;border-radius:14px;margin:.9rem 0;padding:.8rem;background:#0c294f;}
+.ctv-pg-dialog legend {padding:0 .4rem;font-size:1.15rem;font-weight:900;color:#fff;}
+.ctv-pg-close-form {display:flex;justify-content:flex-end;margin:0 0 .4rem;}
+.ctv-pg-close {min-height:48px;padding:.55rem .85rem;border-radius:9px;border:1px solid #a5d8ff;background:#102b52;color:#fff;cursor:pointer;font-size:1rem;}
+.ctv-pg-operaciones {display:flex;flex-wrap:wrap;gap:.8rem;}
+.ctv-pg-operaciones legend {width:100%;}
+.ctv-pg-operaciones label {display:flex;align-items:center;gap:.6rem;flex:1 1 230px;min-height:52px;padding:.5rem .8rem;border:1px solid #5aa5e7;border-radius:10px;cursor:pointer;color:#fff;font-weight:750;}
+.ctv-pg-dialog input[type=radio] {accent-color:#7dc4ff;width:1.5rem;height:1.5rem;flex-shrink:0;}
+.ctv-pg-metodos {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;}
+.ctv-pg-metodos legend {grid-column:1/-1;}
+.ctv-pg-option {min-height:76px;display:flex;align-items:center;gap:.6rem;padding:.65rem;border:1px solid #5aa5e7;border-radius:11px;cursor:pointer;background:#071d39;color:#fff;}
+.ctv-pg-option span {display:flex;flex-direction:column;line-height:1.35;}
+.ctv-pg-option small {color:#e6efff;font-size:.85rem;margin-top:.25rem;}
+.ctv-pg-metodo-contenido,.ctv-pg-comprobante {border:2px solid #4a9ded;border-radius:14px;padding:1rem;margin-top:1rem;background:#0a274b;}
+.ctv-pg-order {font-size:1.15rem;font-weight:800;overflow-wrap:anywhere;}
+#ctv-pg-ref {font-family:ui-monospace,monospace;font-size:.96rem;overflow-wrap:anywhere;}
+.ctv-pg-qr {display:block;width:min(100%,270px);height:auto;aspect-ratio:1;object-fit:contain;background:#fff;border:10px solid #fff;border-radius:9px;margin:1.1rem auto;image-rendering:auto;}
+.ctv-pg-numero {font-size:clamp(1.2rem,3vw,1.5rem);letter-spacing:.05em;overflow-wrap:anywhere;background:#041224;padding:.8rem;border-radius:9px;border:1px solid #8fc8ff;}
+.ctv-pg-btn {display:inline-flex;align-items:center;justify-content:center;min-height:54px;background:#163964;color:#fff;border:2px solid #74baf9;border-radius:12px;font-size:1rem;font-weight:850;padding:.65rem 1rem;text-decoration:none;white-space:normal;cursor:pointer;text-align:center;line-height:1.3;margin:.35rem .3rem .35rem 0;}
+.ctv-pg-primary {background:#126ee7;border-color:#9ddaff;color:#fff;}
+.ctv-pg-btn:hover {background:#1c4d8c;}
+.ctv-pg-note {font-size:.94rem;}
+.ctv-pg-actions {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem;}
+.ctv-pg-actions .ctv-pg-btn {margin:0;}
+#ctv-pg-copiar-manual {width:100%;font-size:1rem;margin-top:.6rem;padding:.65rem;background:#fff;color:#111;}
+.ctv-pg-horario {padding:.8rem;border-left:5px solid #78c6ff;background:#0e315b;}
+.ctv-pg-status {color:#fff;min-height:1rem;font-weight:700;}
+body.ctv-pg-open {overflow:hidden;}
+@media(max-width:680px){.ctv-pg-metodos,.ctv-pg-actions {grid-template-columns:1fr;}.ctv-pg-dialog{width:98vw;max-height:95dvh;padding:.95rem;}.ctv-pg-option{min-height:62px;}.ctv-pg-dialog fieldset{padding:.6rem;}}
+@media(prefers-reduced-motion:reduce){.ctv-pg-dialog *, .ctv-pg-pay-button{transition:none!important;scroll-behavior:auto!important;}}

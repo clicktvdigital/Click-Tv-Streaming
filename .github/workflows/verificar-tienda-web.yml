@@ -1,0 +1,55 @@
+name: Verificar tienda CLICK TV STREAMING
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  revisar-sitio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Obtener repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js para validacion
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Revisar archivos principales
+        run: |
+          for archivo in index.html data.js catalogo.js script.js style.css responsive.css clicktv-accesible-azul.css clicktv-atencion-pagos.css click-tv-logo-horizontal-2026.jpg click-tv-miniatura-whatsapp-2026.jpg clicktv-icono.png; do
+            test -s "$archivo" || { echo "Falta o esta vacio: $archivo"; exit 1; }
+          done
+
+      - name: Confirmar QR y estilos de cobro
+        run: |
+          for f in clicktv-pago-producto.css clicktv-qr-binance.png clicktv-qr-deuna-pichincha.png clicktv-qr-deuna.png clicktv-qr-payphone.png; do
+            test -s "$f" || { echo "Falta archivo de pagos $f"; exit 1; }
+          done
+          grep -Fq 'clicktv-pago-producto.css' index.html
+          grep -Fq 'clicktv-pago-producto.js' index.html
+
+      - name: Validar sintaxis JavaScript
+        run: |
+          for archivo in data.js catalogo.js script.js clicktv-accesible.js clicktv-precios-publico-2026.js clicktv-atencion-pagos.js clicktv-pago-producto.js; do
+            test -s "$archivo" || { echo "Falta: $archivo"; exit 1; }
+            node --check "$archivo"
+          done
+
+      - name: Confirmar recursos conectados a la web
+        run: |
+          grep -Fq 'clicktv-accesible-azul.css' index.html
+          grep -Fq 'clicktv-accesible.js' index.html
+          grep -Fq 'clicktv-precios-publico-2026.js' index.html
+          grep -Fq 'click-tv-logo-horizontal-2026.jpg' index.html
+          grep -Fq 'click-tv-miniatura-whatsapp-2026.jpg' index.html
+          grep -Fq "clicktv-atencion-pagos.js" index.html
+          grep -Fq "clicktv-atencion-pagos.css" index.html
+          grep -Fq "ctv-atencion-titulo" index.html
+          echo "Referencias a estilos, accesibilidad, precios, pagos y logos: OK"

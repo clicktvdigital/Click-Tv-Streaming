@@ -1,0 +1,36 @@
+/* CLICK TV STREAMING: compras nuevas, renovación, garantías y pagos accesibles */
+#clicktv-atencion, #clicktv-pagos-faciles { scroll-margin-top: 6rem; }
+.clicktv-journey__head { max-width: 800px; margin-bottom: 1.5rem; }
+.clicktv-journey__head h2 { color: #fff; font-size: clamp(1.5rem, 3.4vw, 2.25rem); }
+.clicktv-journey__head p { color: #e0ecff; }
+.clicktv-journey__grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; }
+.clicktv-journey__card, .clicktv-terms, .clicktv-payment-guide, .clicktv-bank { color: #f7fbff; background: #0b274a; border: 2px solid #4a9ded; border-radius: 18px; padding: clamp(1rem,2.5vw,1.45rem); }
+.clicktv-journey__card h3, .clicktv-bank h3 { color: #fff; margin: 0 0 .65rem; font-size: 1.2rem; }
+.clicktv-journey__card p, .clicktv-terms p, .clicktv-bank p { color: #e5f2ff; margin: .4rem 0 .8rem; }
+.clicktv-journey__card .btn { width: 100%; display: inline-flex; align-items: center; justify-content: center; text-align: center; min-height: 54px; white-space: normal; }
+.clicktv-journey__step { font-size: 1.4rem; margin-bottom: .6rem; }
+.clicktv-journey__card label { display: block; font-weight: 700; margin: .5rem 0; }
+.clicktv-journey__card input { width: 100%; min-height: 52px; font-size: 1rem; padding: .65rem; }
+.clicktv-journey__hint { font-size: .92rem; color: #e8f2ff; }
+.clicktv-terms { margin-top: 1rem; }
+.clicktv-terms__grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem; }
+.clicktv-terms h3 { color: #fff; font-size: 1.16rem; margin: .25rem 0 .5rem; }
+.clicktv-terms ul { margin: .4rem 0; padding-left: 1.45rem; }
+.clicktv-terms li { margin: .4rem 0; }
+.clicktv-terms details { background: #071a33; border:1px solid #5aa5e7; border-radius:12px; padding:.9rem; margin-top:.9rem; }
+.clicktv-terms summary { min-height:48px; cursor:pointer; font-weight:800; padding:.4rem; }
+.clicktv-payment-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem; }
+.clicktv-bank__name { font-weight: 800; display: block; font-size: 1.15rem; margin-bottom:.5rem; }
+.clicktv-bank__number { padding:.55rem; border:1px solid #81bcf2; background:#071c3a; font-size:1.24rem; color:#fff; border-radius:9px; font-variant-numeric: tabular-nums; overflow-wrap:anywhere; }
+.clicktv-bank__actions { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:.8rem; }
+.clicktv-bank__actions .btn { flex:1 1 160px; min-height:52px; white-space:normal; text-align:center; }
+.clicktv-payment-guide { margin-top:1rem; }
+.clicktv-payment-guide h3 { color:#fff; margin:0 0 .6rem; }
+.clicktv-payment-guide__links { display:flex; flex-wrap:wrap; gap:.65rem; }
+.clicktv-payment-guide__links .btn { flex:1 1 160px; min-height:52px; text-align:center; }
+.clicktv-pagos-nota { font-size:.94rem; color:#f0f6ff; margin-top:1rem; }
+.clicktv-status { font-weight:750; display:block; min-height:1.3em; margin-top:.3rem; }
+.clicktv-payment-guide a:focus-visible, .clicktv-journey__card a:focus-visible { outline: 4px solid #ffe58b; outline-offset:3px; }
+@media(max-width: 900px){ .clicktv-journey__grid{grid-template-columns:1fr;} }
+@media(max-width: 680px){.clicktv-payment-grid,.clicktv-terms__grid{grid-template-columns:1fr;} .clicktv-journey__card,.clicktv-terms,.clicktv-bank{padding:1rem;} }
+@media(prefers-reduced-motion:reduce){#clicktv-atencion *,#clicktv-pagos-faciles *{scroll-behavior:auto!important;}}

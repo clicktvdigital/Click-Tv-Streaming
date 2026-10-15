@@ -1,0 +1,150 @@
+/* CLICK TV DIGITAL — tema azul accesible 2026.
+   Se carga DESPUÉS de style.css y responsive.css para no borrar diseños actuales. */
+:root {
+  color-scheme: dark;
+  --click-bg: #061329;
+  --click-bg-alt: #0b1d3b;
+  --click-panel: #102b4e;
+  --click-primary: #086be9;
+  --click-primary-light: #36b8ff;
+  --click-focus: #ffe37b;
+  --click-text: #f7fbff;
+  --click-muted: #d1e2f6;
+  --color-primary: #1689ff;
+  --color-accent: #36b8ff;
+  --primary: #1689ff;
+  --primary-color: #1689ff;
+  --primary-dark: #0755b8;
+  --accent: #39caff;
+  --neon-green: #36b8ff;
+  --neon: #36b8ff;
+  --green: #1689ff;
+  --brand-green: #1689ff;
+}
+html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+body { background: var(--click-bg); color: var(--click-text); font-size: 17px; line-height: 1.6; }
+:is(p, label, li, .product-card, .faq-card, .step-card) { line-height: 1.6; }
+:is(.header, .hero, .section--dark, .section--accent) { color: var(--click-text); }
+.site-bg { background: linear-gradient(155deg, #020914 0%, #071d44 53%, #031020 100%); }
+.ambient-orb--one { background: radial-gradient(circle, rgba(0,129,255,.18),transparent 68%) !important; }
+.ambient-orb--two { background: radial-gradient(circle, rgba(42,201,255,.15),transparent 68%) !important; }
+.ambient-orb--three { background: radial-gradient(circle, rgba(47,113,255,.14),transparent 68%) !important; }
+
+/* Botones grandes: contraste visible y objetivos táctiles >= 44px */
+:is(.btn, .filter-btn, .cart-btn, .menu-toggle, .geo-btn, button, select) { min-height: 48px; }
+.btn, button, select, input, textarea { font: inherit; }
+.btn { font-weight: 750; letter-spacing: .01em; border-radius: 14px; }
+.btn--primary, .filter-btn.activo, .filter-btn[aria-selected="true"] {
+  background: #0968dc !important;
+  border: 2px solid #42baff !important;
+  color: #fff !important;
+  box-shadow: 0 4px 18px rgba(0,115,255,.22);
+}
+.btn--primary:is(:hover, :focus-visible) { background: #0056ba !important; }
+.btn--outline, .btn--ghost, .filter-btn {
+  border-color: #67baff !important;
+  color: #f5fbff !important;
+}
+.filter-btn:is(:hover,:focus-visible), .btn--outline:is(:hover,:focus-visible) { background: #173f76 !important; }
+:is(a,button,input,textarea,select,summary,[tabindex]):focus-visible {
+  outline: 3px solid var(--click-focus) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 6px rgba(4,15,39,.8) !important;
+}
+a:not(.btn) { text-underline-offset: 3px; }
+
+/* Encabezado, paneles y fondos azul de la identidad visual */
+.navbar, .topbar, .glass-card, .product-card, .step-card, .faq-card, .contact-channel-bar, .geo-modal__card,
+#panel-carrito, .premium-surface, .stat-card {
+  border-color: rgba(90,183,255,.45) !important;
+}
+.product-card, .step-card, .faq-card, .glass-card, .contact-channel-bar {
+  background-color: #102544 !important;
+  color: #f7fbff;
+}
+.brand__logo img { object-fit: contain; height: auto; }
+.eyebrow, .product-tags span, .product-card__icon { color: #cbeaff; }
+:is(.product-card,.step-card,.faq-card) :is(h2,h3,strong) { color: #fff; }
+.product-plans { display: grid; gap: .8rem; }
+.product-plan {
+  background: #071b37 !important;
+  border: 1px solid #397dbc !important;
+  border-radius: 16px;
+  padding: 1rem;
+}
+.product-plan__info { display: flex; align-items: baseline; flex-wrap: wrap; justify-content: space-between; gap: .55rem 1rem; font-size: 1rem; }
+.product-plan__info > :last-child { color: #e4f5ff; font-size: 1.13em; font-weight: 800; font-variant-numeric: tabular-nums; }
+.product-plan__actions { display: grid !important; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .55rem; }
+.product-plan__actions > .btn { white-space: normal; min-width: 0; text-align: center; }
+.product-plan__actions > .clicktv-otros-canales { grid-column: 1/-1; }
+.clicktv-otros-canales { padding: .2rem .3rem; border: 1px solid #375b83; border-radius: 12px; }
+.clicktv-otros-canales summary { display: list-item; cursor: pointer; min-height: 48px; padding: .6rem; font-weight: 700; }
+.clicktv-otros-canales__inner { display: flex; flex-wrap: wrap; gap: .5rem; padding: 0 .3rem .65rem; }
+.clicktv-otros-canales__inner > button { flex: 1 1 140px; }
+
+/* Controles de lectura sencillos y un camino directo a la compra */
+.clicktv-skip {
+  position: absolute; left: .7rem; top: -10rem; z-index: 100001; background: #ffe37b; color: #111c29;
+  border-radius: 12px; padding: .7rem 1rem; font-weight: 800;
+}
+.clicktv-skip:focus { top: .7rem; }
+.clicktv-access {
+  position: relative; z-index: 8; background: #071b35; border-bottom: 1px solid #2478b5;
+  padding: .55rem clamp(.8rem,3vw,3rem); display: flex; flex-wrap: wrap; gap: .65rem; align-items:center;
+}
+.clicktv-access__label { color: #eaf6ff; font-size: 1rem; font-weight: 750; }
+.clicktv-access button, .clicktv-access a {
+  display: inline-flex; align-items:center; justify-content:center; padding: .55rem .85rem;
+  background: #143e73; color: #fff; border: 1.5px solid #67bcff; border-radius: 12px;
+  font-weight: 750; text-decoration:none; min-height:48px;
+}
+.clicktv-access [aria-pressed="true"] { background: #2476c6; outline: 2px solid #cdeeff; }
+.clicktv-access a { background: #095cb9; }
+.clicktv-help {
+  margin: 1.25rem 0 2rem; background: #0b2d55; color: #fff;
+  border: 1px solid #48aefe; border-radius: 16px; padding: 1rem 1.2rem; font-size:1.05rem;
+}
+.clicktv-help strong { color:#d6efff; }
+.clicktv-help p { margin: .2rem 0 0; }
+.clicktv-help a { color:#dff5ff; font-weight:800; }
+
+/* Formularios legibles, sin texto gris pálido sobre fondo oscuro */
+:is(input,textarea,select) { min-height:48px; color:#fff; background:#0a2646; border:1.5px solid #75a9d9; border-radius:10px; }
+:is(input,textarea)::placeholder { color:#c3d3e9; opacity:1; }
+:disabled { opacity:.65; }
+
+/* Letra aumentada para tercera edad y baja visión */
+body.clicktv-large-text { font-size: 20px !important; }
+body.clicktv-large-text :is(p,label,button,a,summary,input,select,textarea) { font-size: 1.1em; }
+body.clicktv-large-text .btn { min-height: 56px; padding: .85rem 1.1rem; }
+body.clicktv-large-text .product-plan__info { font-size:1.2em; }
+body.clicktv-large-text .product-plan__actions { grid-template-columns: 1fr; }
+
+body.clicktv-high-contrast { background: #000 !important; color:#fff !important; }
+body.clicktv-high-contrast :is(.glass-card,.product-card,.product-plan,.step-card,.faq-card,.navbar,.topbar,.section,.site-bg,#panel-carrito) {
+ background: #000 !important; color:#fff !important; border-color:#fff !important;
+}
+body.clicktv-high-contrast :is(.btn,.filter-btn,button,a) { color:#fff; }
+body.clicktv-high-contrast .btn--primary { background:#0048ae !important; border-color:#fff !important; }
+body.clicktv-high-contrast .clicktv-access { background:#000 !important; border-color:#fff; }
+
+/* Usuarios sensibles al movimiento, mareos o epilepsia fotosensible */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior:auto !important; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+  .site-bg, .ambient-orb, #tech-particles { display:none !important; }
+}
+@media (max-width: 760px) {
+ .clicktv-access { gap:.45rem; }
+ .clicktv-access button,.clicktv-access a { flex: 1 1 calc(50% - .45rem); }
+ .product-plan__actions { grid-template-columns: 1fr; }
+ .product-plan { padding:.85rem; }
+ .clicktv-help { margin: 1rem 0; }
+ .topbar { flex-wrap:wrap; }
+}
+
+/* Selección simple de plazo y dispositivos; solo muestra un precio a la vez */
+.clicktv-plan-filters { display:flex; gap:.8rem; flex-wrap:wrap; padding:.75rem .15rem; }
+.clicktv-plan-filters label { display:flex; flex:1 1 175px; flex-direction:column; font-weight:800; gap:.3rem; color:#fff; }
+.clicktv-plan-filters select { color:#fff; background:#092a51; border:2px solid #6ec8ff; padding:.65rem; font-weight:700; min-height:50px; width:100%; }
+.product-plan[hidden] { display:none !important; }
