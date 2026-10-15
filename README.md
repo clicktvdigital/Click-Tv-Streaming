@@ -4,7 +4,7 @@ Tienda web de CLICK TV DIGITAL: catálogo comercial de entretenimiento, televisi
 
 - **Marca pública:** CLICK TV STREAMING.
 - **Tienda:** https://click-tv-streaming.vercel.app/
-- **Código fuente histórico:** https://github.com/clicktvdigital/Click-Tv-Mundial-2026 (hasta completar el cambio de nombre).
+- **Código fuente histórico:** https://github.com/clicktvdigital/Click-Tv-Streaming
 - **Publicación:** GitHub + Vercel; no requiere compilar en el teléfono.
 
 ## Estructura principal
