@@ -1,0 +1,236 @@
+/* CLICK TV DIGITAL · Contactos y radio premium — 15 octubre 2026.
+   Capa visual sin cambios de navegación, audio, pagos ni carrito.
+   El verde se limita a distintivos de WhatsApp; no a tarjetas completas. */
+:root {
+  --ctv-service-ink:#f5faff;
+  --ctv-service-ice:#d5eafd;
+  --ctv-service-navy:#071b38;
+  --ctv-service-navy-light:#112f55;
+  --ctv-service-line:rgba(101,173,242,.64);
+  --ctv-service-glow:rgba(16,91,190,.18);
+}
+/* Contenedor coherente con la portada azul. */
+body .ctvc-utilities .hero__panel {
+  background:linear-gradient(145deg,#0a2748,#061a32 75%) !important;
+  color:var(--ctv-service-ink) !important;
+  border:1px solid var(--ctv-service-line) !important;
+  box-shadow:0 14px 34px rgba(0,8,24,.29) !important;
+}
+body .ctvc-utilities .hero__panel > :is(h2,p),
+body .ctvc-utilities .hero__panel > p strong {
+  color:var(--ctv-service-ink) !important;
+  text-shadow:none !important;
+}
+body .ctvc-utilities .hero__panel > h2 {
+  font-size:clamp(1.2rem,2.3vw,1.65rem) !important;
+  font-weight:850 !important;
+  line-height:1.2 !important;
+}
+body .ctvc-utilities .hero__panel > p {
+  font-size:clamp(.93rem,1.8vw,1.05rem) !important;
+  line-height:1.5 !important;
+  overflow-wrap:anywhere;
+}
+/* Botones de contacto: superficie neutra, identificación mediante un punto de color. */
+body .ctvc-utilities .quick-links {
+  display:grid !important;
+  gap:.65rem !important;
+  min-width:0;
+}
+body .ctvc-utilities .quick-links :is(a,button) {
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:.65rem !important;
+  width:100% !important;
+  min-width:0 !important;
+  min-height:56px !important;
+  height:auto !important;
+  padding:.85rem 1rem !important;
+  border:1px solid #4a88c8 !important;
+  border-radius:14px !important;
+  background:linear-gradient(135deg,#14355c,#0a2446) !important;
+  color:#f7fbff !important;
+  font:750 clamp(.93rem,1.45vw,1.035rem)/1.35 system-ui,-apple-system,"Segoe UI",sans-serif !important;
+  letter-spacing:0 !important;
+  text-align:left !important;
+  white-space:normal !important;
+  overflow-wrap:anywhere;
+  text-decoration:none !important;
+  text-shadow:none !important;
+  box-shadow:0 6px 18px rgba(0,13,38,.22) !important;
+  transition:transform .17s ease,border-color .17s ease,background .17s ease !important;
+}
+body .ctvc-utilities .quick-links :is(a,button)::before {
+  content:"";
+  display:inline-block;
+  flex:0 0 11px;
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:#48bbff;
+  box-shadow:0 0 0 3px rgba(72,187,255,.13);
+}
+body .ctvc-utilities .quick-links :is(a[href*="wa.me/"],a[href*="chat.whatsapp.com/"],button[onclick*="WhatsApp"])::before {
+  background:#25ca72;
+  box-shadow:0 0 0 3px rgba(37,202,114,.14);
+}
+body .ctvc-utilities .quick-links button[onclick*="Telegram"]::before {
+  background:#35b5ee;
+}
+body .ctvc-utilities .quick-links button[onclick*="Signal"]::before {
+  background:#5a82f2;
+}
+body .ctvc-utilities .quick-links :is(a,button):is(:hover,:focus-visible) {
+  border-color:#98dbff !important;
+  background:linear-gradient(135deg,#1a426f,#0d2c54) !important;
+  box-shadow:0 8px 23px rgba(0,37,91,.3) !important;
+  transform:translateY(-2px);
+}
+/* Reproductor: verde antiguo del parlante, volumen, ecualizador y estados. */
+body .ctvc-utilities #radio-app {
+  background:linear-gradient(148deg,#0a2949,#061a32 85%) !important;
+  border:1px solid #4086cc !important;
+  box-shadow:0 13px 30px rgba(0,7,26,.28) !important;
+  color:#f7fbff !important;
+}
+body #radio-app .radio-kicker {
+  color:#a9dbff !important;
+  font-weight:850 !important;
+  letter-spacing:.04em !important;
+  text-shadow:none !important;
+}
+body #radio-app #radio-current-name {
+  color:#fff !important;
+  font-weight:850 !important;
+  line-height:1.3 !important;
+}
+body #radio-app .radio-stream-quality {
+  color:#dbf0ff !important;
+  background:#102f50 !important;
+  border:1px solid #3c86bb !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+}
+body #radio-app :is(.radio-connection,.radio-status,.radio-status-row,.radio-station small) {
+  color:#d7e9fa !important;
+}
+body #radio-app :is(.radio-connection.is-live i,.radio-station.is-active > i,.equalizer i) {
+  background:#3ea7ff !important;
+  border-color:#3ea7ff !important;
+  box-shadow:0 0 10px rgba(62,167,255,.22) !important;
+}
+body #radio-app .radio-now-playing__art,
+body #radio-app .radio-station {
+  border-color:rgba(85,163,238,.65) !important;
+  box-shadow:0 6px 18px rgba(0,12,34,.23) !important;
+}
+body #radio-app .radio-art-control,
+body #radio-app #radio-toggle-play {
+  color:#fff !important;
+  background:linear-gradient(145deg,#1fa1f7,#075abe) !important;
+  border:1px solid #9bddff !important;
+  box-shadow:0 8px 23px rgba(6,90,184,.27) !important;
+}
+body #radio-app :is(.radio-art-control,.radio-play-toggle) svg {
+  fill:#fff !important;
+  color:#fff !important;
+}
+body #radio-app .radio-signal-ring { border-color:rgba(91,180,255,.7) !important; }
+body #radio-app .radio-volume {
+  color:#dbeeff !important;
+  background:transparent !important;
+  text-shadow:none !important;
+}
+/* El parlante SVG y la barra del volumen ya no se pintan de verde. */
+body #radio-app .radio-volume svg,
+body #radio-app .radio-volume svg path {
+  color:#cbeaff !important;
+  fill:#cbeaff !important;
+  filter:none !important;
+}
+body #radio-app #radio-volume {
+  accent-color:#279bff !important;
+  background:transparent;
+}
+body #radio-app #radio-volume::-webkit-slider-thumb {
+  background:#65c0ff !important;
+  border-color:#cceaff !important;
+  box-shadow:0 0 0 2px #092d5a !important;
+}
+body #radio-app #radio-volume::-moz-range-thumb {
+  background:#65c0ff !important;
+  border:2px solid #cceaff !important;
+}
+body #radio-app .radio-play-toggle:is(:hover,:focus-visible) {
+  box-shadow:0 8px 23px rgba(4,87,181,.35) !important;
+}
+body #radio-app .radio-station.is-active {
+  background:#12375c !important;
+  border-color:#80c7ff !important;
+}
+body #radio-app .radio-station :is(strong,span) { color:#f1f8ff !important; }
+body #radio-app .radio-direct-link,
+body #radio-app .radio-retry {
+  color:#e6f5ff !important;
+  background:#133b67 !important;
+  border-color:#539bd6 !important;
+  box-shadow:none !important;
+}
+/* La barra flotante sigue siendo desplazable y mantiene TODOS los accesos. */
+body .floating-actions {
+  background:rgba(3,15,35,.96) !important;
+  border:1px solid rgba(94,151,209,.54) !important;
+  box-shadow:0 12px 32px rgba(0,4,16,.55) !important;
+  gap:clamp(4px,1vw,9px) !important;
+  -webkit-overflow-scrolling:touch;
+}
+body .floating-actions .float-btn {
+  background:linear-gradient(180deg,#143357,#0a2342) !important;
+  border:1px solid #4079b4 !important;
+  color:#f7fbff !important;
+  box-shadow:inset 0 1px 0 rgba(176,223,255,.08),0 5px 13px rgba(0,10,32,.18) !important;
+  text-shadow:none !important;
+}
+body .floating-actions .float-btn__label {
+  color:#f7fbff !important;
+  font-weight:750 !important;
+  text-shadow:none !important;
+}
+body .floating-actions .float-btn__icon {
+  background:rgba(19,79,141,.3) !important;
+  box-shadow:none !important;
+}
+body .floating-actions .float-btn--wa svg,
+body .floating-actions .float-btn--group svg { fill:#30cb79 !important; }
+body .floating-actions .float-btn--tg svg { fill:#35bff2 !important; }
+body .floating-actions .float-btn--signal svg { fill:#78a3ff !important; }
+body .floating-actions .float-btn--support svg { fill:#9adfff !important; }
+body .floating-actions .float-btn:is(:hover,:focus-visible) {
+  border-color:#90d5ff !important;
+  box-shadow:0 6px 16px rgba(5,69,147,.3) !important;
+}
+/* Tipografía y contraste: no ocultar etiquetas, precios ni estados. */
+body .ctvc-utilities :is(.radio-app,.teleamazonas-player-card) :is(h2,h3,strong) {
+  font-weight:800 !important;
+  text-shadow:none !important;
+}
+body .ctvc-utilities :is(.radio-app,.teleamazonas-player-card) :is(p,small,span) {
+  line-height:1.45;
+}
+@media (max-width:600px) {
+  body .ctvc-utilities .quick-links { grid-template-columns:minmax(0,1fr) !important; }
+  body .ctvc-utilities .quick-links :is(a,button) {
+    min-height:54px !important;
+    padding:.78rem .85rem !important;
+    font-size:clamp(.91rem,3.7vw,1rem) !important;
+    border-radius:13px !important;
+  }
+  body .ctvc-utilities .hero__panel { padding:.95rem !important; }
+}
+@media (prefers-reduced-motion:reduce) {
+  body .ctvc-utilities .quick-links :is(a,button) {
+    transition:none !important;
+    transform:none !important;
+  }
+}

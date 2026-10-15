@@ -80,6 +80,13 @@ jobs:
           node --check clicktv-logos-catalogo.js
           node --check script.js
 
+      - name: Verificar capa premium de contactos y radio
+        run: |
+          test -s clicktv-contactos-radio-premium.css
+          grep -Fq 'clicktv-contactos-radio-premium.css' index.html
+          grep -Fq '#radio-app .radio-volume svg' clicktv-contactos-radio-premium.css
+          grep -Fq '.ctvc-utilities .quick-links' clicktv-contactos-radio-premium.css
+
       - name: Validar sintaxis JavaScript
         run: |
           for archivo in data.js catalogo.js script.js clicktv-accesible.js clicktv-precios-publico-2026.js clicktv-atencion-pagos.js clicktv-pago-producto.js; do

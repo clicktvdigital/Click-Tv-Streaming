@@ -117,3 +117,11 @@ El instalador del diseño azul fue ejecutado sobre la copia local. Git muestra:
 - `clicktv-logos-catalogo.js`: el mismo identificador de producto aplica el emblema del catálogo en el carrito, también tras cambios de cantidad o renovación; si falla el logo externo aparece texto de respaldo.
 - Se conserva el verde únicamente en los enlaces/botones de WhatsApp y colores propios de métodos externos. El brillo decorativo y las sombras genéricas de la tienda son azules o neutrales.
 - Verificar visualmente en teléfonos de 320-400px el aviso al agregar un producto, las filas del carrito, el total, pagos, renovaciones y canales de soporte. No confundir `git push` o tests JS con confirmación real de pagos.
+
+## Contactos y radio premium (15/10/2026)
+
+- `clicktv-contactos-radio-premium.css`: transforma los botones de atención en tarjetas azul oscuro con indicadores de color por canal (WhatsApp/Telegram/Signal). Mantiene enlaces y funciones existentes.
+- Reproductor de radio: parlante SVG y barra de volumen blanco/azul; ecualizador, botón reproducir, etiquetas y sombras azules. La radio conserva su funcionalidad.
+- Barra flotante: superficies oscuras; color de marca reservado a los iconos, sin botones fluorescentes completos.
+- Es una capa CSS cargada después de los estilos anteriores. **No modifica** `script.js`, catálogo, precios, cuentas, QR o audio.
+- Validar el resultado en teléfonos y PC, especialmente soporte, radio, volumen, WhatsApp, Telegram, Signal y carrito, antes de considerar cerrada esta etapa.
