@@ -91,3 +91,12 @@ La tienda se diseña para personas mayores y personas con discapacidad. Dar prio
 - No se cambian `data.js`, `catalogo.js`, `script.js`, precios, cuentas, carrito, QR ni configuraciones de pago.
 - No se muestran afirmaciones de clientes conectados o compras simuladas en la portada. No afirmar activación instantánea.
 - Aún requiere inspección manual de celular y escritorio, pruebas de radio/catálogo/carrito, CI y despliegue antes de considerarse verificado.
+
+## Pulido de marca azul y emblemas de catálogo (15/10/2026)
+
+- `clicktv-pulido-azul.css`: tipografía, blancos legibles, tarjetas, carrito, reproductores y logo sin brillo verde; se conserva el verde **solo en WhatsApp**.
+- `style.css`: valores verde neón antiguos migrados a la paleta azul; no se cambiaron clases ni estructura. Respaldo local disponible.
+- `clicktv-logos-catalogo.js`: presentación progresiva de emblemas de marcas conocidas (Simple Icons, con favicon como respaldo); sin tocar los datos, precios ni botones. Para marcas sin logo verificado muestra abreviaturas legibles, **no un logotipo oficial inventado**.
+- Los emblemas de marcas pertenecen a sus titulares y se presentan únicamente para identificar servicios; no implican patrocinio ni distribución autorizada. Revisar el derecho a comercializar cada producto.
+- Los logos externos requieren conectividad para cargarse. Las abreviaturas permanecen legibles cuando los recursos no cargan. Para independencia total se deberán obtener archivos de logo con permiso para alojarlos localmente.
+- Sin modificación de `data.js`, `catalogo.js`, `script.js`, pasarelas ni contactos. Validar visualmente carrito, logo, filtros, radio y pantallas móviles antes de aceptar pagos.

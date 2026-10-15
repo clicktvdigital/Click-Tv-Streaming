@@ -1,0 +1,153 @@
+/* CLICK TV DIGITAL · Pulido visual azul · 15/10/2026
+   Solo presentación; el catálogo, el carrito y las pasarelas se mantienen.
+   Las marcas representadas son propiedad de sus respectivos titulares. */
+:root {
+  color-scheme:dark;
+  --green:#1689ff; --green-2:#35b9ff; --green-3:#c3eeff;
+  --green-neon:#35b9ff; --green-deep:#0b66da;
+  --ctv-polish-bg:#061a35; --ctv-polish-panel:#0a2545;
+  --ctv-polish-ink:#f7fbff; --ctv-polish-muted:#d9eaff;
+  --ctv-polish-outline:#468ecf;
+}
+html { text-rendering:optimizeLegibility; -webkit-text-size-adjust:100%; }
+body,button,input,textarea,select {
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased; font-synthesis:none;
+}
+body { color:var(--ctv-polish-ink); }
+:is(h1,h2,h3,h4,.product-plan__info strong,.cart-summary .total strong) {
+  color:#fff; font-weight:800; letter-spacing:-.02em; text-wrap:pretty;
+}
+:is(p,li,small,summary,label) { line-height:1.55; }
+:is(.product-card,.step-card,.faq-card,.glass-card,.premium-surface,.stat-card,.hero__panel,
+   .radio-app,.teleamazonas-player-card,.cart-summary,.cart-payment,.cart-trust) {
+  box-shadow:0 13px 36px rgba(0,8,30,.37) !important;
+  border-color:rgba(73,157,238,.55) !important;
+}
+/* Logo sin anillos o halos verdes heredados */
+.brand, .brand__logo, .brand__logo::before,.brand__logo::after,
+.brand__logo img,.navbar .brand,.navbar .brand::before,.navbar .brand::after {
+  box-shadow:none !important; filter:none !important; text-shadow:none !important;
+}
+.brand__logo, .brand__logo--horizontal {
+  background:transparent !important; border-color:transparent !important;
+}
+.brand__logo::before,.brand__logo::after,.navbar .brand::before,.navbar .brand::after {
+  background:transparent !important; opacity:0 !important;
+}
+.brand__logo img { display:block; max-width:100%; object-fit:contain; }
+/* Reproductores y radio en azul sobrio, sin fluorescencias verdes */
+:where(.radio-app,.radio-app__header,.radio-station,.radio-station.is-active,
+ .radio-connection,.radio-play-toggle,.teleamazonas-player-card,.media-box,.premium-surface) {
+  border-color:rgba(72,164,246,.6) !important;
+}
+.radio-app,.media-box,.teleamazonas-player-card { background-color:#092444 !important; }
+.radio-play-toggle,.radio-station.is-active > i,.radio-connection.is-live i,
+.equalizer i { background:#329fff !important; }
+.radio-station.is-active > i,.radio-connection.is-live i,
+.radio-play-toggle:is(:hover,:focus-visible) {
+  box-shadow:0 0 14px rgba(47,151,255,.32) !important;
+}
+/* Catálogo legible y jerarquía nítida */
+.product-card {
+  --ctv-card-accent:#268bf0;
+  position:relative; overflow:hidden;
+  background:linear-gradient(157deg,#102c50,#071a33 83%) !important;
+  border:1.5px solid rgba(67,145,220,.58) !important;
+}
+.product-card::before {
+  content:""; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,var(--ctv-card-accent),#6ccaff 70%,transparent);
+}
+.product-card__head { display:flex; align-items:center; gap:1rem; min-width:0; }
+.product-card__head > div { min-width:0; }
+.product-card__head h3 {
+  color:#fff !important; font-size:clamp(1.14rem,2vw,1.36rem);
+  font-weight:850; line-height:1.25; margin:0 0 .35rem; overflow-wrap:anywhere;
+}
+.product-card > p { color:#e0eeff !important; font-size:1rem; line-height:1.55; }
+.product-card__icon.ctv-brand-badge {
+  display:flex; align-items:center; justify-content:center; flex:none;
+  width:clamp(55px,7vw,68px); height:clamp(55px,7vw,68px);
+  border:1px solid rgba(255,255,255,.27); border-radius:17px;
+  background:var(--ctv-brand-bg,#125aa2) !important; color:#fff !important;
+  box-shadow:0 5px 19px rgba(0,6,20,.34) !important;
+  font:900 1.05rem/1 system-ui,sans-serif; letter-spacing:-.03em;
+  text-align:center; overflow:hidden; text-shadow:none !important;
+}
+.ctv-brand-badge img {
+  display:block; width:68%; height:68%; object-fit:contain;
+  filter:brightness(0) invert(1); background:none; border:0;
+}
+.ctv-brand-badge img.ctv-brand-favicon { filter:none; border-radius:5px; }
+.ctv-brand-badge .ctv-brand-fallback { color:#fff; font-weight:900; font-size:.88rem; }
+.product-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+.product-tags span {
+  background:#143e6b !important; color:#f1faff !important;
+  border:1px solid #366a9c !important; border-radius:999px;
+  font-size:.77rem; font-weight:800;
+}
+.product-plan {
+  background:#091f3d !important; color:#fff !important;
+  border:1px solid #3a7dbb !important; box-shadow:none !important;
+}
+.product-plan__info strong { color:#fff !important; font-weight:850; }
+.product-plan__info span { color:#d5f2ff !important; font-weight:850; }
+.product-plan__actions .btn { font-weight:800; }
+/* Botones generales azules. Solo WhatsApp recupera su identidad verde. */
+.btn--primary, .filter-btn.activo, .btn-pago.activo {
+  background:linear-gradient(120deg,#0872ec,#1261cf) !important;
+  border-color:#63c8ff !important; color:#fff !important;
+  box-shadow:0 8px 25px rgba(7,98,234,.24) !important;
+}
+.float-btn--wa,.float-btn--group,
+.product-plan__actions button[onclick*="WhatsApp"],
+a.btn[href*="wa.me/"], .ctvc-utilities .quick-links a[href*="wa.me/"],
+.ctvc-utilities .quick-links button[onclick*="WhatsApp"] {
+  background:linear-gradient(125deg,#25d366,#128c4b) !important;
+  border-color:#65e99a !important; color:#062716 !important;
+  box-shadow:0 5px 20px rgba(0,40,23,.25) !important;
+}
+/* Carrito: sin etiquetas tapadas ni texto oscuro sobre azul. */
+#panel-carrito {
+  background:#071b35 !important; color:#fff !important;
+  max-height:100dvh; overflow-y:auto; overflow-x:hidden;
+  padding-bottom:max(1.6rem,env(safe-area-inset-bottom));
+}
+#panel-carrito :is(.cart-trust,.cart-summary,.cart-payment,.cart-contact-options,.cupon-box) {
+  background:#0c294b !important; color:#fff !important;
+  border-color:#438dd2 !important; box-shadow:none !important;
+  max-width:100%; min-width:0; overflow-wrap:anywhere;
+}
+#panel-carrito :is(.cart-trust,.cart-summary,.cart-payment,.cart-contact-options,.cupon-box)
+ :is(h2,h3,strong,label,p,span,small) {
+  color:#f3f9ff !important; opacity:1 !important; text-shadow:none;
+}
+#panel-carrito .cart-summary .total,
+#panel-carrito .cart-summary .total strong { color:#fff !important; font-weight:900; }
+#panel-carrito .cart-payment__methods { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.6rem; }
+#panel-carrito .cart-payment__methods .btn-pago {
+  font-size:.95rem; font-weight:800; line-height:1.35; padding:.75rem .55rem;
+  white-space:normal; overflow-wrap:anywhere; min-width:0; color:#fff;
+  background:#13365b; border:1px solid #5b9cdb; border-radius:11px;
+}
+#panel-carrito .cart-payment__methods .btn-pago.activo { background:#0b66d2 !important; border-color:#abdaff !important; }
+#panel-carrito :is(input,select,textarea) {
+  background:#061b35 !important; color:#fff !important;
+  border:1.5px solid #64b3fb !important;
+}
+#panel-carrito .cart-payment__detail { color:#f4faff; overflow-wrap:anywhere; }
+.ctv-pg-dialog :is(h2,h3,strong,legend,label) { color:#fff !important; font-weight:800; }
+.ctv-pg-dialog :is(p,small,span) { color:#e8f5ff; }
+.ctv-pg-dialog .ctv-pg-option { overflow-wrap:anywhere; }
+/* Un único color de foco accesible y animaciones moderadas */
+:is(.product-card,.radio-app,.cart-payment) :focus-visible { outline:3px solid #ffe38b !important; outline-offset:3px; }
+@media(max-width:640px){
+  .product-card__head { gap:.7rem; }
+  .product-card__icon.ctv-brand-badge { width:56px; height:56px; border-radius:14px; }
+  #panel-carrito .cart-payment__methods { grid-template-columns:1fr; }
+  #panel-carrito .cart-payment__methods .btn-pago { min-height:52px; }
+}
+@media(prefers-reduced-motion:reduce){
+  .product-card,.product-card__icon,.radio-app,.radio-station { transition:none !important; animation:none !important; }
+}

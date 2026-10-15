@@ -58,6 +58,18 @@ jobs:
           grep -Fq 'clicktv-foto-cine.webp' index.html
           grep -Fq 'clicktv-foto-musica.webp' index.html
 
+      - name: Verificar pulido azul y logotipos
+        run: |
+          test -s clicktv-pulido-azul.css
+          test -s clicktv-logos-catalogo.js
+          grep -Fq 'clicktv-pulido-azul.css' index.html
+          grep -Fq 'clicktv-logos-catalogo.js' index.html
+          node --check clicktv-logos-catalogo.js
+          # Los verdes originales del tema principal no deben reaparecer.
+          if grep -Eiq '#00ff66|#00e676|#00ff88|#74ff38' style.css; then
+            echo 'Persisten verdes antiguos en style.css'; exit 1
+          fi
+
       - name: Validar sintaxis JavaScript
         run: |
           for archivo in data.js catalogo.js script.js clicktv-accesible.js clicktv-precios-publico-2026.js clicktv-atencion-pagos.js clicktv-pago-producto.js; do
