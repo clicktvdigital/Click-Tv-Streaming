@@ -125,3 +125,11 @@ El instalador del diseño azul fue ejecutado sobre la copia local. Git muestra:
 - Barra flotante: superficies oscuras; color de marca reservado a los iconos, sin botones fluorescentes completos.
 - Es una capa CSS cargada después de los estilos anteriores. **No modifica** `script.js`, catálogo, precios, cuentas, QR o audio.
 - Validar el resultado en teléfonos y PC, especialmente soporte, radio, volumen, WhatsApp, Telegram, Signal y carrito, antes de considerar cerrada esta etapa.
+
+## Vista previa de enlaces - WhatsApp (15/10/2026)
+
+- Miniatura nueva: `clicktv-vista-previa-horizontal-2026.jpg`, 1200 × 630, panorámica y optimizada.
+- `index.html` enlaza a la imagen en `og:image`, variantes Open Graph, Twitter y etiquetas sociales auxiliares.
+- CI comprueba archivo y dimensiones; el JPG anterior permanece disponible.
+- Tras publicar, probar el enlace en chat nuevo (si hay caché, `https://click-tv-streaming.vercel.app/?vista=20261015`); no se controla el tamaño de tarjeta decidido por WhatsApp.
+- No modificar carrito, catálogo, pagos ni radio para resolver el preview.

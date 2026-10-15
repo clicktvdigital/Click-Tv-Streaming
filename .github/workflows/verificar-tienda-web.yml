@@ -87,6 +87,15 @@ jobs:
           grep -Fq '#radio-app .radio-volume svg' clicktv-contactos-radio-premium.css
           grep -Fq '.ctvc-utilities .quick-links' clicktv-contactos-radio-premium.css
 
+      - name: Verificar miniatura horizontal para enlaces
+        run: |
+          test -s clicktv-vista-previa-horizontal-2026.jpg
+          grep -Fq 'property="og:image" content="https://click-tv-streaming.vercel.app/clicktv-vista-previa-horizontal-2026.jpg"' index.html
+          grep -Fq 'name="twitter:image" content="https://click-tv-streaming.vercel.app/clicktv-vista-previa-horizontal-2026.jpg"' index.html
+          grep -Fq 'property="og:image:width" content="1200"' index.html
+          grep -Fq 'property="og:image:height" content="630"' index.html
+          file clicktv-vista-previa-horizontal-2026.jpg | grep -Eq '1200[[:space:]]*x[[:space:]]*630|1200x630'
+
       - name: Validar sintaxis JavaScript
         run: |
           for archivo in data.js catalogo.js script.js clicktv-accesible.js clicktv-precios-publico-2026.js clicktv-atencion-pagos.js clicktv-pago-producto.js; do
@@ -100,7 +109,7 @@ jobs:
           grep -Fq 'clicktv-accesible.js' index.html
           grep -Fq 'clicktv-precios-publico-2026.js' index.html
           grep -Fq 'click-tv-logo-horizontal-2026.jpg' index.html
-          grep -Fq 'click-tv-miniatura-whatsapp-2026.jpg' index.html
+          grep -Fq 'clicktv-vista-previa-horizontal-2026.jpg' index.html
           grep -Fq "clicktv-atencion-pagos.js" index.html
           grep -Fq "clicktv-atencion-pagos.css" index.html
           grep -Fq "ctv-atencion-titulo" index.html

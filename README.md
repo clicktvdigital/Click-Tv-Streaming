@@ -116,3 +116,11 @@ La tienda se diseña para personas mayores y personas con discapacidad. Dar prio
 - Barra flotante: superficies oscuras; color de marca reservado a los iconos, sin botones fluorescentes completos.
 - Es una capa CSS cargada después de los estilos anteriores. **No modifica** `script.js`, catálogo, precios, cuentas, QR o audio.
 - Validar el resultado en teléfonos y PC, especialmente soporte, radio, volumen, WhatsApp, Telegram, Signal y carrito, antes de considerar cerrada esta etapa.
+
+## Miniatura social horizontal (15/10/2026)
+
+- Archivo nuevo: `clicktv-vista-previa-horizontal-2026.jpg` (JPG, 1200 × 630) con composición panorámica original.
+- Las etiquetas Open Graph y Twitter de `index.html` enlazan a su dirección HTTPS para evitar reutilizar la imagen anterior almacenada en caché.
+- GitHub Actions valida la URL, las dimensiones declaradas y el archivo real. La miniatura anterior se mantiene para compatibilidad.
+- **WhatsApp decide el diseño de la tarjeta**, incluso en chats, grupos y Estados. La nueva imagen no garantiza una tarjeta grande; comprueba el resultado compartiendo el enlace en un chat de prueba.
+- No se alteraron precios, carrito, pasarelas, radio ni contactos.
