@@ -2,16 +2,27 @@
 
 **Fecha de registro:** 15 de octubre de 2026.
 
+## Estado vigente comprobado el 15/10/2026
+
+- Marca: **CLICK TV DIGITAL**; tienda: **CLICK TV STREAMING**.
+- GitHub: `clicktvdigital/Click-Tv-Streaming` (repositorio renombrado, sin crear uno nuevo).
+- Último commit publicado y verificado por el usuario: `9656b37` en `main`.
+- GitHub Actions para ese commit: `completed / success`.
+- Producción: https://click-tv-streaming.vercel.app/ (HTTP 200); archivos visuales, QR y estilos respondieron 200.
+- Carpeta local en Termux sigue llamándose `~/Click-Tv-Mundial-2026`; ese nombre no afecta a GitHub.
+- **Pendientes:** confirmar remotamente `origin` con el nombre nuevo, probar visualmente pagos/carrito/WhatsApp y auditar archivos antes de plantear limpiezas.
+- Las notas posteriores documentan etapas históricas y pueden mencionar tareas que desde entonces fueron completadas.
+
 ## Proyecto correcto
 
-- Repositorio actual: `clicktvdigital/Click-Tv-Mundial-2026`.
+- Repositorio actual: `clicktvdigital/Click-Tv-Streaming`.
 - Rama de trabajo: `main`.
 - Carpeta en Termux: `~/Click-Tv-Mundial-2026`.
 - Web: https://click-tv-streaming.vercel.app/.
-- Nombre público deseado: **CLICK TV STREAMING**; nombre técnico deseado para GitHub: `click-tv-streaming`.
+- Nombre público deseado: **CLICK TV STREAMING**; repositorio GitHub ya renombrado a `Click-Tv-Streaming`.
 - No modificar el proyecto Android ni Alerta EC.
 
-## Último estado confirmado
+## Registro inicial (histórico; reemplazado por el estado vigente)
 
 El instalador del diseño azul fue ejecutado sobre la copia local. Git muestra:
 
@@ -39,7 +50,7 @@ El instalador del diseño azul fue ejecutado sobre la copia local. Git muestra:
 4. Respaldar antes de cambios destructivos; no borrar repositorios ni carpetas Android sin auditoría.
 5. Tras cada avance, actualizar este archivo y README.
 
-## Siguientes pasos
+## Plan inicial (histórico; ya se realizaron varios pasos)
 
 1. Añadir esta documentación y el workflow de verificación.
 2. Revisar el orden de carga de JavaScript, duplicados de productos, montos visibles y comportamiento del carrito.

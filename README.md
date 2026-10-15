@@ -1,10 +1,14 @@
 # CLICK TV STREAMING 💙
 
+<p align="center">
+  <img src="./clicktv-icono.png" width="190" alt="Logo cuadrado oficial de CLICK TV STREAMING" />
+</p>
+
 Tienda web de CLICK TV DIGITAL: catálogo comercial de entretenimiento, televisión en vivo, servicios digitales y atención al cliente.
 
 - **Marca pública:** CLICK TV STREAMING.
 - **Tienda:** https://click-tv-streaming.vercel.app/
-- **Código fuente histórico:** https://github.com/clicktvdigital/Click-Tv-Mundial-2026 (hasta completar el cambio de nombre).
+- **Repositorio GitHub:** [Click-Tv-Streaming](https://github.com/clicktvdigital/Click-Tv-Streaming).
 - **Publicación:** GitHub + Vercel; no requiere compilar en el teléfono.
 
 ## Estructura principal
@@ -46,7 +50,7 @@ La tienda se diseña para personas mayores y personas con discapacidad. Dar prio
 - No colocar contraseñas, tokens privados, claves de producción ni costos del proveedor en archivos públicos del repositorio.
 - Verificar los permisos de comercialización, las condiciones y la disponibilidad de cada servicio antes de publicarlo como oferta oficial.
 - Mantener `docs/CONTINUAR_AQUI.md` actualizado al terminar cada sesión de trabajo.
-- Cambiar el nombre del repositorio mediante la configuración de GitHub solo después de comprobar referencias y despliegues.
+- El repositorio GitHub ya fue renombrado a `Click-Tv-Streaming`. Comprobar la conexión de Vercel y mantener la URL pública sin cambios.
 
 ## Atención comercial y métodos de pago (15/10/2026)
 
