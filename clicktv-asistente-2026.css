@@ -77,7 +77,8 @@
 .ctv-asistente__op:focus-visible { background: rgba(29, 95, 191, .85); outline: none; }
 
 @media (max-width: 680px) {
-  #ctv-asistente-btn { bottom: 84px; right: 10px; }
+  #ctv-asistente-btn { bottom: 104px; right: 10px; }
+  .ctv-asistente { bottom: 170px; }
 }
 
 .ctv-asistente__pregunta {
