@@ -245,3 +245,29 @@
   body .header .currency-label { font-size: 10px !important; gap: 2px !important; }
   body #selector-moneda { padding: 2px 16px 2px 6px !important; font-size: 10px !important; min-height: 0 !important; height: 22px !important; }
 }
+
+/* Aviso cuando la tienda se abre desde el enlace de un producto */
+.enlace-producto-aviso {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px solid #f8d26a;
+  border-radius: 14px;
+  background: rgba(10, 24, 46, .7);
+  color: #e6f3ff;
+  font-size: .9rem;
+}
+.enlace-producto-aviso button {
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 12px;
+  background: #f8d26a;
+  color: #3a0a10;
+  font-weight: 800;
+  font-size: .82rem;
+  cursor: pointer;
+}

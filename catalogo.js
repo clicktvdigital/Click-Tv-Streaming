@@ -6,6 +6,8 @@
 
   window.seleccionarCategoriaCatalogo = function (categoria = "todos") {
     categoriaActual = categoria;
+    window.productoEnfocado = null;
+    document.getElementById('enlace-producto-aviso')?.remove();
     document.querySelectorAll("[data-categoria]").forEach((btn) => btn.classList.toggle("activo", btn.dataset.categoria === categoria));
     renderCatalogo();
   };
@@ -13,7 +15,10 @@
   window.renderCatalogo = function () {
     const grid = document.getElementById("catalogo-grid");
     if (!grid || typeof PRODUCTOS === "undefined") return;
-    const productos = categoriaActual === "todos" ? PRODUCTOS : PRODUCTOS.filter((p) => p.categoria === categoriaActual);
+    const enfocado = window.productoEnfocado;
+    const productos = enfocado
+      ? PRODUCTOS.filter((p) => p.id === enfocado)
+      : (categoriaActual === "todos" ? PRODUCTOS : PRODUCTOS.filter((p) => p.categoria === categoriaActual));
     grid.innerHTML = productos.map(crearProducto).join("");
   };
 

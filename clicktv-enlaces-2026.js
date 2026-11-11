@@ -39,52 +39,46 @@
     return document.querySelector(`.product-card[data-producto="${CSS.escape(id)}"]`);
   }
 
-  // Lleva a la tarjeta debajo de la cabecera. Solo mueve la página si la
-  // tarjeta no está en su sitio, así no hay saltos cuando ya está bien.
   const OFFSET_CABECERA = 170;
 
-  function posicionar(tarjeta) {
-    const desvio = tarjeta.getBoundingClientRect().top - OFFSET_CABECERA;
+  function posicionarGrid(grid) {
+    const desvio = grid.getBoundingClientRect().top - OFFSET_CABECERA;
     if (Math.abs(desvio) < 40) return;
     document.documentElement.style.scrollBehavior = 'auto';
     window.scrollTo({ top: Math.max(window.scrollY + desvio, 0), behavior: 'auto' });
   }
 
-  function resaltar(tarjeta) {
-    tarjeta.classList.add('catalogo-destacado');
-    let cancelado = false;
-    const cancelar = () => { cancelado = true; };
-    ['touchstart', 'wheel', 'keydown'].forEach((ev) => window.addEventListener(ev, cancelar, { once: true, passive: true }));
-
-    // La página sigue acomodándose al cargar; se revisa varias veces, sin mover si ya está bien.
-    [300, 900, 1800, 3000, 4500, 6500].forEach((ms) => {
-      setTimeout(() => { if (!cancelado) posicionar(tarjeta); }, ms);
+  function mostrarAviso(producto, grid) {
+    document.getElementById('enlace-producto-aviso')?.remove();
+    const aviso = document.createElement('div');
+    aviso.id = 'enlace-producto-aviso';
+    aviso.className = 'enlace-producto-aviso';
+    aviso.innerHTML = `<span>🔗 Mostrando: <strong></strong></span><button type="button" id="btn-ver-todo-catalogo">Ver todo el catálogo</button>`;
+    aviso.querySelector('strong').textContent = producto.nombre;
+    grid.parentNode.insertBefore(aviso, grid);
+    document.getElementById('btn-ver-todo-catalogo').addEventListener('click', () => {
+      if (typeof window.seleccionarCategoriaCatalogo === 'function') {
+        window.seleccionarCategoriaCatalogo(producto.categoria);
+      }
     });
-
-    setTimeout(() => tarjeta.classList.remove('catalogo-destacado'), 6000);
   }
 
   function abrirProductoDesdeEnlace(id) {
     const producto = (typeof PRODUCTOS !== 'undefined' ? PRODUCTOS : []).find((p) => p.id === id);
-    if (!producto) return;
+    if (!producto || typeof window.seleccionarCategoriaCatalogo !== 'function') return;
 
-    // Cambia a la categoría del producto para que su tarjeta exista en pantalla.
-    if (typeof window.seleccionarCategoriaCatalogo === 'function') {
-      window.seleccionarCategoriaCatalogo(producto.categoria);
-    }
+    // Muestra solo el producto del enlace, dentro de su categoría.
+    window.seleccionarCategoriaCatalogo(producto.categoria);
+    window.productoEnfocado = id;
+    window.renderCatalogo();
 
-    // Espera a que el catálogo se pinte y luego lleva a la tarjeta.
-    let intentos = 0;
-    const timer = setInterval(() => {
-      const tarjeta = buscarTarjeta(id);
-      intentos += 1;
-      if (tarjeta) {
-        clearInterval(timer);
-        setTimeout(() => resaltar(tarjeta), 250);
-      } else if (intentos > 40) {
-        clearInterval(timer);
-      }
-    }, 100);
+    const grid = document.getElementById('catalogo-grid');
+    if (!grid) return;
+    mostrarAviso(producto, grid);
+
+    // Se lleva la vista al producto; la pantalla casi no cambia, así que una revisión basta.
+    setTimeout(() => posicionarGrid(grid), 400);
+    setTimeout(() => posicionarGrid(grid), 1400);
   }
 
   const id = idDesdeEnlace();
@@ -95,9 +89,6 @@
       abrirProductoDesdeEnlace(id);
     }
     // Cuando termina de cargar todo (imágenes, partidos), se vuelve a llevar al producto.
-    window.addEventListener('load', () => {
-      const tarjeta = buscarTarjeta(id);
-      if (tarjeta) posicionar(tarjeta);
-    });
+
   }
 })();
