@@ -558,10 +558,17 @@ const PRODUCTOS = [
     nombre: "Aki Móvil",
     categoria: "recargas",
     icono: "📱",
-    descripcion: "Paquetes Aki Móvil. Precio por confirmar.",
-    etiquetas: ["📱 AKI MÓVIL", "💬 PRECIO A CONFIRMAR"],
+    descripcion: "Paquetes Aki Móvil con precio final. No aplican cupón de descuento.",
+    etiquetas: ["📱 AKI MÓVIL", "🚫 SIN CUPÓN"],
     planes: [
-      { tipo: "Paquete Aki Móvil · monto a confirmar", precio: 0, consultar: true }
+      { tipo: "1 GB · vigencia 1 día", precio: 1.05, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "5 GB · vigencia 7 días", precio: 2.99, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "6 GB · vigencia 15 días", precio: 4.99, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "8 GB · vigencia 20 días", precio: 6.99, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "10 GB · vigencia 30 días", precio: 8.99, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "14 GB · vigencia 30 días", precio: 9.99, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "19 GB · vigencia 30 días", precio: 15.49, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "22 GB · vigencia 30 días", precio: 19.99, ivaIncluido: true, bloquearDescuento: true }
     ]
   },
   {
