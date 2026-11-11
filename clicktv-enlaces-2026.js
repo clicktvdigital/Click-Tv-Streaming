@@ -39,23 +39,31 @@
     return document.querySelector(`.product-card[data-producto="${CSS.escape(id)}"]`);
   }
 
-  // La página se acomoda mientras cargan imágenes y partidos; se vuelve a centrar
-  // la tarjeta varias veces, hasta que el cliente desplace la pantalla por su cuenta.
+  // Llevar a la tarjeta con un solo desplazamiento suave y, si la página
+  // cambió de altura al cargar, una sola corrección discreta. Si el cliente
+  // toca o desplaza la pantalla, no se vuelve a mover.
+  function posicionar(tarjeta, suave) {
+    const y = tarjeta.getBoundingClientRect().top + window.scrollY - 170;
+    window.scrollTo({ top: Math.max(y, 0), behavior: suave ? 'smooth' : 'auto' });
+  }
+
   function resaltar(tarjeta) {
     tarjeta.classList.add('catalogo-destacado');
     let cancelado = false;
     const cancelar = () => { cancelado = true; };
     ['touchstart', 'wheel', 'keydown'].forEach((ev) => window.addEventListener(ev, cancelar, { once: true, passive: true }));
-    [150, 600, 1200, 2200, 3500, 5000, 7000].forEach((ms) => {
-      setTimeout(() => {
-        if (cancelado) return;
-        document.documentElement.style.scrollBehavior = 'auto';
-        // Se deja la tarjeta justo debajo de la cabecera fija (aprox. 170 px).
-        const y = tarjeta.getBoundingClientRect().top + window.scrollY - 170;
-        window.scrollTo({ top: Math.max(y, 0), behavior: 'auto' });
-      }, ms);
-    });
-    setTimeout(() => tarjeta.classList.remove('catalogo-destacado'), 8000);
+
+    // Un desplazamiento suave hacia la tarjeta.
+    setTimeout(() => { if (!cancelado) posicionar(tarjeta, true); }, 300);
+
+    // Una corrección solo si la tarjeta quedó lejos del punto correcto.
+    setTimeout(() => {
+      if (cancelado) return;
+      const desvio = Math.abs(tarjeta.getBoundingClientRect().top - 170);
+      if (desvio > 60) posicionar(tarjeta, false);
+    }, 2600);
+
+    setTimeout(() => tarjeta.classList.remove('catalogo-destacado'), 5000);
   }
 
   function abrirProductoDesdeEnlace(id) {
@@ -91,7 +99,10 @@
     // Cuando termina de cargar todo (imágenes, partidos), se vuelve a llevar al producto.
     window.addEventListener('load', () => {
       const tarjeta = buscarTarjeta(id);
-      if (tarjeta) resaltar(tarjeta);
+      if (!tarjeta) return;
+      // Solo se corrige si la tarjeta se movió al terminar de cargar la página.
+      const desvio = Math.abs(tarjeta.getBoundingClientRect().top - 170);
+      if (desvio > 60 && tarjeta.classList.contains('catalogo-destacado')) posicionar(tarjeta, true);
     });
   }
 })();
