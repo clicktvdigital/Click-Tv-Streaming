@@ -415,6 +415,18 @@ const PRODUCTOS = [
     planes: [{ tipo: "1 mes", precio: 9 }]
   },
   {
+    id: "directv-go-deportes",
+    nombre: "DIRECTV GO Deportes",
+    categoria: "deportes",
+    icono: "⚪",
+    descripcion: "DIRECTV GO con canales deportivos en vivo: fútbol, boxeo y programación deportiva desde dispositivos compatibles.",
+    etiquetas: ["⚽ DEPORTES EN VIVO", "💎 PREMIUM"],
+    planes: [
+      { tipo: "1 dispositivo", precio: 15 },
+      { tipo: "Cuenta completa", precio: 25 }
+    ]
+  },
+  {
     id: "deportes-pack",
     nombre: "Pack Deportes",
     categoria: "deportes",

@@ -24,6 +24,7 @@
     'oratv': { src: 'assets/logos-catalogo/ora.jpg', blend: true },
     'xc-tv': { src: 'assets/logos-catalogo/gx-tv.png' },
     'directv-go': { src: 'assets/logos-catalogo/directv-go.png', blend: true },
+    'directv-go-deportes': { src: 'assets/logos-catalogo/directv-go.png', blend: true },
     'vanna-tv': { src: 'assets/logos-catalogo/vanna-tv.jpg' },
     'megax-tv': { src: 'assets/logos-catalogo/megax-tv.png', blend: true },
     'oleada-tv': { src: 'assets/logos-catalogo/oleada-tv.jpg' },
