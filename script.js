@@ -278,7 +278,7 @@ function contactarWhatsAppGeneral() {
 }
 
 function contactarWhatsAppSoporte() {
-  const mensaje = "Hola, necesito soporte técnico con mi servicio Click TV. Escribo al WhatsApp alternativo.";
+  const mensaje = "Hola, necesito soporte técnico con mi servicio de Click TV Streaming. Por favor, indíquenme los pasos para resolver el problema.";
   window.open(`${CONFIG.whatsappAlternativoLink}?text=${encodeURIComponent(mensaje)}`, "_blank", "noopener,noreferrer");
 }
 
@@ -307,7 +307,7 @@ function inicializarBotonesFlotantes() {
   if (catalogo) catalogo.href = "#streaming";
 
   if (soporte) {
-    const msg = encodeURIComponent("Hola, necesito soporte técnico con mi servicio Click TV.");
+    const msg = encodeURIComponent("Hola, necesito soporte técnico con mi servicio de Click TV Streaming. Por favor, indíquenme los pasos para resolver el problema.");
     configurarLinkExterno(soporte, `${CONFIG.whatsappAlternativoLink}?text=${msg}`);
   }
 }
