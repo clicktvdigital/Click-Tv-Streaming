@@ -170,7 +170,12 @@
         <strong>💬 Asistente</strong>
         <button type="button" class="ctv-asistente__cerrar" aria-label="Cerrar asistente">✕</button>
       </div>
-      <div class="ctv-asistente__cuerpo" aria-live="polite"></div>`;
+      <div class="ctv-asistente__cuerpo" aria-live="polite"></div>
+      <form class="ctv-asistente__pregunta">
+        <input type="text" maxlength="300" placeholder="Escribe tu pregunta…" aria-label="Escribe tu pregunta" required>
+        <button type="submit">Enviar</button>
+      </form>
+      <p class="ctv-asistente__aviso">🔒 No escribas claves, contraseñas ni datos de tarjetas.</p>`;
 
     document.body.appendChild(boton);
     document.body.appendChild(panel);
@@ -224,6 +229,39 @@
     if (document.getElementById('ctv-asistente-btn')) return;
     const { boton, panel, cuerpo } = crearDom();
     render(cuerpo, 'inicio');
+
+    // Preguntas libres: se responden con el servicio de IA a través de /api/asistente.
+    const formulario = panel.querySelector('.ctv-asistente__pregunta');
+    formulario.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const campo = formulario.querySelector('input');
+      const pregunta = campo.value.trim();
+      if (pregunta.length < 2) return;
+      const pregunta_p = document.createElement('p');
+      pregunta_p.className = 'ctv-asistente__tu-pregunta';
+      pregunta_p.textContent = '🙋 ' + pregunta;
+      cuerpo.appendChild(pregunta_p);
+      campo.value = '';
+      const espera = document.createElement('p');
+      espera.className = 'ctv-asistente__ia';
+      espera.textContent = '⏳ Revisando tu pregunta…';
+      cuerpo.appendChild(espera);
+      cuerpo.scrollTop = cuerpo.scrollHeight;
+      try {
+        const r = await fetch('/api/asistente', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pregunta }),
+        });
+        const datos = await r.json().catch(() => ({}));
+        espera.textContent = r.ok && datos.respuesta
+          ? '🤖 ' + datos.respuesta
+          : '💬 ' + (datos.error || 'No pude responder ahora. Escribe a soporte por WhatsApp.');
+      } catch (error) {
+        espera.textContent = '💬 Sin conexión. Escribe a soporte por WhatsApp.';
+      }
+      cuerpo.scrollTop = cuerpo.scrollHeight;
+    });
 
     boton.addEventListener('click', () => {
       const abrir = panel.hidden;
