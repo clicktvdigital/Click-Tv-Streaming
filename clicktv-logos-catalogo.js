@@ -34,6 +34,8 @@
     'iptv-premium': { src: 'assets/logos-catalogo/iptv-xtream-pro.jpg', blend: true },
     'iptv-ultra': { src: 'assets/logos-catalogo/iptv-xtream-pro.jpg', blend: true }
   };
+  // Productos que se muestran con insignia negra (fondo del logo oscuro o marca de fondo negro).
+  const DARK = new Set(['netflix-extra']);
   const BRANDS = {
     'netflix-normal':defined('netflix','netflix.com','#ba1624','N'),
     'netflix-extra':defined('netflix','netflix.com','#ba1624','N'),
@@ -96,6 +98,7 @@
     card.style.setProperty('--ctv-card-accent', info.accent);
     icon.style.setProperty('--ctv-brand-bg', info.accent);
     icon.classList.add('ctv-brand-badge');
+    if (DARK.has(id)) icon.classList.add('ctv-brand-dark');
     icon.setAttribute('aria-hidden','true');
     // Si no hay logo verificado, se muestra el icono original del producto (📺, 🎬, ⚽…), no una letra suelta.
     const original = (icon.textContent || '').trim();
@@ -139,6 +142,7 @@
     const short = info.short || fallbackInitials(name);
     icon.style.setProperty('--ctv-brand-bg',info.accent);
     icon.classList.add('ctv-brand-badge','ctv-cart-badge');
+    if (DARK.has(id)) icon.classList.add('ctv-brand-dark');
     icon.setAttribute('aria-hidden','true');
     const original = (icon.textContent || '').trim();
     icon.textContent='';
