@@ -36,10 +36,22 @@
     return document.querySelector(`.product-card[data-producto="${CSS.escape(id)}"]`);
   }
 
+  // La página se acomoda mientras cargan imágenes y partidos; se vuelve a centrar
+  // la tarjeta varias veces, hasta que el cliente desplace la pantalla por su cuenta.
   function resaltar(tarjeta) {
     tarjeta.classList.add('catalogo-destacado');
-    tarjeta.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setTimeout(() => tarjeta.classList.remove('catalogo-destacado'), 4000);
+    let cancelado = false;
+    const cancelar = () => { cancelado = true; };
+    ['touchstart', 'wheel', 'keydown'].forEach((ev) => window.addEventListener(ev, cancelar, { once: true, passive: true }));
+    [150, 600, 1200, 2200, 3500].forEach((ms) => {
+      setTimeout(() => {
+        if (cancelado) return;
+        // Se deja la tarjeta justo debajo de la cabecera fija (aprox. 170 px).
+        const y = tarjeta.getBoundingClientRect().top + window.scrollY - 170;
+        window.scrollTo({ top: Math.max(y, 0), behavior: 'auto' });
+      }, ms);
+    });
+    setTimeout(() => tarjeta.classList.remove('catalogo-destacado'), 5000);
   }
 
   function abrirProductoDesdeEnlace(id) {
