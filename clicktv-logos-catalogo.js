@@ -10,7 +10,8 @@
     'zapping-ligapro': { src: 'assets/logos-catalogo/zapping.png', blend: true },
     'zapping-pro': { src: 'assets/logos-catalogo/zapping.png', blend: true },
     'telelatino': { src: 'assets/logos-catalogo/telelatino.webp' },
-    'flujo-tv': { src: 'assets/logos-catalogo/flujo-tv.jpg' }
+    'flujo-tv': { src: 'assets/logos-catalogo/flujo-tv.jpg' },
+    'xc-tv': { src: 'assets/logos-catalogo/gx-tv.jpg', blend: true }
   };
   const BRANDS = {
     'netflix-normal':defined('netflix','netflix.com','#ba1624','N'),
