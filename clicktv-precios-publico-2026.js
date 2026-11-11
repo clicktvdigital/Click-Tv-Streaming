@@ -141,7 +141,7 @@
       { tipo: "3 dispositivos · 6 meses", precio: 67.5, dispositivos: 3, ivaIncluido: true },
       { tipo: "3 dispositivos · 12 meses", precio: 120, dispositivos: 3, ivaIncluido: true }
     ] },
-  { id: "xc-tv", nombre: "XC+ TV", categoria: "iptv", icono: "📺", descripcion: "Servicio IPTV con canales, películas, series y eventos en vivo.", etiquetas: [
+  { id: "xc-tv", nombre: "GXTV", categoria: "iptv", icono: "📺", descripcion: "Servicio IPTV con canales, películas, series y eventos en vivo.", etiquetas: [
       "📺 IPTV"
     ], planes: [
       { tipo: "1 dispositivo · 1 mes", precio: 5.5, dispositivos: 1, ivaIncluido: true },
