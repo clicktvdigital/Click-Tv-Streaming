@@ -67,12 +67,14 @@
     icon.style.setProperty('--ctv-brand-bg', info.accent);
     icon.classList.add('ctv-brand-badge');
     icon.setAttribute('aria-hidden','true');
+    // Si no hay logo verificado, se muestra el icono original del producto (📺, 🎬, ⚽…), no una letra suelta.
+    const original = (icon.textContent || '').trim();
     icon.textContent = '';
     const text = () => {
       icon.textContent = '';
       const span = document.createElement('span');
       span.className = 'ctv-brand-fallback';
-      span.textContent = short;
+      span.textContent = original || short;
       icon.appendChild(span);
     };
     if (!info.slug) text();
@@ -106,12 +108,13 @@
     icon.style.setProperty('--ctv-brand-bg',info.accent);
     icon.classList.add('ctv-brand-badge','ctv-cart-badge');
     icon.setAttribute('aria-hidden','true');
+    const original = (icon.textContent || '').trim();
     icon.textContent='';
     const fallback = () => {
       icon.replaceChildren();
       const text = document.createElement('span');
       text.className='ctv-brand-fallback';
-      text.textContent=short;
+      text.textContent = original || short;
       icon.appendChild(text);
     };
     if (!info.slug) fallback();
