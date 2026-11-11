@@ -275,3 +275,10 @@
 .enlace-producto-aviso__titulo { font-size: .9rem; }
 .enlace-producto-aviso__pasos { margin: 2px 0 0; padding-left: 20px; font-size: .84rem; line-height: 1.5; width: 100%; }
 .enlace-producto-aviso__pasos li { margin: 0; }
+
+/* Los botones Subir / Bajar / Cerrar solo sirven en el menú desplegable del celular. */
+@media (min-width: 681px) {
+  .nav-menu__toolbar,
+  .nav-menu__control,
+  .nav-menu__close { display: none !important; }
+}
