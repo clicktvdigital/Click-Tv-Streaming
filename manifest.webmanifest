@@ -10,7 +10,7 @@
   "background_color": "#07111f",
   "theme_color": "#1d6fd1",
   "icons": [
-    { "src": "clicktv-icono.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "clicktv-icono.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "clicktv-icono-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "clicktv-icono-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
   ]
 }
