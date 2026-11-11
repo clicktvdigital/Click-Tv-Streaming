@@ -457,7 +457,7 @@ const PRODUCTOS = [
   },
   {
     id: "cnt-paquetes-prepago",
-    nombre: "CNT Paquetes",
+    nombre: "Paquetes",
     categoria: "recargas",
     icono: "🟣",
     descripcion: "Paquetes CNT Ecuador con precio final. No aplican cupón de descuento.",
@@ -508,7 +508,7 @@ const PRODUCTOS = [
   },
   {
     id: "cnt-aplicaciones",
-    nombre: "CNT Aplicaciones",
+    nombre: "Aplicaciones",
     categoria: "recargas",
     icono: "🟣",
     descripcion: "Paquetes de aplicaciones CNT con precio final. No aplican cupón de descuento.",
@@ -526,7 +526,7 @@ const PRODUCTOS = [
   },
   {
     id: "cnt-wifi",
-    nombre: "CNT WiFi",
+    nombre: "Wi-Fi",
     categoria: "recargas",
     icono: "🟣",
     descripcion: "Recarga CNT WiFi desde $0.25. El cliente indica el código de su tarjeta y el monto a recargar; se confirma antes de pagar.",

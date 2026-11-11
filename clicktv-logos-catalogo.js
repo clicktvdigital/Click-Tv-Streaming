@@ -16,7 +16,10 @@
     'maxiplus': { src: 'assets/logos-catalogo/maxiplus.jpg' },
     'aki-movil': { src: 'assets/logos-catalogo/aki-movil.jpg' },
     'tuenti-recargas-combos': { src: 'assets/logos-catalogo/tuenti-tigo.jpg' },
-    'tigo-combos': { src: 'assets/logos-catalogo/tigo-combos.jpg' }
+    'tigo-combos': { src: 'assets/logos-catalogo/tigo-combos.jpg' },
+    'cnt-paquetes-prepago': { src: 'assets/logos-catalogo/cnt.jpg' },
+    'cnt-aplicaciones': { src: 'assets/logos-catalogo/cnt.jpg' },
+    'cnt-wifi': { src: 'assets/logos-catalogo/cnt.jpg' }
   };
   const BRANDS = {
     'netflix-normal':defined('netflix','netflix.com','#ba1624','N'),
