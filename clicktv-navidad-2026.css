@@ -6,35 +6,47 @@
   position: relative;
   z-index: 950;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 8px 12px;
-  padding: 8px 14px;
-  background: linear-gradient(90deg, #8f0f1d, #b71c2c 50%, #0b6b3a);
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 40px;
+  padding: 6px 12px;
+  background: linear-gradient(90deg, #8f0f1d, #b71c2c 60%, #0b6b3a);
   color: #fff;
-  font-size: .9rem;
-  font-weight: 700;
-  text-align: center;
   border-bottom: 2px solid #f8d26a;
 }
 
-.navidad-banner__texto { line-height: 1.35; }
+.navidad-banner__texto {
+  font-size: .92rem;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.navidad-banner__acciones {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
 
 .navidad-banner__boton {
   border: 0;
   border-radius: 999px;
-  padding: 7px 14px;
+  padding: 4px 10px;
   background: #f8d26a;
   color: #3a0a10;
   font-weight: 800;
-  font-size: .85rem;
+  font-size: .72rem;
+  line-height: 1.2;
+  white-space: nowrap;
   cursor: pointer;
 }
 
+.navidad-banner__boton--app { background: #fff; }
+
 .navidad-banner__boton[hidden] { display: none; }
 
-/* Copos de nieve suaves, sin interactuar con la página. */
 .navidad-nieve {
   position: fixed;
   inset: 0;
@@ -72,5 +84,18 @@
 }
 
 @media (max-width: 680px) {
-  .navidad-banner { font-size: .8rem; padding: 7px 10px; }
+  .navidad-banner { padding: 5px 10px; }
+  .navidad-banner__texto { font-size: .85rem; }
+  .navidad-banner__boton { font-size: .66rem; padding: 4px 8px; }
+}
+
+/* Botones del banner: tamaño fijo para que no los agranden los estilos generales de botón. */
+body .navidad-banner button.navidad-banner__boton {
+  height: auto !important;
+  min-height: 0 !important;
+  width: auto !important;
+  padding: 4px 9px !important;
+  font-size: .7rem !important;
+  line-height: 1.2 !important;
+  box-shadow: none !important;
 }
