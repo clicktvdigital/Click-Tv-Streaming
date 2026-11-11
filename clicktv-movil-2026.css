@@ -1,0 +1,101 @@
+/* CLICK TV STREAMING · Ajustes de interfaz para celulares (2026)
+ * Capa final: se carga después de todas las demás hojas de estilo.
+ * Solo actúa en pantallas de hasta 680px. No cambia colores de marca ni contenido. */
+
+@media (max-width: 680px) {
+  /* Barra inferior de accesos: una sola fila compacta, sin textos cortados. */
+  body .floating-actions {
+    position: fixed !important;
+    left: 8px !important;
+    right: 8px !important;
+    bottom: max(8px, env(safe-area-inset-bottom)) !important;
+    width: auto !important;
+    max-width: none !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 4px !important;
+    padding: 6px !important;
+    border-radius: 18px !important;
+    background: rgba(7, 14, 26, .94) !important;
+    border: 1px solid rgba(96, 165, 250, .28) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, .45) !important;
+    backdrop-filter: blur(10px);
+    overflow: visible !important;
+    z-index: 900 !important;
+  }
+
+  /* Estos accesos siguen disponibles en su sección; la barra muestra los principales. */
+  body .floating-actions .float-btn.float-btn--group,
+  body .floating-actions .float-btn.float-btn--top,
+  body .floating-actions .float-btn.float-btn--catalog,
+  body .floating-actions .float-btn.float-btn--menu,
+  body .floating-actions .float-btn#btn-whatsapp-grupo,
+  body .floating-actions .float-btn#btn-catalogo,
+  body .floating-actions .float-btn#btn-menu {
+    display: none !important;
+  }
+
+  body .floating-actions .float-btn {
+    position: relative !important;
+    width: auto !important;
+    height: 58px !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 14px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  body .floating-actions .float-btn::before,
+  body .floating-actions .float-btn::after {
+    display: none !important;
+  }
+
+  body .floating-actions .float-btn__icon {
+    position: static !important;
+    width: 34px !important;
+    height: 34px !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 12px !important;
+    transform: none !important;
+  }
+
+  body .floating-actions .float-btn__icon svg,
+  body .floating-actions .float-btn svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  body .floating-actions .float-btn__badge {
+    font-size: 8px !important;
+  }
+
+  body .floating-actions .float-btn__label {
+    position: static !important;
+    opacity: 1 !important;
+    transform: none !important;
+    max-width: 100% !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    background: none !important;
+    padding: 0 !important;
+    color: #e6f3ff !important;
+  }
+
+  /* Espacio para que la barra no tape el final de cada sección. */
+  body {
+    padding-bottom: 84px;
+  }
+}
