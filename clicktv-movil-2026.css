@@ -182,3 +182,13 @@
     padding-bottom: 84px;
   }
 }
+
+/* Rendimiento: en celulares el desenfoque de fondo hace lento el desplazamiento. */
+@media (max-width: 680px) {
+  *, *::before, *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  .navidad-nieve { display: none !important; }
+  .navidad-santa { display: none !important; }
+}

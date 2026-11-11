@@ -119,7 +119,7 @@ body .navidad-banner input.navidad-banner__volumen[hidden] { display: none; }
   opacity: 0;
   animation: navidad-volar 26s linear infinite;
 }
-.navidad-santa svg { width: 100%; height: auto; filter: drop-shadow(0 4px 6px rgba(0,0,0,.35)); }
+.navidad-santa svg { width: 100%; height: auto; }
 @keyframes navidad-volar {
   0%   { transform: translate(-260px, 0) rotate(-4deg); opacity: 0; }
   4%   { opacity: 1; }
