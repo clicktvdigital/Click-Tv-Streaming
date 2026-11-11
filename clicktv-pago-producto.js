@@ -146,7 +146,7 @@
       <button type="button" data-ctv-pg-contacto="telegram" class="ctv-pg-btn">✈️ Telegram (copiar pedido)</button>
       <button type="button" data-ctv-pg-contacto="copiar" class="ctv-pg-btn">📋 Copiar resumen</button></div>
       <textarea id="ctv-pg-copiar-manual" aria-label="Resumen o cuenta para copiar manualmente" rows="3" readonly hidden></textarea></div>
-      <p class="ctv-pg-horario">🕗 <strong>Ventas y suscripciones:</strong> 08:00–20:00 · <strong>Soporte:</strong> 08:00–18:00 (hora de Ecuador).<br>⚡ Activación estimada desde 5 minutos <strong>después de verificar el pago</strong>, según disponibilidad y horario. No es automática.</p>
+      <p class="ctv-pg-horario"><span style="display:block;margin:3px 0">🕗 <strong>Ventas y suscripciones:</strong> 08:00–20:00</span><span style="display:block;margin:3px 0">🛠️ <strong>Soporte:</strong> 08:00–18:00 (hora de Ecuador)</span><span style="display:block;margin:3px 0">⚡ <strong>Activación estimada</strong> desde 5 minutos después de verificar el pago, según disponibilidad y horario.</span><span style="display:block;margin:3px 0">🔒 No es automática: se confirma cuando el pago está verificado.</span></p>
       <p id="ctv-pg-status" role="status" aria-live="polite" class="ctv-pg-status"></p>`;
     document.body.appendChild(dlg);
     dlg.addEventListener('change',e=>{
