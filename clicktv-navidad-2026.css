@@ -1,0 +1,76 @@
+/* CLICK TV STREAMING · Temporada navideña (2026)
+ * Capa visual que se puede quitar borrando su enlace en index.html.
+ * No cambia precios, enlaces ni contenido. */
+
+.navidad-banner {
+  position: relative;
+  z-index: 950;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 12px;
+  padding: 8px 14px;
+  background: linear-gradient(90deg, #8f0f1d, #b71c2c 50%, #0b6b3a);
+  color: #fff;
+  font-size: .9rem;
+  font-weight: 700;
+  text-align: center;
+  border-bottom: 2px solid #f8d26a;
+}
+
+.navidad-banner__texto { line-height: 1.35; }
+
+.navidad-banner__boton {
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 14px;
+  background: #f8d26a;
+  color: #3a0a10;
+  font-weight: 800;
+  font-size: .85rem;
+  cursor: pointer;
+}
+
+.navidad-banner__boton[hidden] { display: none; }
+
+/* Copos de nieve suaves, sin interactuar con la página. */
+.navidad-nieve {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.navidad-nieve span {
+  position: absolute;
+  top: -10px;
+  color: rgba(255, 255, 255, .75);
+  font-size: 12px;
+  animation: navidad-caer linear infinite;
+}
+
+.navidad-nieve span:nth-child(1)  { left: 5%;  animation-duration: 14s; animation-delay: 0s; }
+.navidad-nieve span:nth-child(2)  { left: 17%; animation-duration: 18s; animation-delay: 3s; font-size: 16px; }
+.navidad-nieve span:nth-child(3)  { left: 29%; animation-duration: 12s; animation-delay: 6s; }
+.navidad-nieve span:nth-child(4)  { left: 41%; animation-duration: 20s; animation-delay: 1s; font-size: 10px; }
+.navidad-nieve span:nth-child(5)  { left: 53%; animation-duration: 15s; animation-delay: 8s; }
+.navidad-nieve span:nth-child(6)  { left: 65%; animation-duration: 17s; animation-delay: 4s; font-size: 14px; }
+.navidad-nieve span:nth-child(7)  { left: 77%; animation-duration: 13s; animation-delay: 2s; }
+.navidad-nieve span:nth-child(8)  { left: 89%; animation-duration: 19s; animation-delay: 7s; font-size: 16px; }
+.navidad-nieve span:nth-child(9)  { left: 11%; animation-duration: 16s; animation-delay: 10s; }
+.navidad-nieve span:nth-child(10) { left: 95%; animation-duration: 21s; animation-delay: 5s; font-size: 10px; }
+
+@keyframes navidad-caer {
+  from { transform: translateY(0) rotate(0deg); opacity: .9; }
+  to   { transform: translateY(110vh) rotate(360deg); opacity: .2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navidad-nieve { display: none; }
+}
+
+@media (max-width: 680px) {
+  .navidad-banner { font-size: .8rem; padding: 7px 10px; }
+}

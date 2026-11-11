@@ -1,0 +1,16 @@
+{
+  "name": "CLICK TV STREAMING",
+  "short_name": "Click TV",
+  "description": "Streaming, TV en vivo, deportes, música y recargas. Compra y renovación por WhatsApp.",
+  "lang": "es",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#07111f",
+  "theme_color": "#1d6fd1",
+  "icons": [
+    { "src": "clicktv-icono.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "clicktv-icono.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

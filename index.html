@@ -60,6 +60,7 @@
   }
   </script>
   <link rel="apple-touch-icon" href="clicktv-icono.png">
+  <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="clicktv-accesible-azul.css?v=20261015-4">
   <link rel="stylesheet" href="clicktv-atencion-pagos.css?v=20261015-2">
   <link rel="stylesheet" href="clicktv-pago-producto.css?v=20261015-1">
@@ -73,8 +74,14 @@
   <!-- CLICKTV_CONTACTOS_RADIO_PREMIUM_2026 -->
   <link rel="stylesheet" href="clicktv-contactos-radio-premium.css?v=20261015-8">
   <link rel="stylesheet" href="clicktv-movil-2026.css?v=20261111-5">
+  <link rel="stylesheet" href="clicktv-navidad-2026.css?v=20261111-1">
 </head>
 <body>
+  <div class="navidad-banner" role="region" aria-label="Mensaje de temporada">
+    <span class="navidad-banner__texto">🎄 ¡Feliz Navidad! Atendemos por WhatsApp y Telegram en nuestro horario.</span>
+    <button id="btn-instalar-app" class="navidad-banner__boton" type="button" hidden>📲 Instalar app en mi celular</button>
+  </div>
+  <div class="navidad-nieve" aria-hidden="true"><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span></div>
   <div class="site-bg" aria-hidden="true">
     <span class="ambient-orb ambient-orb--one"></span>
     <span class="ambient-orb ambient-orb--two"></span>
@@ -931,5 +938,6 @@
   <script src="clicktv-pago-producto.js?v=20261015-1" defer></script>
   <script src="clicktv-final-visual.js?v=20261015-3" defer></script>
   <script src="clicktv-logos-catalogo.js?v=20261111-22" defer></script>
+  <script src="clicktv-app-2026.js?v=20261111-1" defer></script>
 </body>
 </html>
