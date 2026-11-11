@@ -1315,7 +1315,13 @@ function marcarRenovacionCarrito(itemId) {
 }
 
 function obtenerMensajeRenovacion(item) {
-  return `Hola Click TV Streaming, deseo renovar mi servicio:\n\nServicio: ${item.nombre}\nPlan: ${item.plan}\nCantidad: ${item.cantidad || 1}\nDeseo realizar la renovación.`;
+  // El mensaje sigue la operación del producto: compra nueva o renovación.
+  const cantidad = item.cantidad || 1;
+  const precio = item.consultar ? "Por confirmar" : formatearPrecio(item.precio);
+  if (item.operacion === "renovacion") {
+    return `Hola Click TV Streaming, deseo renovar mi servicio:\n\nServicio: ${item.nombre}\nPlan: ${item.plan}\nCantidad: ${cantidad}\nDeseo realizar la renovación.`;
+  }
+  return `Hola Click TV Streaming, quiero contratar este servicio:\n\nServicio: ${item.nombre}\nPlan: ${item.plan}\nCantidad: ${cantidad}\nPrecio mostrado: ${precio}\n¿Me confirman disponibilidad y activación antes de pagar?`;
 }
 
 function renovarItemWhatsApp(itemId) {
@@ -1367,7 +1373,7 @@ function renderCarrito() {
             <div class="carrito-item__renew-actions">
               <button type="button" class="cart-renew-toggle" onclick="marcarRenovacionCarrito('${item.itemId}')">${item.operacion === "renovacion" ? "Cambiar a compra" : "🔄 Marcar renovación"}</button>
               <div class="cart-renew-channels" aria-label="Renovar por canal de contacto">
-                <button type="button" class="cart-renew-channel cart-renew-channel--wa" onclick="renovarItemWhatsApp('${item.itemId}')">🟢 Enviar por WhatsApp</button>
+                <button type="button" class="cart-renew-channel cart-renew-channel--wa" onclick="renovarItemWhatsApp('${item.itemId}')">🟢 WhatsApp 0939166222</button>
                 <button type="button" class="cart-renew-channel cart-renew-channel--signal" onclick="renovarItemSignal('${item.itemId}')">🔵 Enviar por Signal</button>
                 <button type="button" class="cart-renew-channel cart-renew-channel--telegram" onclick="renovarItemTelegram('${item.itemId}')">✈️ Enviar por Telegram</button>
               </div>
