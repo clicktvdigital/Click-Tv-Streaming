@@ -66,7 +66,6 @@ const CONFIG = {
   exchangeRateApiUrl: "https://open.er-api.com/v6/latest/USD",
   ipGeoUrl: "https://ipapi.co/json/",
 
-  ivaPorcentaje: 0.13,
   paypalComisionPorcentaje: 0.054,
   paypalComisionFija: 0.30
 };
@@ -501,7 +500,7 @@ const PRODUCTOS = [
     nombre: "Recargas ilimitadas por operador",
     categoria: "recargas",
     icono: "♾️",
-    descripcion: "Gestión de recarga ilimitada o combo ilimitado por operador. Precio final sin IVA adicional y sin cupón.",
+    descripcion: "Gestión de recarga ilimitada o combo ilimitado por operador. Precio final y sin cupón.",
     etiquetas: ["♾️ ILIMITADAS", "✅ PRECIO FINAL", "🚫 SIN CUPÓN"],
     planes: [
       { tipo: "Recarga ilimitada Claro · 1 mes", precio: 4.00, ivaIncluido: true, bloquearDescuento: true },

@@ -65,7 +65,13 @@ async function cargarEspn(dateFrom, dateTo) {
     const data = await fetchJson(`${ESPN_BASE}/${slug}/scoreboard?dates=${dates}&limit=100`);
     return (data.events || []).map(e => normalizarEspnEvento(e, label));
   }));
-  return resultados.flatMap(r => r.status === "fulfilled" ? r.value : []);
+  // Estado por liga, para que la web pueda informar qué competición respondió.
+  const ligas = ESPN_LIGAS.map(({ label }, i) => {
+    const r = resultados[i];
+    if (r.status === "fulfilled") return { liga: label, fuente: "ESPN", estado: "ok", partidos: r.value.length };
+    return { liga: label, fuente: "ESPN", estado: "error", partidos: 0, motivo: String(r.reason?.message || r.reason).slice(0, 120) };
+  });
+  return { matches: resultados.flatMap(r => r.status === "fulfilled" ? r.value : []), ligas };
 }
 
 function clave(m) {
@@ -95,11 +101,12 @@ export default async function handler(req, res) {
   }
   const hoy = new Date();
   const iso = d => d.toISOString().slice(0, 10);
-  const dateFrom = /^\d{4}-\d{2}-\d{2}$/.test(req.query.dateFrom || "") ? req.query.dateFrom : iso(new Date(hoy.getTime() - 2*86400000));
-  const dateTo = /^\d{4}-\d{2}-\d{2}$/.test(req.query.dateTo || "") ? req.query.dateTo : iso(new Date(hoy.getTime() + 12*86400000));
+  const dateFrom = /^\d{4}-\d{2}-\d{2}$/.test(req.query.dateFrom || "") ? req.query.dateFrom : iso(new Date(hoy.getTime() - 1*86400000));
+  const dateTo = /^\d{4}-\d{2}-\d{2}$/.test(req.query.dateTo || "") ? req.query.dateTo : iso(new Date(hoy.getTime() + 30*86400000));
 
   try {
-    const [footballData, espn] = await Promise.all([cargarFootballData(dateFrom, dateTo), cargarEspn(dateFrom, dateTo)]);
+    const [footballData, espnRes] = await Promise.all([cargarFootballData(dateFrom, dateTo), cargarEspn(dateFrom, dateTo)]);
+    const espn = espnRes.matches;
     const mapa = new Map();
     [...espn, ...footballData].forEach(m => mapa.set(clave(m), m));
     const matches = [...mapa.values()].sort((a,b) => new Date(a.utcDate)-new Date(b.utcDate));
@@ -108,7 +115,7 @@ export default async function handler(req, res) {
     if (matches.some(m => /Libertadores/i.test(m.competition?.name || m.group || ""))) fuentes.push("Libertadores");
     if (matches.some(m => /Sudamericana|CONMEBOL/i.test(m.competition?.name || m.group || ""))) fuentes.push("CONMEBOL");
     if (matches.some(m => /LigaPro|Ecuador/i.test(m.competition?.name || m.group || ""))) fuentes.push("LigaPro Ecuador");
-    return res.status(200).json({ matches, total: matches.length, fuentes: [...new Set(fuentes)], actualizado: new Date().toISOString() });
+    return res.status(200).json({ matches, total: matches.length, fuentes: [...new Set(fuentes)], ligas: espnRes.ligas, rango: { dateFrom, dateTo }, actualizado: new Date().toISOString() });
   } catch (error) {
     return res.status(200).json({ matches: [], total: 0, fuentes: [], warning: "No fue posible consultar los calendarios en este momento.", actualizado: new Date().toISOString() });
   }

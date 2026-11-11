@@ -1365,7 +1365,7 @@ function renderCarrito() {
             <p class="carrito-item__nombre">${item.nombre}</p>
             <span class="operation-badge ${item.operacion === "renovacion" ? "is-renewal" : ""}">${item.operacion === "renovacion" ? "Renovación" : "Compra nueva"}</span>
           </div>
-          <p class="carrito-item__plan">${item.plan} · ${item.consultar ? "Precio por confirmar" : formatearPrecio(item.precio)}${item.ivaIncluido ? " · Precio final" : ""}${item.bloquearDescuento ? " · Sin cupón" : ""}</p>
+          <p class="carrito-item__plan">${item.plan} · ${item.consultar ? "Precio por confirmar" : formatearPrecio(item.precio)}${item.bloquearDescuento ? " · Sin cupón" : ""}</p>
           ${item.dispositivos ? `
             <label class="mini-label">Dispositivos
               <input type="number" min="1" max="10" value="${item.dispositivos}" onchange="modificarDispositivos('${item.itemId}', this.value)">
@@ -1396,7 +1396,6 @@ function renderCarrito() {
   const totales = calcularTotales();
   actualizarTexto("carrito-subtotal", formatearPrecio(totales.subtotal));
   actualizarTexto("carrito-descuento", `- ${formatearPrecio(totales.descuento)}`);
-  actualizarTexto("carrito-iva", formatearPrecio(totales.iva));
   const contienePreciosPorConfirmar = carrito.some((item) => item.consultar);
   actualizarTexto("carrito-total", `${formatearPrecio(totales.total)}${contienePreciosPorConfirmar ? " + valores por confirmar" : ""}`);
   actualizarTexto("paypal-total", `$${totales.totalPaypal.toFixed(2)} USD`);
@@ -1420,23 +1419,12 @@ function calcularTotales() {
   }, 0);
   const descuento = cuponManualActivo ? subtotalDescontable * (Number(cuponManualActivo.porcentaje) / 100) : 0;
   const base = Math.max(subtotal - descuento, 0);
-  const subtotalGravado = carrito.reduce((acc, item) => {
-    if (item.ivaIncluido) return acc;
-    return acc + Number(item.precio) * Number(item.cantidad);
-  }, 0);
-  const subtotalGravadoDescontable = carrito.reduce((acc, item) => {
-    if (item.ivaIncluido || item.bloquearDescuento) return acc;
-    return acc + Number(item.precio) * Number(item.cantidad);
-  }, 0);
-  const descuentoGravado = cuponManualActivo ? subtotalGravadoDescontable * (Number(cuponManualActivo.porcentaje) / 100) : 0;
-  const baseGravada = Math.max(subtotalGravado - descuentoGravado, 0);
-  const iva = baseGravada * CONFIG.ivaPorcentaje;
-  const total = base + iva;
+  const total = base;
   const totalPaypal = total > 0
     ? (total + CONFIG.paypalComisionFija) / (1 - CONFIG.paypalComisionPorcentaje)
     : 0;
 
-  return { subtotal, descuento, base, iva, total, totalPaypal };
+  return { subtotal, descuento, base, total, totalPaypal };
 }
 
 function obtenerCuponManualActivo() {
@@ -1581,11 +1569,10 @@ function calcularAhorroSeleccionado() {
   const subtotal = seleccionados.reduce((acc, item) => acc + Number(item.data.plan.precio), 0);
   const descuento = cuponAhorroAplicado ? subtotal * (Number(cuponAhorroAplicado.porcentaje) / 100) : 0;
   const base = Math.max(subtotal - descuento, 0);
-  const iva = base * Number(CONFIG.ivaPorcentaje || 0);
-  const total = base + iva;
+  const total = base;
   const ahorro = Math.max(normal - total, 0);
 
-  return { seleccionados, normal, subtotal, descuento, iva, total, ahorro };
+  return { seleccionados, normal, subtotal, descuento, total, ahorro };
 }
 
 function actualizarCalculadoraAhorro() {
@@ -1593,7 +1580,6 @@ function actualizarCalculadoraAhorro() {
   actualizarTexto("ahorro-normal", formatearPrecio(totales.normal));
   actualizarTexto("ahorro-subtotal", formatearPrecio(totales.subtotal));
   actualizarTexto("ahorro-cupon", `- ${formatearPrecio(totales.descuento)}`);
-  actualizarTexto("ahorro-iva", formatearPrecio(totales.iva));
   actualizarTexto("ahorro-total", formatearPrecio(totales.total));
   actualizarTexto("ahorro-total-ahorrado", formatearPrecio(totales.ahorro));
   actualizarTexto("ahorro-cupon-info", cuponAhorroAplicado ? `Cupón aplicado manualmente: ${cuponAhorroAplicado.codigo}` : "Sin cupón aplicado.");
@@ -1813,9 +1799,8 @@ function generarResumenPedido() {
     return `• ${operacion}: ${item.nombre} (${item.plan}) x${item.cantidad}${precioLinea}`;
   }).join("\n");
   const totales = calcularTotales();
-  const ivaEtiqueta = Math.round(CONFIG.ivaPorcentaje * 100);
   const cuponManualActivo = obtenerCuponManualActivo();
-  return `Hola, quiero finalizar mi compra:\n${resumen}\n\nMétodo elegido: ${obtenerNombreMetodoPago(metodoPagoActual)}\nSubtotal: $${totales.subtotal.toFixed(2)} USD\nDescuento aplicado: $${totales.descuento.toFixed(2)} USD\nIVA ${ivaEtiqueta}% Ecuador cuando aplica: $${totales.iva.toFixed(2)} USD\nTotal: $${totales.total.toFixed(2)} USD${cuponManualActivo ? `\nCupón: ${cuponManualActivo.codigo} (no aplica a recargas o combos oficiales de operadora)` : ""}\n\nPor favor confirmar disponibilidad y pasos para activar.`;
+  return `Hola, quiero finalizar mi compra:\n${resumen}\n\nMétodo elegido: ${obtenerNombreMetodoPago(metodoPagoActual)}\nSubtotal: $${totales.subtotal.toFixed(2)} USD\nDescuento aplicado: $${totales.descuento.toFixed(2)} USD\nTotal: $${totales.total.toFixed(2)} USD${cuponManualActivo ? `\nCupón: ${cuponManualActivo.codigo} (no aplica a recargas o combos oficiales de operadora)` : ""}\n\nPor favor confirmar disponibilidad y pasos para activar.`;
 }
 
 function enviarPedidoWhatsApp() {
@@ -2042,9 +2027,12 @@ function actualizarFuentePartidos(respuesta = {}) {
   if (!estado) return;
   const fuentes = Array.isArray(respuesta.fuentes) ? respuesta.fuentes.filter(Boolean) : [];
   const total = Number(respuesta.total || respuesta.matches?.length || 0);
+  const ligas = Array.isArray(respuesta.ligas)
+    ? respuesta.ligas.map((l) => `${l.liga}: ${l.estado === "ok" ? `${l.partidos} partido${l.partidos === 1 ? "" : "s"}` : "sin respuesta"}`).join(" · ")
+    : "";
   estado.textContent = total
-    ? `✅ ${total} partido${total === 1 ? "" : "s"} encontrados · ${fuentes.join(" · ") || "Calendario actualizado"}`
-    : "ℹ️ Sin encuentros cercanos; actualización automática cada 30 segundos.";
+    ? `✅ ${total} partido${total === 1 ? "" : "s"} · ${ligas}`
+    : `ℹ️ Sin encuentros en los próximos días · ${ligas || "actualización automática cada 30 segundos"}`;
 }
 
 async function enriquecerPartidosConDetalle(matches) {
