@@ -16,7 +16,7 @@
     const ayudas=document.querySelector('#streaming .container');
     if(ayudas && !document.getElementById('clicktv-guia-compras')){
       const box=document.createElement('div'); box.id='clicktv-guia-compras'; box.className='clicktv-help';
-      box.innerHTML='<strong>🛒 Comprar es sencillo</strong><p>1. Elige tu servicio. 2. Selecciona cuántos meses y dispositivos necesitas. 3. Pulsa <strong>Comprar por WhatsApp</strong> o <strong>Añadir al carrito</strong>. Si necesitas ayuda, <a href="#contacto">contacta con nuestro equipo</a>.</p>';
+      box.innerHTML='<strong>🛒 Comprar es sencillo</strong><p>1️⃣ Elige tu servicio.</p><p>2️⃣ Selecciona cuántos meses y dispositivos necesitas.</p><p>3️⃣ Pulsa <strong>🛒 Añadir al carrito</strong> o <strong>🟢 Comprar por WhatsApp</strong>.</p><p>💬 ¿Necesitas ayuda? <a href="#contacto">Contacta con nuestro equipo</a>.</p>';
       const filter=ayudas.querySelector('.filter-tabs'); if(filter) filter.insertAdjacentElement('beforebegin',box); else ayudas.prepend(box);
     }
     // Agrupar botones secundarios para dar prioridad a carrito y WhatsApp; mantiene alternativas.
@@ -27,7 +27,7 @@
         if(buttons.length < 4) return;
         const secondary=buttons.slice(2);
         const more=document.createElement('details'); more.className='clicktv-otros-canales';
-        const summary=document.createElement('summary'); summary.textContent='Otras opciones y renovación';
+        const summary=document.createElement('summary'); summary.textContent='➕ Otras opciones y renovación';
         const inner=document.createElement('div'); inner.className='clicktv-otros-canales__inner';
         secondary.forEach(el=>inner.appendChild(el));
         more.append(summary,inner); actions.appendChild(more);

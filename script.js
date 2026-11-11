@@ -1598,7 +1598,7 @@ function enviarAhorroWhatsApp() {
     .join("\n");
 
   const mensaje = encodeURIComponent(
-    `Hola, deseo consultar este combo simulado:\n${servicios}\n\nSubtotal Click TV: $${totales.subtotal.toFixed(2)} USD\nCupón aplicado: ${cuponAhorroAplicado ? `${cuponAhorroAplicado.codigo} (-$${totales.descuento.toFixed(2)} USD)` : "Sin cupón"}\nIVA Ecuador: $${totales.iva.toFixed(2)} USD\nTotal estimado: $${totales.total.toFixed(2)} USD\nAhorro aproximado: $${totales.ahorro.toFixed(2)} USD\n\nPor favor confirmar disponibilidad y precio final.`
+`🧮 Hola Click TV Streaming, deseo consultar este combo simulado.\n\n${servicios}\n\n🧾 Subtotal Click TV: $${totales.subtotal.toFixed(2)} USD\n🏷️ Cupón: ${cuponAhorroAplicado ? `${cuponAhorroAplicado.codigo} (-$${totales.descuento.toFixed(2)} USD)` : "Sin cupón"}\n✅ Total estimado: $${totales.total.toFixed(2)} USD\n💰 Ahorro aproximado: $${totales.ahorro.toFixed(2)} USD\n\n📲 Por favor, confirmen disponibilidad y precio final.`
   );
 
   window.open(`${CONFIG.whatsappLink}?text=${mensaje}`, "_blank", "noopener,noreferrer");
