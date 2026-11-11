@@ -59,7 +59,7 @@
     const n=waNumero(soporte);
     if(!n){ $('ctv-pg-status').textContent='No hay WhatsApp configurado. Usa Telegram.';return; }
     window.open(`https://wa.me/${n}?text=${encodeURIComponent(detalle())}`,'_blank','noopener,noreferrer');
-    $('ctv-pg-status').textContent='WhatsApp abierto. Adjunta manualmente la foto o PDF del comprobante con el icono de clip. No compartas claves ni códigos.';
+    $('ctv-pg-status').textContent='📲 WhatsApp abierto. 📎 Adjunta la foto o PDF del comprobante con el icono de clip. 🔒 No compartas claves ni códigos.';
   }
   function telegram(){
     const u=String(conf('telegramUsuario')||'').replace(/^@/,'');
@@ -99,18 +99,18 @@
     let html='';
     if(QR[value]){
       const item=QR[value];
-      html=`<p>Escanea este código con la aplicación correspondiente o pulsa «Abrir pago». <strong>Comprueba el titular y escribe o verifica ${formato(pedido.precio)} antes de confirmar.</strong></p><img class="ctv-pg-qr" src="${item.img}" alt="Código QR de ${esc(nombreMetodo(value))}. También disponible mediante el botón Abrir pago." width="250" height="250" loading="lazy">`;
+      html=`<p>📷 Escanea este código con tu aplicación o pulsa «Abrir pago».</p><p>✅ <strong>Comprueba el titular y verifica el importe de ${formato(pedido.precio)} antes de confirmar.</strong></p><img class="ctv-pg-qr" src="${item.img}" alt="Código QR de ${esc(nombreMetodo(value))}. También disponible mediante el botón Abrir pago." width="250" height="250" loading="lazy">`;
     } else if(bancos[value]){
       const n=String(conf(bancos[value].key)||'').trim();
-      html=`<p>Cuenta de ${esc(bancos[value].nombre)} para transferencia. Comprueba el titular y el importe en la banca oficial.</p><p class="ctv-pg-numero"><strong>${esc(n||'Consultar número por WhatsApp')}</strong></p>${n?'<button type="button" class="ctv-pg-btn ctv-pg-copiar" data-copiar-banco="'+esc(value)+'">📋 Copiar número de cuenta</button>':''}`;
+      html=`<p>🏦 Cuenta de ${esc(bancos[value].nombre)} para transferencia.</p><p>🔎 Comprueba el titular y el importe en la banca oficial.</p><p class="ctv-pg-numero"><strong>${esc(n||'Consultar número por WhatsApp')}</strong></p>${n?'<button type="button" class="ctv-pg-btn ctv-pg-copiar" data-copiar-banco="'+esc(value)+'">📋 Copiar número de cuenta</button>':''}`;
     } else if(value==='deunaLink'){
-      html='<p>Enlace de cobro facilitado por la tienda. Indica vencimiento el 14 de noviembre de 2026. Confirma el importe, beneficiario y vigencia en Deuna.</p>';
+      html='<p>💳 Enlace de cobro facilitado por la tienda.</p><p>📅 Vigencia del enlace: 14 de noviembre de 2026.</p><p>✅ Confirma el importe, el beneficiario y la vigencia en Deuna.</p>';
     } else if(value==='remesas') {
-      html='<p>Enlace de cobro para pagos desde el exterior. El importe y las comisiones deben verificarse dentro de la plataforma.</p>';
+      html='<p>🌎 Enlace de cobro para pagos desde el exterior.</p><p>🧮 Verifica el importe y las comisiones dentro de la plataforma.</p>';
     } else if(value==='paypal'){
-      html=`<p>El enlace de PayPal puede no tener el valor precargado. Verifica el importe de ${formato(pedido.precio)} y cualquier comisión antes de completar el pago.</p>`;
+      html=`<p>🅿️ El enlace de PayPal puede no tener el valor precargado.</p><p>🧮 Verifica el importe de ${formato(pedido.precio)} y cualquier comisión antes de pagar.</p>`;
     }
-    html+='<p class="ctv-pg-note">🔒 No ingreses contraseñas, tarjetas ni códigos OTP dentro de CLICK TV STREAMING. Este botón abre un proveedor externo.</p>';
+    html+='<p class="ctv-pg-note">🔒 No ingreses contraseñas, tarjetas ni códigos OTP en CLICK TV STREAMING.</p><p class="ctv-pg-note">🌐 Este botón abre un proveedor externo.</p>';
     const url=urlMetodo(value);
     const dominios = value==='paypal' ? ['paypal.me','www.paypal.com','paypal.com']
       : value==='remesas'?['envios.pichincha.com']
