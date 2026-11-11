@@ -39,12 +39,15 @@
     return document.querySelector(`.product-card[data-producto="${CSS.escape(id)}"]`);
   }
 
-  // Llevar a la tarjeta con un solo desplazamiento suave y, si la página
-  // cambió de altura al cargar, una sola corrección discreta. Si el cliente
-  // toca o desplaza la pantalla, no se vuelve a mover.
-  function posicionar(tarjeta, suave) {
-    const y = tarjeta.getBoundingClientRect().top + window.scrollY - 170;
-    window.scrollTo({ top: Math.max(y, 0), behavior: suave ? 'smooth' : 'auto' });
+  // Lleva a la tarjeta debajo de la cabecera. Solo mueve la página si la
+  // tarjeta no está en su sitio, así no hay saltos cuando ya está bien.
+  const OFFSET_CABECERA = 170;
+
+  function posicionar(tarjeta) {
+    const desvio = tarjeta.getBoundingClientRect().top - OFFSET_CABECERA;
+    if (Math.abs(desvio) < 40) return;
+    document.documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo({ top: Math.max(window.scrollY + desvio, 0), behavior: 'auto' });
   }
 
   function resaltar(tarjeta) {
@@ -53,17 +56,12 @@
     const cancelar = () => { cancelado = true; };
     ['touchstart', 'wheel', 'keydown'].forEach((ev) => window.addEventListener(ev, cancelar, { once: true, passive: true }));
 
-    // Un desplazamiento suave hacia la tarjeta.
-    setTimeout(() => { if (!cancelado) posicionar(tarjeta, true); }, 300);
+    // La página sigue acomodándose al cargar; se revisa varias veces, sin mover si ya está bien.
+    [300, 900, 1800, 3000, 4500, 6500].forEach((ms) => {
+      setTimeout(() => { if (!cancelado) posicionar(tarjeta); }, ms);
+    });
 
-    // Una corrección solo si la tarjeta quedó lejos del punto correcto.
-    setTimeout(() => {
-      if (cancelado) return;
-      const desvio = Math.abs(tarjeta.getBoundingClientRect().top - 170);
-      if (desvio > 60) posicionar(tarjeta, false);
-    }, 2600);
-
-    setTimeout(() => tarjeta.classList.remove('catalogo-destacado'), 5000);
+    setTimeout(() => tarjeta.classList.remove('catalogo-destacado'), 6000);
   }
 
   function abrirProductoDesdeEnlace(id) {
@@ -99,10 +97,7 @@
     // Cuando termina de cargar todo (imágenes, partidos), se vuelve a llevar al producto.
     window.addEventListener('load', () => {
       const tarjeta = buscarTarjeta(id);
-      if (!tarjeta) return;
-      // Solo se corrige si la tarjeta se movió al terminar de cargar la página.
-      const desvio = Math.abs(tarjeta.getBoundingClientRect().top - 170);
-      if (desvio > 60 && tarjeta.classList.contains('catalogo-destacado')) posicionar(tarjeta, true);
+      if (tarjeta) posicionar(tarjeta);
     });
   }
 })();
