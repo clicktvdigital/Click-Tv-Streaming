@@ -107,14 +107,17 @@
     guayaquil: {
       android: 'com.bancodeguayaquil',
       ios: 'https://apps.apple.com/us/app/banco-guayaquil-banca-m%C3%B3vil/id624963066'
-    }
+    },
+    // Deuna: en iPhone se ofrece la App Store; en Android se mantiene el QR.
+    deunaPichincha: { ios: 'https://apps.apple.com/us/app/deuna/id1490185584' },
+    deunaPersonal: { ios: 'https://apps.apple.com/us/app/deuna/id1490185584' }
   };
 
   function appBanco(m){
     const cfg = APPS_BANCO[m];
     if(!cfg) return '';
     const ua = navigator.userAgent || '';
-    if(/Android/i.test(ua)){
+    if(/Android/i.test(ua) && cfg.android){
       const play = `https://play.google.com/store/apps/details?id=${cfg.android}`;
       return `intent://#Intent;package=${cfg.android};action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;S.browser_fallback_url=${encodeURIComponent(play)};end`;
     }
@@ -144,7 +147,7 @@
     }
     html+='<p class="ctv-pg-note">🔒 No ingreses contraseñas, tarjetas ni códigos OTP en CLICK TV STREAMING.</p><p class="ctv-pg-note">🌐 Este botón abre un proveedor externo.</p>';
     const appUrl=appBanco(value);
-    if(appUrl) html+=`<a class="ctv-pg-btn ctv-pg-primary" href="${esc(appUrl)}">📲 Abrir la app de ${esc(nombreMetodo(value))}</a>`;
+    if(appUrl) html+=`<a class="ctv-pg-btn ctv-pg-primary" href="${esc(appUrl)}">📲 ${APPS_BANCO[value]?.ios===appUrl && QR[value] ? 'Abrir o instalar Deuna' : 'Abrir la app de ' + esc(nombreMetodo(value))}</a>`;
     const url=urlMetodo(value);
     const dominios = value==='paypal' ? ['paypal.me','www.paypal.com','paypal.com']
       : value==='remesas'?['envios.pichincha.com']
