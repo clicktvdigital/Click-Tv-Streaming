@@ -140,7 +140,10 @@
       <fieldset class="ctv-pg-metodos"><legend>Forma de pago</legend>${opciones.map(([id,n,description])=>`<label class="ctv-pg-option"><input type="radio" name="ctv-pg-metodo" value="${esc(id)}"><span><strong>${esc(n)}</strong><small>${esc(description)}</small></span></label>`).join('')}</fieldset>
       <div id="ctv-pg-metodo-contenido" class="ctv-pg-metodo-contenido" aria-live="polite"><p>Selecciona un método para continuar.</p></div>
       <div class="ctv-pg-comprobante"><h3>📨 Avisar pago y enviar comprobante</h3>
-      <p>Envía la referencia de este pedido y adjunta manualmente tu comprobante. Si el WhatsApp principal no responde, usa soporte. El pago queda pendiente hasta que lo validemos.</p>
+      <p>📝 Envía la referencia de tu pedido.</p>
+      <p>📎 Adjunta tu comprobante manualmente.</p>
+      <p>📲 Si el WhatsApp de ventas no responde, usa soporte.</p>
+      <p>⏳ El pago queda pendiente hasta que lo validemos.</p>
       <div class="ctv-pg-actions"><button type="button" data-ctv-pg-contacto="principal" class="ctv-pg-btn ctv-pg-primary">📲 WhatsApp ventas</button>
       <button type="button" data-ctv-pg-contacto="soporte" class="ctv-pg-btn">🛠 WhatsApp soporte / renovación</button>
       <button type="button" data-ctv-pg-contacto="telegram" class="ctv-pg-btn">✈️ Telegram (copiar pedido)</button>
