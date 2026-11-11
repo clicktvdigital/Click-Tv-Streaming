@@ -189,6 +189,22 @@
     window.open(enlaceWA(numero, texto), '_blank', 'noopener,noreferrer');
   }
 
+  // Preguntas comunes: se muestra la guía correspondiente sin usar la IA.
+  const PALABRAS = [
+    [/agente|humano|persona|asesor|hablar con/i, 'agente'],
+    [/horario|hora|a qu[eé] hora|atienden/i, 'horario'],
+    [/no abre|no funciona|falla|error|problema|no me llega|no llega|datos de acceso|no activ/i, 'problema'],
+    [/renov/i, 'renovar'],
+    [/pag|transfer|paypal|deuna|binance|payphone|tarjeta/i, 'pagos'],
+    [/compr|contrat|netflix|disney|hbo|prime|spotify|plan|precio|cuánto|cuanto/i, 'comprar'],
+  ];
+
+  function guiaPara(texto) {
+    const t = texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const hallazgo = PALABRAS.find(([re]) => re.test(t));
+    return hallazgo ? hallazgo[1] : null;
+  }
+
   function render(cuerpo, clave) {
     const nodo = nodos[clave] || nodos.inicio;
     cuerpo.innerHTML = '';
@@ -237,6 +253,12 @@
       const campo = formulario.querySelector('input');
       const pregunta = campo.value.trim();
       if (pregunta.length < 2) return;
+      const guia = guiaPara(pregunta);
+      if (guia) {
+        campo.value = '';
+        render(cuerpo, guia);
+        return;
+      }
       const pregunta_p = document.createElement('p');
       pregunta_p.className = 'ctv-asistente__tu-pregunta';
       pregunta_p.textContent = '🙋 ' + pregunta;
