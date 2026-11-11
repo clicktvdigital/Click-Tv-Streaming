@@ -55,9 +55,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Si Gemini tarda demasiado, se responde a tiempo en lugar de dejar la pantalla esperando.
+    // Si Gemini tarda demasiado, se responde con un mensaje en lugar de dejar la pantalla esperando.
     const control = new AbortController();
-    const corte = setTimeout(() => control.abort(), 9000);
+    const corte = setTimeout(() => control.abort(), 20000);
     const respuesta = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${MODELO}:generateContent`,
       {
