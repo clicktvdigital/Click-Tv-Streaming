@@ -98,7 +98,7 @@
     card.style.setProperty('--ctv-card-accent', info.accent);
     icon.style.setProperty('--ctv-brand-bg', info.accent);
     icon.classList.add('ctv-brand-badge');
-    if (DARK.has(id)) icon.classList.add('ctv-brand-dark');
+    if (DARK.has(id)) { icon.classList.add('ctv-brand-dark'); icon.style.setProperty('--ctv-brand-bg', '#050607'); }
     icon.setAttribute('aria-hidden','true');
     // Si no hay logo verificado, se muestra el icono original del producto (📺, 🎬, ⚽…), no una letra suelta.
     const original = (icon.textContent || '').trim();
@@ -142,7 +142,7 @@
     const short = info.short || fallbackInitials(name);
     icon.style.setProperty('--ctv-brand-bg',info.accent);
     icon.classList.add('ctv-brand-badge','ctv-cart-badge');
-    if (DARK.has(id)) icon.classList.add('ctv-brand-dark');
+    if (DARK.has(id)) { icon.classList.add('ctv-brand-dark'); icon.style.setProperty('--ctv-brand-bg', '#050607'); }
     icon.setAttribute('aria-hidden','true');
     const original = (icon.textContent || '').trim();
     icon.textContent='';
