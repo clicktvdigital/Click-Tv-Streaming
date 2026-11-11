@@ -891,15 +891,19 @@ function inicializarUbicacion() {
   btnUbicacion?.addEventListener("click", mostrarModalUbicacion);
   btnModalUbicacion?.addEventListener("click", detectarPais);
   btnCerrarModal?.addEventListener("click", cerrarModalUbicacion);
+  document.getElementById("btn-ahora-no")?.addEventListener("click", cerrarModalUbicacion);
+  document.getElementById("modal-ubicacion")?.addEventListener("click", (e) => {
+    if (e.target.id === "modal-ubicacion") cerrarModalUbicacion();
+  });
   btnContinuarUsd?.addEventListener("click", () => {
     seleccionarMoneda("USD", "Ecuador / Internacional");
     cerrarModalUbicacion();
   });
   selectorPais?.addEventListener("change", () => aplicarPaisManual(selectorPais.value));
 
-  if (!sessionStorage.getItem(CLAVE_GEO_MODAL)) {
-    setTimeout(mostrarModalUbicacion, 900);
-  }
+  // Detección automática por GPS al abrir la página (el navegador pide permiso una vez).
+  // Si el cliente no lo permite, la tienda sigue funcionando y puede elegir su país arriba.
+  setTimeout(() => detectarPais(), 1200);
 
   detectarUbicacionPorIP();
 
@@ -1108,7 +1112,7 @@ function detectarPais() {
         btnModalUbicacion.disabled = false;
         btnModalUbicacion.textContent = "Activar ubicación";
       }
-      mostrarToast("No se activó la ubicación. Puedes elegir la moneda manualmente.", "info");
+      mostrarToast("Ubicación no activada. Puedes elegir tu país con el selector de arriba.", "info");
     },
     { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
   );
