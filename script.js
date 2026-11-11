@@ -1331,6 +1331,13 @@ function renovarItemWhatsApp(itemId) {
   window.open(`${CONFIG.whatsappLink}?text=${mensaje}`, "_blank", "noopener,noreferrer");
 }
 
+function renovarItemWhatsAppAlternativo(itemId) {
+  const item = carrito.find((elemento) => elemento.itemId === itemId);
+  if (!item) return;
+  const mensaje = encodeURIComponent(obtenerMensajeRenovacion(item));
+  window.open(`${CONFIG.whatsappAlternativoLink}?text=${mensaje}`, "_blank", "noopener,noreferrer");
+}
+
 async function renovarItemSignal(itemId) {
   const item = carrito.find((elemento) => elemento.itemId === itemId);
   if (!item) return;
@@ -1374,6 +1381,7 @@ function renderCarrito() {
               <button type="button" class="cart-renew-toggle" onclick="marcarRenovacionCarrito('${item.itemId}')">${item.operacion === "renovacion" ? "Cambiar a compra" : "🔄 Marcar renovación"}</button>
               <div class="cart-renew-channels" aria-label="Renovar por canal de contacto">
                 <button type="button" class="cart-renew-channel cart-renew-channel--wa" onclick="renovarItemWhatsApp('${item.itemId}')">🟢 WhatsApp 0939166222</button>
+                <button type="button" class="cart-renew-channel cart-renew-channel--wa" onclick="renovarItemWhatsAppAlternativo('${item.itemId}')">🛠️ WhatsApp 0990056986</button>
                 <button type="button" class="cart-renew-channel cart-renew-channel--signal" onclick="renovarItemSignal('${item.itemId}')">🔵 Enviar por Signal</button>
                 <button type="button" class="cart-renew-channel cart-renew-channel--telegram" onclick="renovarItemTelegram('${item.itemId}')">✈️ Enviar por Telegram</button>
               </div>

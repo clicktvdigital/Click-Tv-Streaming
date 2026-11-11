@@ -55,7 +55,7 @@ La tienda se diseña para personas mayores y personas con discapacidad. Dar prio
 ## Atención comercial y métodos de pago (15/10/2026)
 
 - `clicktv-atencion-pagos.css` y `clicktv-atencion-pagos.js`: compra nueva, renovación, soporte, garantías e instrucciones de transferencia.
-- Compras nuevas al WhatsApp comercial configurado en `CONFIG`; renovaciones y soporte al WhatsApp alternativo configurado en `CONFIG`.
+- Carrito: cada producto tiene botones a `whatsappLink` (0939166222) y a `whatsappAlternativoLink` (0990056986), con mensaje de compra o de renovación según la operación. Soporte: WhatsApp alternativo configurado en `CONFIG`.
 - Se reutilizan los enlaces ya configurados de PayPal, PayPhone y DEUNA; no se guardan secretos ni se afirma que el pago se acredita automáticamente.
 - Bancos: copiar número y abrir sitio oficial de Banco Pichincha o Guayaquil. La tienda no captura claves bancarias.
 - Los términos de uso muestran condiciones de los servicios sin prometer activación inmediata ni soporte 24/7. Verificar condiciones particulares de cada producto antes de publicitarlo.

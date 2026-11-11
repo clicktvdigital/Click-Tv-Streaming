@@ -54,19 +54,6 @@
       const link=document.getElementById(id);
       if(link){ const url=CONFIG[key];if(typeof url ==='string' && /^https:\/\//i.test(url)) link.href=url; else link.hidden=true; }
     }
-    // Las funciones existentes mantienen la compra nueva al WhatsApp principal.
-    // Si el usuario prepara una renovación en el carrito, el mensaje se dirige a soporte.
-    if(typeof window.enviarPedidoWhatsApp === 'function'){
-      const original = window.enviarPedidoWhatsApp;
-      window.enviarPedidoWhatsApp = function (...args){
-        try {
-          if (Array.isArray(carrito) && carrito.some(item=>item.operacion==='renovacion') && typeof generarResumenPedido==='function') {
-            return abrir(numeroSoporte, generarResumenPedido() + '\n\nSolicitud de renovación/gestión de servicio existente.');
-          }
-        } catch(e){ console.warn('[Click TV] Revisión de renovación:',e); }
-        return original.apply(this,args);
-      };
-    }
     if(typeof window.renovarServicio === 'function'){
       const original=window.renovarServicio;
       window.renovarServicio=function(id,plan,agregar=false){
@@ -76,14 +63,6 @@
           const p=producto?.planes?.[Number(plan)];
           return abrir(numeroSoporte, renovarTexto(producto ? `${producto.nombre} · ${p?.tipo || ''}`: ''));
         } catch(e){return abrir(numeroSoporte,renovarTexto());}
-      };
-    }
-    if(typeof window.renovarItemWhatsApp === 'function'){
-      window.renovarItemWhatsApp=function(id){
-        if(!Array.isArray(carrito)) return;
-        const item=carrito.find(i=>i.itemId===id);
-        if(!item) return;
-        return abrir(numeroSoporte, renovarTexto(`${item.nombre} · ${item.plan}`));
       };
     }
     if(typeof window.contactarPlanWhatsApp === 'function'){
