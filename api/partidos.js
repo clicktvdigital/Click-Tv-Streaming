@@ -61,9 +61,22 @@ async function cargarFootballData(dateFrom, dateTo) {
 
 async function cargarEspn(dateFrom, dateTo) {
   const dates = `${fechaCompacta(dateFrom)}-${fechaCompacta(dateTo)}`;
+  // ESPN devuelve 400 con algunos parámetros; se prueban formas más simples antes de rendirse.
+  const intentos = [
+    `${ESPN_BASE}/SLUG/scoreboard?dates=${dates}`,
+    `${ESPN_BASE}/SLUG/scoreboard`
+  ];
   const resultados = await Promise.allSettled(ESPN_LIGAS.map(async ({ slug, label }) => {
-    const data = await fetchJson(`${ESPN_BASE}/${slug}/scoreboard?dates=${dates}&limit=100`);
-    return (data.events || []).map(e => normalizarEspnEvento(e, label));
+    let ultimoError = null;
+    for (const plantilla of intentos) {
+      try {
+        const data = await fetchJson(plantilla.replace("SLUG", slug));
+        return (data.events || []).map(e => normalizarEspnEvento(e, label));
+      } catch (error) {
+        ultimoError = error;
+      }
+    }
+    throw ultimoError;
   }));
   // Estado por liga, para que la web pueda informar qué competición respondió.
   const ligas = ESPN_LIGAS.map(({ label }, i) => {

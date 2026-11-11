@@ -262,22 +262,10 @@ function abrirTelegramConMensaje(mensaje) {
 }
 
 async function abrirSignalConMensaje(mensaje) {
-  // Signal no ofrece un enlace web oficial que abra un chat concreto con texto
-  // precargado. En móviles usamos Compartir para que el texto llegue ya escrito
-  // al seleccionar Signal, sin obligar al cliente a copiar y pegar.
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: "Click TV Streaming",
-        text: mensaje
-      });
-      return;
-    } catch (error) {
-      if (error?.name === "AbortError") return;
-    }
-  }
-
-  await copiarTexto(mensaje, "Mensaje listo para Signal");
+  // Signal no permite precargar texto desde un enlace web. Se copia el mensaje
+  // al portapapeles y se abre directamente el chat de Signal de Click TV.
+  // No se usa navigator.share: abría la hoja de compartir en lugar del chat.
+  await copiarTexto(mensaje, "Mensaje copiado. Pégalo en el chat de Signal que se abrió.");
   window.open(CONFIG.signalLink, "_blank", "noopener,noreferrer");
 }
 
