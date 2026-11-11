@@ -73,6 +73,7 @@ export default async function handler(req, res) {
     if (!texto) throw new Error("Respuesta vacía");
     return res.status(200).json({ respuesta: texto });
   } catch (error) {
-    return res.status(502).json({ error: "No pude responder ahora. Escribe a soporte por WhatsApp." });
+    // El detalle no incluye la clave: solo indica el código de respuesta de Gemini.
+    return res.status(502).json({ error: "No pude responder ahora. Escribe a soporte por WhatsApp.", detalle: String(error.message).slice(0, 80) });
   }
 }

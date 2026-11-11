@@ -256,7 +256,7 @@
         const datos = await r.json().catch(() => ({}));
         espera.textContent = r.ok && datos.respuesta
           ? '🤖 ' + datos.respuesta
-          : '💬 ' + (datos.error || 'No pude responder ahora. Escribe a soporte por WhatsApp.');
+          : '💬 ' + (datos.error || 'No pude responder ahora. Escribe a soporte por WhatsApp.') + (datos.detalle ? ' (' + datos.detalle + ')' : '');
       } catch (error) {
         espera.textContent = '💬 Sin conexión. Escribe a soporte por WhatsApp.';
       }
