@@ -22,7 +22,11 @@
     'cnt-wifi': { src: 'assets/logos-catalogo/cnt.jpg' },
     'ibo-player': { src: 'assets/logos-catalogo/ibo-player.webp' },
     'aumento-gigas-proneet': { src: 'assets/logos-catalogo/proneet.jpg', blend: true },
-    'oratv': { src: 'assets/logos-catalogo/ora.png' }
+    'oratv': { src: 'assets/logos-catalogo/ora.png' },
+    'plataformas-iptv': { src: 'assets/logos-catalogo/smartone-iptv.png' },
+    'iptv-basico': { src: 'assets/logos-catalogo/iptv-xtream-pro.jpg', blend: true },
+    'iptv-premium': { src: 'assets/logos-catalogo/iptv-xtream-pro.jpg', blend: true },
+    'iptv-ultra': { src: 'assets/logos-catalogo/iptv-xtream-pro.jpg', blend: true }
   };
   const BRANDS = {
     'netflix-normal':defined('netflix','netflix.com','#ba1624','N'),
