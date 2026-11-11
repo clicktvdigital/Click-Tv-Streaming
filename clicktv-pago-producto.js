@@ -97,6 +97,31 @@
     if(bancos[m]) return bancos[m].url;
     return '';
   }
+  // Apps de banca móvil. Android abre la app por su paquete (si no está instalada, va a Play Store).
+  // iPhone abre la página de la App Store, desde donde se abre la app si ya está instalada.
+  const APPS_BANCO = {
+    pichincha: {
+      android: 'com.yellowpepper.pichincha',
+      ios: 'https://apps.apple.com/ec/app/pichincha-banca-movil/id999191728'
+    },
+    guayaquil: {
+      android: 'com.bancodeguayaquil',
+      ios: 'https://apps.apple.com/us/app/banco-guayaquil-banca-m%C3%B3vil/id624963066'
+    }
+  };
+
+  function appBanco(m){
+    const cfg = APPS_BANCO[m];
+    if(!cfg) return '';
+    const ua = navigator.userAgent || '';
+    if(/Android/i.test(ua)){
+      const play = `https://play.google.com/store/apps/details?id=${cfg.android}`;
+      return `intent://#Intent;package=${cfg.android};action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;S.browser_fallback_url=${encodeURIComponent(play)};end`;
+    }
+    if(/iPhone|iPad|iPod/i.test(ua)) return cfg.ios;
+    return '';
+  }
+
   function nombreMetodo(id){return opciones.find(x=>x[0]===id)?.[1] || ''}
   function mostrarMetodo(){
     const value=document.querySelector('input[name="ctv-pg-metodo"]:checked')?.value;
@@ -118,6 +143,8 @@
       html=`<p>🅿️ Se abrirá PayPal con el importe <strong>${formato(pedido.precio)}</strong>.</p><p>📝 En la nota del pago escribe tu referencia: <strong>${esc(pedido.ref||'')}</strong></p><p>🧾 Luego envía el comprobante por WhatsApp.</p>`;
     }
     html+='<p class="ctv-pg-note">🔒 No ingreses contraseñas, tarjetas ni códigos OTP en CLICK TV STREAMING.</p><p class="ctv-pg-note">🌐 Este botón abre un proveedor externo.</p>';
+    const appUrl=appBanco(value);
+    if(appUrl) html+=`<a class="ctv-pg-btn ctv-pg-primary" href="${esc(appUrl)}">📲 Abrir la app de ${esc(nombreMetodo(value))}</a>`;
     const url=urlMetodo(value);
     const dominios = value==='paypal' ? ['paypal.me','www.paypal.com','paypal.com']
       : value==='remesas'?['envios.pichincha.com']
