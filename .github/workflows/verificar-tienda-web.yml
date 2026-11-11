@@ -102,6 +102,21 @@ jobs:
             test -s "$archivo" || { echo "Falta: $archivo"; exit 1; }
             node --check "$archivo"
           done
+          for archivo in api/*.js; do
+            test -s "$archivo" || { echo "Falta: $archivo"; exit 1; }
+            node --check "$archivo"
+          done
+
+      - name: Bloquear credenciales en el código publico
+        run: |
+          # Un token de API en un sitio estatico o en un repo publico queda expuesto.
+          # Las claves deben ir solo en variables de entorno de Vercel.
+          if grep -RInE "[\"'][0-9a-f]{32}[\"']|X-Auth-Token[^;]*[\"'][A-Za-z0-9]{16,}" --exclude-dir=.git --exclude-dir=.github .; then
+            echo "Se encontro una posible credencial escrita en el codigo"; exit 1
+          fi
+          if grep -RIn "footballDataApiToken" --exclude-dir=.git --exclude-dir=docs --exclude-dir=.github .; then
+            echo "footballDataApiToken no debe existir en el front"; exit 1
+          fi
 
       - name: Confirmar recursos conectados a la web
         run: |

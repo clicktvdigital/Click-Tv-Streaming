@@ -47,7 +47,7 @@ function normalizarEspnEvento(evento, etiqueta) {
 }
 
 async function cargarFootballData(dateFrom, dateTo) {
-  const token = process.env.FOOTBALL_DATA_TOKEN || process.env.FOOTBALL_DATA_API_TOKEN || "467c885c07fa49baa40ac78cf636f8b0";
+  const token = process.env.FOOTBALL_DATA_TOKEN || process.env.FOOTBALL_DATA_API_TOKEN;
   if (!token) return [];
   const resultados = await Promise.allSettled(COMPETENCIAS.map(async ({ code, label }) => {
     const url = new URL(`${FOOTBALL_DATA}/competitions/${code}/matches`);
@@ -78,6 +78,21 @@ function clave(m) {
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Cache-Control", "s-maxage=120, stale-while-revalidate=300");
+
+  const token = process.env.FOOTBALL_DATA_TOKEN || process.env.FOOTBALL_DATA_API_TOKEN;
+
+  // Detalle de un partido (marcador, goles) consultado solo desde el servidor.
+  if (req.query.detalleId !== undefined) {
+    const id = String(req.query.detalleId);
+    if (!/^\d+$/.test(id)) return res.status(400).json({ error: "ID de partido no válido" });
+    if (!token) return res.status(503).json({ error: "Detalle no disponible" });
+    try {
+      const detalle = await fetchJson(`${FOOTBALL_DATA}/matches/${id}`, { headers: { "X-Auth-Token": token } });
+      return res.status(200).json(detalle);
+    } catch (error) {
+      return res.status(502).json({ error: "No fue posible consultar el detalle" });
+    }
+  }
   const hoy = new Date();
   const iso = d => d.toISOString().slice(0, 10);
   const dateFrom = /^\d{4}-\d{2}-\d{2}$/.test(req.query.dateFrom || "") ? req.query.dateFrom : iso(new Date(hoy.getTime() - 2*86400000));

@@ -133,3 +133,12 @@ El instalador del diseño azul fue ejecutado sobre la copia local. Git muestra:
 - CI comprueba archivo y dimensiones; el JPG anterior permanece disponible.
 - Tras publicar, probar el enlace en chat nuevo (si hay caché, `https://click-tv-streaming.vercel.app/?vista=20261015`); no se controla el tamaño de tarjeta decidido por WhatsApp.
 - No modificar carrito, catálogo, pagos ni radio para resolver el preview.
+
+## Seguridad y CI — revisión del código (rama `fix/token-y-ci`)
+
+- Se retiró la clave de Football-Data de `data.js` y de `api/partidos.js`. Ahora solo se lee de las variables de entorno de Vercel: `FOOTBALL_DATA_TOKEN` (o `FOOTBALL_DATA_API_TOKEN`).
+- El navegador ya no llama a Football-Data directamente. El detalle de partidos pasa por `/api/partidos?detalleId=<id>` (solo IDs numéricos).
+- Se eliminó `api/mundial.js` (duplicado sin uso).
+- CI valida sintaxis de `api/*.js` y falla si aparece una clave escrita en el código o `footballDataApiToken` en el front.
+- **Pendiente crítico:** la clave anterior (`467c885c…`) estuvo en un repositorio público. Debe revocarse en football-data.org aunque ya no esté en el código; el historial de git todavía la contiene.
+- Pendiente: confirmar en Vercel que `FOOTBALL_DATA_TOKEN` está configurada con la clave nueva antes de publicar.

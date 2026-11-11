@@ -2015,16 +2015,8 @@ async function obtenerPartidosFootballData() {
     console.warn("El agregador de partidos no respondió:", error);
   }
 
-  // Respaldo directo: conserva el Mundial si el endpoint serverless no está disponible.
-  if (!data) {
-    const url = new URL(CONFIG.footballDataApiUrl);
-    url.search = params.toString();
-    const respuestaDirecta = await fetch(url.toString(), {
-      headers: { "X-Auth-Token": CONFIG.footballDataApiToken }
-    });
-    if (!respuestaDirecta.ok) throw new Error(`Football-Data HTTP ${respuestaDirecta.status}`);
-    data = await respuestaDirecta.json();
-  }
+  // El token de Football-Data vive solo en el servidor (Vercel); el navegador nunca lo recibe.
+  if (!data) throw new Error("El agregador de partidos no está disponible");
 
   const matches = Array.isArray(data) ? data : (data.matches || data.partidos || []);
   const enriquecidos = await enriquecerPartidosConDetalle(matches);
@@ -2075,15 +2067,9 @@ function ordenarPartidosPorPrioridadDetalle(a, b) {
 }
 
 async function obtenerDetallePartidoFootballData(id) {
-  const url = new URL(CONFIG.footballDataApiUrl);
-  url.pathname = `/v4/matches/${id}`;
-  url.search = "";
-
-  const respuesta = await fetch(url.toString(), {
-    headers: { "X-Auth-Token": CONFIG.footballDataApiToken }
-  });
-
-  if (!respuesta.ok) throw new Error(`Football-Data detail HTTP ${respuesta.status}`);
+  const endpoint = CONFIG.partidosApiUrl || "/api/partidos";
+  const respuesta = await fetch(`${endpoint}?detalleId=${encodeURIComponent(id)}`, { cache: "no-store" });
+  if (!respuesta.ok) throw new Error(`Detalle de partido HTTP ${respuesta.status}`);
   return respuesta.json();
 }
 
