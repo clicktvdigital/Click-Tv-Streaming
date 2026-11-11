@@ -529,10 +529,10 @@ const PRODUCTOS = [
     nombre: "CNT WiFi",
     categoria: "recargas",
     icono: "🟣",
-    descripcion: "Paquetes CNT WiFi. Precio por confirmar.",
-    etiquetas: ["🟣 CNT", "📶 WIFI", "💬 PRECIO A CONFIRMAR"],
+    descripcion: "Recarga CNT WiFi desde $0.25. El cliente indica el código de su tarjeta y el monto a recargar; se confirma antes de pagar.",
+    etiquetas: ["🟣 CNT", "📶 WIFI", "📇 CÓDIGO DE TARJETA"],
     planes: [
-      { tipo: "Paquete WiFi · monto a confirmar", precio: 0, consultar: true }
+      { tipo: "Recarga CNT WiFi · desde $0.25 · indicar código de tarjeta y monto", precio: 0, consultar: true }
     ]
   },
   {
