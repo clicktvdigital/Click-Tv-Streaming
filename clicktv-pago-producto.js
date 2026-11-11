@@ -16,15 +16,18 @@
     guayaquil: { nombre: 'Banco Guayaquil', key: 'bancoGuayaquil', url: 'https://www.bancoguayaquil.com/' }
   };
   const opciones = [
-    ['payphone', '📱 PayPhone', 'Escanear QR o abrir enlace de cobro'],
-    ['deunaPichincha', '💜 Deuna / Pichincha', 'QR de Deuna facilitado por la tienda'],
-    ['deunaPersonal', '💜 Deuna (otro QR)', 'Otra opción Deuna facilitada por la tienda'],
-    ['deunaLink', '💜 Deuna enlace temporal', 'Válido hasta 14/11/2026 según el enlace recibido'],
-    ['binance', '🟡 Binance', 'QR de Binance Pay; confirmar moneda y monto'],
-    ['pichincha', '🏦 Banco Pichincha', 'Copiar número y abrir banca web'],
-    ['guayaquil', '🏦 Banco Guayaquil', 'Copiar número y abrir banca web'],
-    ['remesas', '🌍 Pichincha desde el exterior', 'Enlace facilitado para envíos internacionales'],
-    ['paypal', '🅿️ PayPal', 'Abrir enlace; revisar importe y comisiones']
+    // 1. Enlaces directos (se abren en la app o en el navegador)
+    ['paypal', '🅿️ PayPal', 'Abre PayPal con el importe del plan'],
+    ['payphone', '📱 PayPhone', 'Abre el cobro de PayPhone'],
+    ['deunaLink', '💜 Deuna enlace de cobro', 'Válido hasta 14/11/2026 según el enlace recibido'],
+    ['remesas', '🌍 Pichincha desde el exterior', 'Enlace para envíos internacionales'],
+    // 2. Cuentas para copiar el número
+    ['pichincha', '🏦 Banco Pichincha', 'Copia el número y abre la banca web'],
+    ['guayaquil', '🏦 Banco Guayaquil', 'Copia el número y abre la banca web'],
+    // 3. Códigos QR (en el celular, el botón «Abrir» abre la app directamente)
+    ['deunaPichincha', '💜 Deuna / Pichincha (QR)', 'En el celular, abre Deuna; en computadora, escanea el QR'],
+    ['deunaPersonal', '💜 Deuna otro QR', 'En el celular, abre Deuna; en computadora, escanea el QR'],
+    ['binance', '🟡 Binance (QR)', 'En el celular, abre Binance; en computadora, escanea el QR'],
   ];
   let pedido = null;
   let lastFocus = null;
@@ -84,7 +87,11 @@
   }
   function urlMetodo(m){
     if(QR[m]) return QR[m].url;
-    if(m==='paypal') return conf('paypalUrl') || 'https://www.paypal.com/';
+    if(m==='paypal'){
+      const base=String(conf('paypalUrl')||'https://www.paypal.com/').replace(/\/+$/,'');
+      const precio=Number(pedido?.precio||0);
+      return precio>0 ? `${base}/${precio.toFixed(2)}USD` : base;
+    }
     if(m==='deunaLink') return 'https://pagar.deuna.app/H92p/U2FsdGVkX1+d7h9/Vloewf7/9cA8KVnCeSq0jVHfPAEcMzUXIGCWZUdoUFWx0+hCMy0whtMOl1hTgF7jgRyZfzZstsoMrRrz6NnQP8/bS0V+kr/XlJUcJQOgsepVYMO7xeDkaaYWAiOKHiixWCY8frwAUSvAHjpgWScGzCsGwgSXkI3waGhRu0oUyZb9yqD9TOEP/eXYQvotO61uuXOLsQ==';
     if(m==='remesas') return 'https://envios.pichincha.com/l/Cb3V5Ja7';
     if(bancos[m]) return bancos[m].url;
@@ -99,7 +106,7 @@
     let html='';
     if(QR[value]){
       const item=QR[value];
-      html=`<p>📷 Escanea este código con tu aplicación o pulsa «Abrir pago».</p><p>✅ <strong>Comprueba el titular y verifica el importe de ${formato(pedido.precio)} antes de confirmar.</strong></p><img class="ctv-pg-qr" src="${item.img}" alt="Código QR de ${esc(nombreMetodo(value))}. También disponible mediante el botón Abrir pago." width="250" height="250" loading="lazy">`;
+      html=`<p>📱 En el celular, pulsa «Abrir» para ir directo a la app.</p><p>💻 En computadora, escanea el código con tu aplicación.</p><p>✅ <strong>Comprueba el titular y verifica el importe de ${formato(pedido.precio)} antes de confirmar.</strong></p><img class="ctv-pg-qr" src="${item.img}" alt="Código QR de ${esc(nombreMetodo(value))}. También disponible mediante el botón Abrir pago." width="250" height="250" loading="lazy">`;
     } else if(bancos[value]){
       const n=String(conf(bancos[value].key)||'').trim();
       html=`<p>🏦 Cuenta de ${esc(bancos[value].nombre)} para transferencia.</p><p>🔎 Comprueba el titular y el importe en la banca oficial.</p><p class="ctv-pg-numero"><strong>${esc(n||'Consultar número por WhatsApp')}</strong></p>${n?'<button type="button" class="ctv-pg-btn ctv-pg-copiar" data-copiar-banco="'+esc(value)+'">📋 Copiar número de cuenta</button>':''}`;
@@ -108,7 +115,7 @@
     } else if(value==='remesas') {
       html='<p>🌎 Enlace de cobro para pagos desde el exterior.</p><p>🧮 Verifica el importe y las comisiones dentro de la plataforma.</p>';
     } else if(value==='paypal'){
-      html=`<p>🅿️ El enlace de PayPal puede no tener el valor precargado.</p><p>🧮 Verifica el importe de ${formato(pedido.precio)} y cualquier comisión antes de pagar.</p>`;
+      html=`<p>🅿️ Se abrirá PayPal con el importe <strong>${formato(pedido.precio)}</strong>.</p><p>📝 En la nota del pago escribe tu referencia: <strong>${esc(pedido.ref||'')}</strong></p><p>🧾 Luego envía el comprobante por WhatsApp.</p>`;
     }
     html+='<p class="ctv-pg-note">🔒 No ingreses contraseñas, tarjetas ni códigos OTP en CLICK TV STREAMING.</p><p class="ctv-pg-note">🌐 Este botón abre un proveedor externo.</p>';
     const url=urlMetodo(value);
