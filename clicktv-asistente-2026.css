@@ -108,3 +108,22 @@
 .ctv-asistente__aviso { margin: 0 12px 10px; font-size: .75rem; opacity: .8; }
 .ctv-asistente__tu-pregunta { font-weight: 700; margin-top: 10px !important; }
 .ctv-asistente__ia { background: rgba(20, 50, 95, .6); border-radius: 10px; padding: 8px 10px; margin-top: 6px !important; }
+
+/* Ayuda: tamaño de letra y desplazamiento */
+.ctv-asistente { font-size: .88rem; }
+.ctv-asistente__cuerpo {
+  flex: 1 1 auto;
+  min-height: 0;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  font-size: .86rem;
+  line-height: 1.45;
+  padding: 10px 12px 12px;
+}
+.ctv-asistente__cuerpo p { font-size: .86rem; }
+.ctv-asistente__op { font-size: .84rem; padding: 8px 11px; border-radius: 10px; }
+.ctv-asistente__cabecera strong { font-size: .92rem; }
+.ctv-asistente__opciones { gap: 5px; margin-top: 8px; }
+.ctv-asistente__aviso { font-size: .7rem; }
+#ctv-asistente-btn svg { vertical-align: -3px; margin-right: 4px; }
+#ctv-asistente-btn { display: inline-flex; align-items: center; }

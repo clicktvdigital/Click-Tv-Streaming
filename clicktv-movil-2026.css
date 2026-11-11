@@ -271,3 +271,7 @@
   font-size: .82rem;
   cursor: pointer;
 }
+
+.enlace-producto-aviso__titulo { font-size: .9rem; }
+.enlace-producto-aviso__pasos { margin: 2px 0 0; padding-left: 20px; font-size: .84rem; line-height: 1.5; width: 100%; }
+.enlace-producto-aviso__pasos li { margin: 0; }

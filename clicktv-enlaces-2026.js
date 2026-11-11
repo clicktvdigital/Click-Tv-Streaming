@@ -53,7 +53,7 @@
     const aviso = document.createElement('div');
     aviso.id = 'enlace-producto-aviso';
     aviso.className = 'enlace-producto-aviso';
-    aviso.innerHTML = `<span>🔗 Mostrando: <strong></strong></span><small>1️⃣ Elige el plan · 2️⃣ Añade al carrito o compra por WhatsApp · 3️⃣ Finaliza y paga</small><button type="button" id="btn-ver-todo-catalogo">Ver todo el catálogo</button>`;
+    aviso.innerHTML = `<span class="enlace-producto-aviso__titulo">🔗 Mostrando: <strong></strong></span><ol class="enlace-producto-aviso__pasos"><li>Elige el plan</li><li>Añade al carrito o compra por WhatsApp</li><li>Finaliza y paga</li></ol><button type="button" id="btn-ver-todo-catalogo">Ver todo el catálogo</button>`;
     aviso.querySelector('strong').textContent = producto.nombre;
     grid.parentNode.insertBefore(aviso, grid);
     document.getElementById('btn-ver-todo-catalogo').addEventListener('click', () => {

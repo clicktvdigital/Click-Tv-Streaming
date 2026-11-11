@@ -157,7 +157,7 @@
     boton.type = 'button';
     boton.setAttribute('aria-controls', 'ctv-asistente');
     boton.setAttribute('aria-expanded', 'false');
-    boton.textContent = '💬 Ayuda';
+    boton.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg> Ayuda';
 
     const panel = document.createElement('div');
     panel.id = 'ctv-asistente';
@@ -293,12 +293,17 @@
       const campo = formulario.querySelector('input');
       const pregunta = campo.value.trim();
       if (pregunta.length < 2) return;
-      // Si el cliente nombra un producto, se abre directo en el catálogo.
+      // Si el cliente nombra un producto, se abre directo; si hay varios, se elige.
       const hallados = buscarProductos(pregunta);
-      if (hallados.length >= 1) {
+      if (hallados.length === 1) {
         campo.value = '';
         cerrarPanel();
         window.enfocarProducto?.(hallados[0].id);
+        return;
+      }
+      if (hallados.length > 1) {
+        campo.value = '';
+        renderProductos(cuerpo, hallados);
         return;
       }
       const guia = guiaPara(pregunta);
