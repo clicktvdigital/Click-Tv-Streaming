@@ -124,7 +124,7 @@
       { tipo: "12 meses", precio: 96 },
       { tipo: "Cuenta completa · 1 mes", precio: 18 }
     ] },
-  { id: "telelatino", nombre: "Telelatino", categoria: "iptv", icono: "📺", descripcion: "TV en vivo, películas, series y deportes desde apps compatibles.", etiquetas: [
+  { id: "telelatino", nombre: "Tele Latino", categoria: "iptv", icono: "📺", descripcion: "TV en vivo, películas, series y deportes desde apps compatibles.", etiquetas: [
       "📺 IPTV",
       "🔥 MÁS VENDIDO"
     ], planes: [

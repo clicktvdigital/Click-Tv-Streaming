@@ -80,6 +80,7 @@ body { color:var(--ctv-polish-ink); }
   filter:brightness(0) invert(1); background:none; border:0;
 }
 .ctv-brand-badge img.ctv-brand-favicon { filter:none; border-radius:5px; }
+.ctv-brand-badge img.ctv-brand-local { filter:none; width:100%; height:100%; object-fit:cover; border-radius:inherit; }
 .ctv-brand-badge .ctv-brand-fallback { color:#fff; font-weight:900; font-size:.88rem; }
 .product-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
 .product-tags span {

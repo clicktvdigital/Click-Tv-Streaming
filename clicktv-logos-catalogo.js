@@ -5,6 +5,13 @@
 (() => {
   'use strict';
   const defined = (slug, domain, accent, short) => ({slug,domain,accent,short});
+  // Logos entregados por el negocio, servidos desde el propio sitio.
+  const LOCAL = {
+    'zapping-ligapro': { src: 'assets/logos-catalogo/zapping.png', blend: true },
+    'zapping-pro': { src: 'assets/logos-catalogo/zapping.png', blend: true },
+    'telelatino': { src: 'assets/logos-catalogo/telelatino.webp' },
+    'flujo-tv': { src: 'assets/logos-catalogo/flujo-tv.jpg' }
+  };
   const BRANDS = {
     'netflix-normal':defined('netflix','netflix.com','#ba1624','N'),
     'netflix-extra':defined('netflix','netflix.com','#ba1624','N'),
@@ -77,7 +84,8 @@
       span.textContent = original || short;
       icon.appendChild(span);
     };
-    if (!info.slug) text();
+    const local = LOCAL[id];
+    if (!info.slug && !local) text();
     else {
       const img = document.createElement('img');
       img.alt = '';
@@ -91,7 +99,8 @@
           img.src = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(info.domain) + '&sz=128';
         } else text();
       });
-      img.src = 'https://cdn.jsdelivr.net/npm/simple-icons@v15/icons/' + info.slug + '.svg';
+      if (local) { img.src = local.src; img.classList.add('ctv-brand-local'); if (local.blend) img.style.mixBlendMode = 'screen'; }
+      else img.src = 'https://cdn.jsdelivr.net/npm/simple-icons@v15/icons/' + info.slug + '.svg';
       icon.appendChild(img);
     }
     card.dataset.ctvLogoReady = '1';
@@ -117,7 +126,8 @@
       text.textContent = original || short;
       icon.appendChild(text);
     };
-    if (!info.slug) fallback();
+    const local = LOCAL[id];
+    if (!info.slug && !local) fallback();
     else {
       const img = document.createElement('img');
       img.alt='';
@@ -131,7 +141,8 @@
           img.src='https://www.google.com/s2/favicons?domain='+encodeURIComponent(info.domain)+'&sz=128';
         } else fallback();
       });
-      img.src='https://cdn.jsdelivr.net/npm/simple-icons@v15/icons/'+info.slug+'.svg';
+      if (local) { img.src = local.src; img.classList.add('ctv-brand-local'); if (local.blend) img.style.mixBlendMode = 'screen'; }
+      else img.src='https://cdn.jsdelivr.net/npm/simple-icons@v15/icons/'+info.slug+'.svg';
       icon.appendChild(img);
     }
     row.dataset.ctvCartLogoReady='1';
