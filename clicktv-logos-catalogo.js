@@ -21,7 +21,7 @@
     'cnt-wifi': { src: 'assets/logos-catalogo/cnt.jpg' },
     'ibo-player': { src: 'assets/logos-catalogo/ibo-player.webp' },
     'aumento-gigas-proneet': { src: 'assets/logos-catalogo/proneet.jpg', blend: true },
-    'oratv': { src: 'assets/logos-catalogo/ora.jpg' },
+    'oratv': { src: 'assets/logos-catalogo/ora.jpg', blend: true },
     'xc-tv': { src: 'assets/logos-catalogo/gx-tv.png' },
     'directv-go': { src: 'assets/logos-catalogo/directv-go.png', blend: true },
     'vanna-tv': { src: 'assets/logos-catalogo/vanna-tv.jpg' },
@@ -121,7 +121,7 @@
           img.src = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(info.domain) + '&sz=128';
         } else text();
       });
-      if (local) { img.src = local.src; img.classList.add('ctv-brand-local'); if (local.blend) { img.style.mixBlendMode = 'screen'; img.classList.add('ctv-brand-blend'); } }
+      if (local) { img.src = local.src; img.classList.add('ctv-brand-local'); if (local.blend) { img.classList.add('ctv-brand-blend'); icon.classList.add('ctv-brand-dark'); } }
       else img.src = 'https://cdn.jsdelivr.net/npm/simple-icons@v15/icons/' + info.slug + '.svg';
       icon.appendChild(img);
     }
@@ -163,7 +163,7 @@
           img.src='https://www.google.com/s2/favicons?domain='+encodeURIComponent(info.domain)+'&sz=128';
         } else fallback();
       });
-      if (local) { img.src = local.src; img.classList.add('ctv-brand-local'); if (local.blend) { img.style.mixBlendMode = 'screen'; img.classList.add('ctv-brand-blend'); } }
+      if (local) { img.src = local.src; img.classList.add('ctv-brand-local'); if (local.blend) { img.classList.add('ctv-brand-blend'); icon.classList.add('ctv-brand-dark'); } }
       else img.src='https://cdn.jsdelivr.net/npm/simple-icons@v15/icons/'+info.slug+'.svg';
       icon.appendChild(img);
     }

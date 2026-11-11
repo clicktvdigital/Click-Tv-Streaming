@@ -162,3 +162,6 @@ body .brand,body .brand__logo,body .brand__logo img { box-shadow: none !importan
 @media (prefers-reduced-motion: reduce) {
   body #toast-contenedor .toast { transition: none !important; }
 }
+
+/* Logos con fondo negro en el carrito: insignia negra, sin capa azul. */
+#panel-carrito .carrito-item__icono.ctv-brand-badge.ctv-brand-dark { background:#050607 !important; }

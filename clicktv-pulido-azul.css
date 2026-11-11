@@ -81,7 +81,8 @@ body { color:var(--ctv-polish-ink); }
 }
 .ctv-brand-badge img.ctv-brand-favicon { filter:none; border-radius:5px; }
 .ctv-brand-badge img.ctv-brand-local { filter:none; width:100%; height:100%; object-fit:cover; border-radius:inherit; }
-.ctv-brand-badge img.ctv-brand-blend { filter:contrast(1.35) brightness(1.2) saturate(1.25) drop-shadow(0 0 4px rgba(255,255,255,.35)); }
+.ctv-brand-badge.ctv-brand-dark { background:#050607 !important; box-shadow:0 5px 19px rgba(0,0,0,.55) !important; }
+.ctv-brand-badge img.ctv-brand-blend { mix-blend-mode:normal !important; filter:contrast(1.12) brightness(1.06); }
 .ctv-brand-badge .ctv-brand-fallback { color:#fff; font-weight:900; font-size:.88rem; }
 .product-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
 .product-tags span {
