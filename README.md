@@ -27,6 +27,20 @@ Tienda web de CLICK TV DIGITAL: catálogo comercial de entretenimiento, televisi
 | `click-tv-miniatura-whatsapp-2026.jpg` | Miniatura Open Graph para enlaces compartidos. |
 | `clicktv-icono.png` | Favicon e icono del sitio. |
 
+## Enlaces de contacto oficiales
+
+| Canal | Enlace | Dónde está en la web |
+| --- | --- | --- |
+| WhatsApp ClickTV Digital (ventas) | https://wa.me/593939166222 | Carrito (por producto y pedido completo), botón flotante y atención |
+| WhatsApp ClickTV Streaming (soporte) | https://wa.me/593990056986 | Carrito (por producto y pedido completo), botón flotante de soporte |
+| Grupo de WhatsApp | https://chat.whatsapp.com/CNWqZ0AhHhKDb1VKp1LqNu?s=cl&p=a&iam=2 | Botón flotante y atención |
+| Telegram oficial | https://t.me/clicktvdigital | Carrito y botón flotante |
+| Telegram promociones y estrenos | https://t.me/click_tv_streaming | Carrito |
+| Telegram TV en vivo y eventos | https://t.me/clicktvgo | Carrito |
+| Signal | https://signal.me/#eu/dbuzKUYd0bhoGCmHIPAZAhBiHqomTyVnotlsGU5c4QhFcL5OfY1MRooGbYHEg7ve | Carrito y botón flotante (pendiente de verificar) |
+
+`wa.me` solo acepta números de teléfono; no usar nombres de usuario en esos enlaces.
+
 ## Experiencia accesible
 
 La tienda se diseña para personas mayores y personas con discapacidad. Dar prioridad a letras legibles, contraste suficiente, controles grandes, etiquetas claras, navegación por teclado y compatibilidad con lectores de pantalla (TalkBack).
@@ -48,6 +62,8 @@ La tienda se diseña para personas mayores y personas con discapacidad. Dar prio
 
 - Mantener el trabajo en GitHub y utilizar Vercel para servir la web.
 - No colocar contraseñas, tokens privados, claves de producción ni costos del proveedor en archivos públicos del repositorio.
+- La clave de Football-Data **no va en el código**. Se configura en Vercel como `FOOTBALL_DATA_TOKEN` (Settings → Environment Variables). `api/partidos.js` la lee del servidor; el navegador nunca la recibe. La validación de GitHub Actions falla si aparece una clave escrita en el repositorio.
+- Publicación: Vercel despliega la rama `main`. Los cambios en otras ramas no se ven en https://click-tv-streaming.vercel.app hasta que se integren en `main`.
 - Verificar los permisos de comercialización, las condiciones y la disponibilidad de cada servicio antes de publicarlo como oferta oficial.
 - Mantener `docs/CONTINUAR_AQUI.md` actualizado al terminar cada sesión de trabajo.
 - El repositorio GitHub ya fue renombrado a `Click-Tv-Streaming`. Comprobar la conexión de Vercel y mantener la URL pública sin cambios.
