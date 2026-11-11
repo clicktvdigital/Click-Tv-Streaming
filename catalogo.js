@@ -44,15 +44,9 @@
     return producto && plan ? {producto, plan} : null;
   }
   function mensaje(productoId, planIndex, operacion) {
-    const data = obtener(productoId, planIndex); if (!data) return "Hola, deseo información sobre sus servicios.";
+    const data = obtener(productoId, planIndex); if (!data) return "👋 Hola Click TV Streaming.\n\n📺 Deseo información sobre sus servicios.";
     const tipo = operacion === "renovacion" ? "renovar" : "comprar por primera vez";
-    return `Hola Click TV Streaming. Deseo ${tipo}:
-
-Servicio: ${data.producto.nombre}
-Plan: ${data.plan.tipo}
-Precio: ${data.plan.consultar ? "Por consultar" : `$${Number(data.plan.precio).toFixed(2)} USD`}
-
-Por favor, indíqueme disponibilidad y forma de pago.`;
+    return `${operacion === "renovacion" ? "🔁" : "🛒"} Hola Click TV Streaming.\n\nDeseo ${tipo}.\n\n📺 Servicio: ${data.producto.nombre}\n📦 Plan: ${data.plan.tipo}\n💲 Precio: ${data.plan.consultar ? "Por consultar" : `$${Number(data.plan.precio).toFixed(2)} USD`}\n\n✅ Por favor, indíquenme disponibilidad y forma de pago.`;
   }
   window.contactarPlanWhatsApp = (p,i,o='compra') => window.open(`${CONFIG.whatsappLink}?text=${encodeURIComponent(mensaje(p,i,o))}`, '_blank', 'noopener,noreferrer');
   window.contactarPlanTelegram = (p,i,o='compra') => abrirTelegramConMensaje(mensaje(p,i,o));

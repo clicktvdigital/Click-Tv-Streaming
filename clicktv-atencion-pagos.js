@@ -8,9 +8,9 @@
     const numeroSoporte = String(CONFIG.whatsappAlternativoNumero || '').replace(/\D/g, '');
     const construirEnlace = (numero, mensaje) => `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
     const abrir = (numero, mensaje) => window.open(construirEnlace(numero,mensaje),'_blank','noopener,noreferrer');
-    const textoNuevo = 'Hola CLICK TV STREAMING. Quiero contratar un servicio nuevo. ¿Me confirman disponibilidad, precio final y activación antes de pagar?';
-    const textoSoporte = 'Hola CLICK TV STREAMING. Necesito soporte técnico de un servicio activo. Indicaré servicio y problema, sin compartir contraseñas ni códigos.';
-    const renovarTexto = (servicio='') => `Hola CLICK TV STREAMING. Deseo renovar mi servicio${servicio ? ': '+servicio : ''}. Por favor, confirmen vencimiento, importe y disponibilidad antes de pagar.`;
+    const textoNuevo = '🛒 Hola Click TV Streaming.\n\nQuiero contratar un servicio nuevo.\n\n✅ ¿Me confirman disponibilidad, precio final y activación antes de pagar?';
+    const textoSoporte = '🛠️ Hola Click TV Streaming.\n\nNecesito soporte técnico de un servicio activo.\n\n📝 Indicaré el servicio y el problema, sin compartir contraseñas ni códigos.';
+    const renovarTexto = (servicio='') => `🔁 Hola Click TV Streaming.\n\nDeseo renovar mi servicio${servicio ? '\n📺 '+servicio : ''}.\n\n✅ Por favor, confirmen vencimiento, importe y disponibilidad antes de pagar.`;
     const aNuevo = document.getElementById('ctv-enlace-nuevo');
     const aSoporte = document.getElementById('ctv-enlace-soporte');
     const aRenovar = document.getElementById('ctv-enlace-renovar');

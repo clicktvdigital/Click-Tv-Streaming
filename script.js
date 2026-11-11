@@ -270,7 +270,7 @@ async function abrirSignalConMensaje(mensaje) {
 }
 
 function mensajeContactoGeneral() {
-  return "Hola Click TV Streaming, deseo información sobre sus planes, disponibilidad y formas de pago.";
+  return "👋 Hola Click TV Streaming.\n\n📺 Deseo información sobre sus planes, disponibilidad y formas de pago.";
 }
 
 function contactarWhatsAppGeneral() {
@@ -326,7 +326,7 @@ function inicializarPagosRapidos() {
   if (catalogo) configurarLinkExterno(catalogo, CONFIG.catalogoUrl);
   if (fifa) configurarLinkExterno(fifa, CONFIG.fifaCalendarioUrl);
   if (renovar) {
-    const mensaje = encodeURIComponent("Hola, deseo renovar mi servicio Click Tv Streaming.");
+    const mensaje = encodeURIComponent("🔁 Hola Click TV Streaming.\n\nDeseo renovar mi servicio. ¿Me indican el vencimiento y el importe?");
     configurarLinkExterno(renovar, `${CONFIG.whatsappLink}?text=${mensaje}`);
   }
 
@@ -1266,13 +1266,13 @@ function comprarAhora(productoId, planIndex) {
 
   const { producto, plan } = data;
   if (plan.consultar) {
-    const mensajeConsulta = encodeURIComponent(`Hola, deseo consultar disponibilidad de ${producto.nombre} (${plan.tipo}). ¿Me confirma stock, precio y condiciones antes de pagar?`);
+    const mensajeConsulta = encodeURIComponent(`👋 Hola Click TV Streaming.\n\n📺 Deseo consultar disponibilidad de ${producto.nombre} (${plan.tipo}).\n\n💬 ¿Me confirman precio y condiciones antes de pagar?`);
     window.open(`${CONFIG.whatsappLink}?text=${mensajeConsulta}`, "_blank", "noopener,noreferrer");
     return;
   }
 
   const precio = `$${Number(plan.precio).toFixed(2)} USD`;
-  const mensaje = encodeURIComponent(`Hola, deseo comprar ${producto.nombre} ${plan.tipo} por ${precio}.`);
+  const mensaje = encodeURIComponent(`👋 Hola Click TV Streaming.\n\n🛒 Deseo comprar ${producto.nombre} · ${plan.tipo}.\n💲 Precio: ${precio}\n\n✅ ¿Me confirman la activación?`);
   window.open(`${CONFIG.whatsappLink}?text=${mensaje}`, "_blank", "noopener,noreferrer");
 }
 
@@ -1288,7 +1288,7 @@ function renovarServicio(productoId, planIndex, agregarComoRenovacion = false) {
   }
 
   const mensaje = encodeURIComponent(
-    `Hola Click TV, deseo renovar mi servicio:\n\nServicio: ${producto.nombre}\nPlan: ${plan.tipo}\nDeseo realizar renovación.`
+    `🔁 Hola Click TV Streaming, deseo renovar mi servicio.\n\n📺 Servicio: ${producto.nombre}\n📦 Plan: ${plan.tipo}\n\n✅ ¿Me indican el vencimiento y el importe?`
   );
   window.open(`${CONFIG.whatsappLink}?text=${mensaje}`, "_blank", "noopener,noreferrer");
 }
@@ -1307,9 +1307,9 @@ function obtenerMensajeRenovacion(item) {
   const cantidad = item.cantidad || 1;
   const precio = item.consultar ? "Por confirmar" : formatearPrecio(item.precio);
   if (item.operacion === "renovacion") {
-    return `Hola Click TV Streaming, deseo renovar mi servicio:\n\nServicio: ${item.nombre}\nPlan: ${item.plan}\nCantidad: ${cantidad}\nDeseo realizar la renovación.`;
+    return `🔁 Hola Click TV Streaming, deseo renovar mi servicio.\n\n📺 Servicio: ${item.nombre}\n📦 Plan: ${item.plan}\n🔢 Cantidad: ${cantidad}\n\n✅ ¿Me indican el vencimiento y el importe?`;
   }
-  return `Hola Click TV Streaming, quiero contratar este servicio:\n\nServicio: ${item.nombre}\nPlan: ${item.plan}\nCantidad: ${cantidad}\nPrecio mostrado: ${precio}\n¿Me confirman disponibilidad y activación antes de pagar?`;
+  return `🛒 Hola Click TV Streaming, quiero contratar este servicio.\n\n📺 Servicio: ${item.nombre}\n📦 Plan: ${item.plan}\n🔢 Cantidad: ${cantidad}\n💲 Precio mostrado: ${precio}\n\n✅ ¿Me confirman disponibilidad y activación antes de pagar?`;
 }
 
 function renovarItemWhatsApp(itemId) {
@@ -1788,7 +1788,7 @@ function generarResumenPedido() {
   }).join("\n");
   const totales = calcularTotales();
   const cuponManualActivo = obtenerCuponManualActivo();
-  return `Hola, quiero finalizar mi compra:\n${resumen}\n\nMétodo elegido: ${obtenerNombreMetodoPago(metodoPagoActual)}\nSubtotal: $${totales.subtotal.toFixed(2)} USD\nDescuento aplicado: $${totales.descuento.toFixed(2)} USD\nTotal: $${totales.total.toFixed(2)} USD${cuponManualActivo ? `\nCupón: ${cuponManualActivo.codigo} (no aplica a recargas o combos oficiales de operadora)` : ""}\n\nPor favor confirmar disponibilidad y pasos para activar.`;
+  return `🛒 Hola Click TV Streaming, quiero finalizar mi compra.\n\n${resumen}\n\n💳 Método elegido: ${obtenerNombreMetodoPago(metodoPagoActual)}\n🧾 Subtotal: $${totales.subtotal.toFixed(2)} USD\n🏷️ Descuento aplicado: $${totales.descuento.toFixed(2)} USD\n✅ Total: $${totales.total.toFixed(2)} USD${cuponManualActivo ? `\nCupón: ${cuponManualActivo.codigo} (no aplica a recargas o combos oficiales de operadora)` : ""}\n\n📲 Por favor, confirmen disponibilidad y pasos para activar.`;
 }
 
 function enviarPedidoWhatsApp() {
@@ -1804,19 +1804,19 @@ function enviarPedidoWhatsAppAlternativo() {
 }
 
 function enviarComprobanteWhatsApp() {
-  const mensaje = encodeURIComponent("Hola, ya realicé el pago y deseo enviar mi comprobante para validar mi pedido.");
+  const mensaje = encodeURIComponent("🧾 Hola Click TV Streaming, ya realicé el pago.\n\n📎 Deseo enviar mi comprobante para validar mi pedido.");
   window.open(`${CONFIG.whatsappLink}?text=${mensaje}`, "_blank", "noopener,noreferrer");
 }
 
 function enviarComprobanteWhatsAppAlternativo() {
-  const mensaje = encodeURIComponent("Hola, ya realicé el pago y deseo enviar mi comprobante para validar mi pedido por el WhatsApp alternativo.");
+  const mensaje = encodeURIComponent("🧾 Hola Click TV Streaming, ya realicé el pago.\n\n📎 Deseo enviar mi comprobante para validar mi pedido.");
   window.open(`${CONFIG.whatsappAlternativoLink}?text=${mensaje}`, "_blank", "noopener,noreferrer");
 }
 
 async function copiarResumenParaCanal(tipo = "pedido") {
   const encabezado = tipo === "comprobante"
-    ? "Hola, ya realicé el pago y deseo enviar mi comprobante para validar este pedido."
-    : "Hola, deseo realizar el siguiente pedido:";
+    ? "🧾 Hola Click TV Streaming, ya realicé el pago.\n\n📎 Deseo enviar mi comprobante para validar este pedido."
+    : "🛒 Hola Click TV Streaming, deseo realizar el siguiente pedido:";
   const mensaje = `${encabezado}
 
 ${generarResumenPedido()}`;
@@ -1830,8 +1830,8 @@ ${generarResumenPedido()}`;
 
 function generarMensajeParaCanal(tipo = "pedido") {
   const encabezado = tipo === "comprobante"
-    ? "Hola, ya realicé el pago y deseo enviar mi comprobante para validar este pedido."
-    : "Hola, deseo realizar el siguiente pedido:";
+    ? "🧾 Hola Click TV Streaming, ya realicé el pago.\n\n📎 Deseo enviar mi comprobante para validar este pedido."
+    : "🛒 Hola Click TV Streaming, deseo realizar el siguiente pedido:";
   return `${encabezado}
 
 ${generarResumenPedido()}`;
@@ -2867,7 +2867,7 @@ function enviarContactoInternacional(evento) {
   }
 
   const mensaje = encodeURIComponent(
-    `Hola, deseo información de Click Tv Streaming.\n\nNombre: ${nombre}\nPaís: ${pais}\nTeléfono: ${telefono}\nMensaje: ${mensajeCliente}`
+    `👋 Hola Click TV Streaming, deseo información.\n\n👤 Nombre: ${nombre}\n🌎 País: ${pais}\n📞 Teléfono: ${telefono}\n💬 Mensaje: ${mensajeCliente}`
   );
 
   window.open(`${CONFIG.whatsappLink}?text=${mensaje}`, "_blank", "noopener,noreferrer");
