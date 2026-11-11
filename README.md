@@ -37,7 +37,7 @@ Tienda web de CLICK TV DIGITAL: catálogo comercial de entretenimiento, televisi
 | Telegram oficial | https://t.me/clicktvdigital | Carrito y botón flotante |
 | Telegram promociones y estrenos | https://t.me/click_tv_streaming | Carrito |
 | Telegram TV en vivo y eventos | https://t.me/clicktvgo | Carrito |
-| Signal | https://signal.me/#eu/dbuzKUYd0bhoGCmHIPAZAhBiHqomTyVnotlsGU5c4QhFcL5OfY1MRooGbYHEg7ve | Carrito y botón flotante (pendiente de verificar) |
+| Signal | https://signal.me/#u/ClickTvDigital.88 | Carrito y botón flotante (pendiente de verificar) |
 
 `wa.me` solo acepta números de teléfono; no usar nombres de usuario en esos enlaces.
 

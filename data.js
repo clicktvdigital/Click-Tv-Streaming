@@ -16,7 +16,7 @@ const CONFIG = {
   telegramUsuario: "ClickTvDigital",
   telegramLink: "https://t.me/ClickTvDigital",
   telegramReferenciaWeb: "https://web.telegram.org/k/#@ClickTvDigital",
-  signalLink: "https://signal.me/#eu/dbuzKUYd0bhoGCmHIPAZAhBiHqomTyVnotlsGU5c4QhFcL5OfY1MRooGbYHEg7ve",
+  signalLink: "https://signal.me/#u/ClickTvDigital.88",
 
   catalogoUrl: "https://click-tv-streaming.vercel.app/#streaming",
 
