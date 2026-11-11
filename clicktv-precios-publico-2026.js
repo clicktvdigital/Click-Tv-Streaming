@@ -238,7 +238,7 @@
       { tipo: "3 dispositivos · 6 meses", precio: 81, dispositivos: 3, ivaIncluido: true },
       { tipo: "3 dispositivos · 12 meses", precio: 144, dispositivos: 3, ivaIncluido: true }
     ] },
-  { id: "oratv", nombre: "ORATV Anual Servidor", categoria: "iptv", icono: "🛰️", descripcion: "Acceso anual a ORATV con soporte según disponibilidad del servicio.", etiquetas: [
+  { id: "oratv", nombre: "ORA Player", categoria: "iptv", icono: "🛰️", descripcion: "Acceso anual a ORATV con soporte según disponibilidad del servicio.", etiquetas: [
       "📺 IPTV",
       "🗓️ ANUAL"
     ], planes: [

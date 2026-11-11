@@ -335,6 +335,19 @@ const PRODUCTOS = [
     ]
   },
   {
+    id: "oratv",
+    nombre: "ORA Player",
+    categoria: "iptv",
+    icono: "🛰️",
+    descripcion: "Acceso anual a ORA Player con soporte según disponibilidad del servicio.",
+    etiquetas: ["📺 IPTV", "🗓️ ANUAL"],
+    planes: [
+      { tipo: "Anual · 1 dispositivo", precio: 7, ivaIncluido: true },
+      { tipo: "Anual · 2 dispositivos", precio: 12, ivaIncluido: true },
+      { tipo: "Anual · 3 dispositivos", precio: 17, ivaIncluido: true }
+    ]
+  },
+  {
     id: "plataformas-iptv",
     nombre: "Plataformas IPTV",
     categoria: "iptv",
