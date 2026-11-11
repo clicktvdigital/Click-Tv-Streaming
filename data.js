@@ -406,12 +406,11 @@ const PRODUCTOS = [
     nombre: "Aumento de gigas PRONEET VPN",
     categoria: "proneet",
     icono: "📶",
-    descripcion: "Aumento de megas para Android en Ecuador. Disponible para Claro, Movistar y Tuenti. No disponible para CNT.",
+    descripcion: "Aumento de megas para Android en Ecuador. Disponible para Claro y Tigo. No disponible para CNT.",
     etiquetas: ["🚀 AUMENTO DE MEGAS", "✅ ACEPTA CUPÓN", "⚡ ACTIVACIÓN RÁPIDA"],
     planes: [
       { tipo: "PRONEET VPN Claro · aumento de megas", precio: 5, ivaIncluido: true },
-      { tipo: "PRONEET VPN Movistar · aumento de megas", precio: 5, ivaIncluido: true },
-      { tipo: "PRONEET VPN Tuenti · aumento de megas", precio: 5, ivaIncluido: true }
+      { tipo: "PRONEET VPN Tigo · aumento de megas", precio: 5, ivaIncluido: true }
     ]
   },
   {

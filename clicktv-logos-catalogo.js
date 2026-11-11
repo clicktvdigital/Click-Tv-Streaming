@@ -19,7 +19,10 @@
     'tigo-combos': { src: 'assets/logos-catalogo/tigo-combos.jpg' },
     'cnt-paquetes-prepago': { src: 'assets/logos-catalogo/cnt.jpg' },
     'cnt-aplicaciones': { src: 'assets/logos-catalogo/cnt.jpg' },
-    'cnt-wifi': { src: 'assets/logos-catalogo/cnt.jpg' }
+    'cnt-wifi': { src: 'assets/logos-catalogo/cnt.jpg' },
+    'ibo-player': { src: 'assets/logos-catalogo/ibo-player.webp' },
+    'aumento-gigas-proneet': { src: 'assets/logos-catalogo/proneet.jpg', blend: true },
+    'oratv': { src: 'assets/logos-catalogo/ora.png' }
   };
   const BRANDS = {
     'netflix-normal':defined('netflix','netflix.com','#ba1624','N'),
