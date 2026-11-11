@@ -55,9 +55,13 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Si Gemini tarda demasiado, se responde a tiempo en lugar de dejar la pantalla esperando.
+    const control = new AbortController();
+    const corte = setTimeout(() => control.abort(), 9000);
     const respuesta = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${MODELO}:generateContent`,
       {
+        signal: control.signal,
         method: "POST",
         headers: { "Content-Type": "application/json", "x-goog-api-key": clave },
         body: JSON.stringify({
@@ -67,6 +71,7 @@ export default async function handler(req, res) {
         }),
       }
     );
+    clearTimeout(corte);
     if (!respuesta.ok) throw new Error(`Gemini HTTP ${respuesta.status}`);
     const datos = await respuesta.json();
     const texto = datos?.candidates?.[0]?.content?.parts?.map((p) => p.text).join("").trim();
