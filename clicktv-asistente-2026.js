@@ -199,6 +199,46 @@
     [/compr|contrat|netflix|disney|hbo|prime|spotify|plan|precio|cuánto|cuanto/i, 'comprar'],
   ];
 
+  const PALABRAS_VACIAS = ['como', 'compro', 'comprar', 'quiero', 'quisiera', 'de', 'del', 'el', 'la', 'un', 'una', 'que', 'precio', 'cuanto', 'cuánto', 'plan', 'planes', 'tienes', 'tiene', 'hay', 'con', 'para', 'por', 'en', 'me', 'puedo', 'pagar', 'pago', 'renovar', 'renuevo', 'es', 'y'];
+
+  function normalizar(texto) {
+    return String(texto || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  }
+
+  // Busca productos por el nombre que escribió el cliente (ej.: "netflix").
+  function buscarProductos(texto) {
+    const catalogo = typeof PRODUCTOS !== 'undefined' ? PRODUCTOS : [];
+    const palabras = normalizar(texto).split(/[^a-z0-9+]+/).filter((w) => w.length > 2 && !PALABRAS_VACIAS.includes(w));
+    if (!palabras.length) return [];
+    return catalogo.filter((p) => {
+      const nombre = normalizar(p.nombre);
+      return palabras.some((w) => nombre.includes(w));
+    }).slice(0, 6);
+  }
+
+  function renderProductos(cuerpo, productos) {
+    cuerpo.innerHTML = '';
+    const p0 = document.createElement('p');
+    p0.textContent = '🔎 Encontré estas opciones. ¿Cuál quieres?';
+    cuerpo.appendChild(p0);
+    const opciones = document.createElement('div');
+    opciones.className = 'ctv-asistente__opciones';
+    productos.forEach((p) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'ctv-asistente__op';
+      b.textContent = (p.icono || '📺') + ' ' + p.nombre;
+      b.addEventListener('click', () => {
+        cerrarPanel();
+        window.enfocarProducto?.(p.id);
+      });
+      opciones.appendChild(b);
+    });
+    cuerpo.appendChild(opciones);
+  }
+
+  let cerrarPanel = () => {};
+
   function guiaPara(texto) {
     const t = texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const hallazgo = PALABRAS.find(([re]) => re.test(t));
@@ -253,6 +293,14 @@
       const campo = formulario.querySelector('input');
       const pregunta = campo.value.trim();
       if (pregunta.length < 2) return;
+      // Si el cliente nombra un producto, se abre directo en el catálogo.
+      const hallados = buscarProductos(pregunta);
+      if (hallados.length >= 1) {
+        campo.value = '';
+        cerrarPanel();
+        window.enfocarProducto?.(hallados[0].id);
+        return;
+      }
       const guia = guiaPara(pregunta);
       if (guia) {
         campo.value = '';
@@ -295,6 +343,10 @@
       panel.hidden = true;
       boton.setAttribute('aria-expanded', 'false');
     });
+    cerrarPanel = () => {
+      panel.hidden = true;
+      boton.setAttribute('aria-expanded', 'false');
+    };
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !panel.hidden) {
         panel.hidden = true;

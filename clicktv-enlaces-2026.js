@@ -53,7 +53,7 @@
     const aviso = document.createElement('div');
     aviso.id = 'enlace-producto-aviso';
     aviso.className = 'enlace-producto-aviso';
-    aviso.innerHTML = `<span>🔗 Mostrando: <strong></strong></span><button type="button" id="btn-ver-todo-catalogo">Ver todo el catálogo</button>`;
+    aviso.innerHTML = `<span>🔗 Mostrando: <strong></strong></span><small>1️⃣ Elige el plan · 2️⃣ Añade al carrito o compra por WhatsApp · 3️⃣ Finaliza y paga</small><button type="button" id="btn-ver-todo-catalogo">Ver todo el catálogo</button>`;
     aviso.querySelector('strong').textContent = producto.nombre;
     grid.parentNode.insertBefore(aviso, grid);
     document.getElementById('btn-ver-todo-catalogo').addEventListener('click', () => {
@@ -80,6 +80,9 @@
     setTimeout(() => posicionarGrid(grid), 400);
     setTimeout(() => posicionarGrid(grid), 1400);
   }
+
+  // Disponible para el asistente y otros accesos a un producto concreto.
+  window.enfocarProducto = abrirProductoDesdeEnlace;
 
   const id = idDesdeEnlace();
   if (id) {
