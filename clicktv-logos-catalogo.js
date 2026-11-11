@@ -78,6 +78,7 @@
     'iptv-premium':defined('', '', '#145e98','TV'),
     'iptv-ultra':defined('', '', '#145e98','TV'),
     'plataformas-iptv':defined('', '', '#145e98','TV'),
+    'disney-premium-deportes':defined('disneyplus','disneyplus.com','#1556bd','D+'),
     'deportes-pack':defined('', '', '#1569a6','⚽'),
     'aumento-gigas-proneet':defined('', '', '#1c66aa','VPN'),
     'recargas-ilimitadas-operador':defined('', '', '#175c99','SIM')
@@ -120,7 +121,7 @@
           img.src = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(info.domain) + '&sz=128';
         } else text();
       });
-      if (local) { img.src = local.src; img.classList.add('ctv-brand-local'); if (local.blend) img.style.mixBlendMode = 'screen'; }
+      if (local) { img.src = local.src; img.classList.add('ctv-brand-local'); if (local.blend) { img.style.mixBlendMode = 'screen'; img.classList.add('ctv-brand-blend'); } }
       else img.src = 'https://cdn.jsdelivr.net/npm/simple-icons@v15/icons/' + info.slug + '.svg';
       icon.appendChild(img);
     }
@@ -162,7 +163,7 @@
           img.src='https://www.google.com/s2/favicons?domain='+encodeURIComponent(info.domain)+'&sz=128';
         } else fallback();
       });
-      if (local) { img.src = local.src; img.classList.add('ctv-brand-local'); if (local.blend) img.style.mixBlendMode = 'screen'; }
+      if (local) { img.src = local.src; img.classList.add('ctv-brand-local'); if (local.blend) { img.style.mixBlendMode = 'screen'; img.classList.add('ctv-brand-blend'); } }
       else img.src='https://cdn.jsdelivr.net/npm/simple-icons@v15/icons/'+info.slug+'.svg';
       icon.appendChild(img);
     }

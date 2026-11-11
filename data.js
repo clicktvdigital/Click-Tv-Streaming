@@ -406,6 +406,15 @@ const PRODUCTOS = [
     planes: [{ tipo: "Consultar disponibilidad", precio: 0, consultar: true }]
   },
   {
+    id: "disney-premium-deportes",
+    nombre: "Disney+ Premium con ESPN",
+    categoria: "deportes",
+    icono: "⚽",
+    descripcion: "Disney+ Premium con ESPN para seguir fútbol, partidos en vivo y deportes, además de películas, series y contenido familiar.",
+    etiquetas: ["⚽ DEPORTES EN VIVO", "⭐ RECOMENDADO", "💎 PREMIUM"],
+    planes: [{ tipo: "1 mes", precio: 9 }]
+  },
+  {
     id: "deportes-pack",
     nombre: "Pack Deportes",
     categoria: "deportes",
