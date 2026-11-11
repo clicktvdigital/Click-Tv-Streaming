@@ -1,0 +1,251 @@
+/* CLICK TV STREAMING · Asistente guiado (sin inteligencia artificial externa).
+ * Ayuda a comprar, pagar, renovar, resolver problemas y llegar a un agente.
+ * No pide datos de tarjetas, claves ni códigos. */
+(() => {
+  'use strict';
+
+  const WA_VENTAS = '593939166222';
+  const WA_SOPORTE = '593990056986';
+  const TG = 'https://t.me/clicktvdigital';
+
+  const enlaceWA = (numero, texto) =>
+    `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+
+  // Cada nodo tiene un texto (líneas separadas), opciones y, si aplica, enlaces.
+  const nodos = {
+    inicio: {
+      texto: ['👋 Hola, soy el asistente de CLICK TV STREAMING.', '¿En qué te ayudo?'],
+      opciones: [
+        ['🛒 Quiero comprar', 'comprar'],
+        ['💳 Formas de pago', 'pagos'],
+        ['🔁 Renovar mi servicio', 'renovar'],
+        ['🛠️ Tengo un problema', 'problema'],
+        ['👤 Hablar con un agente', 'agente'],
+      ],
+    },
+    comprar: {
+      texto: [
+        '🛒 Comprar es rápido:',
+        '1️⃣ Ve al catálogo y elige tu servicio.',
+        '2️⃣ Selecciona el plan y los meses o dispositivos.',
+        '3️⃣ Pulsa «Añadir al carrito» o «Comprar por WhatsApp».',
+        '4️⃣ Finaliza la compra y elige cómo pagar.',
+      ],
+      opciones: [
+        ['📺 Ir al catálogo', 'ir:#streaming'],
+        ['💳 Ver formas de pago', 'pagos'],
+        ['⬅️ Volver', 'inicio'],
+      ],
+    },
+    pagos: {
+      texto: [
+        '💳 Formas de pago:',
+        '🏦 Transferencia bancaria (copia la cuenta en el carrito).',
+        '🅿️ PayPal y PayPhone (enlaces en el carrito).',
+        '📲 Deuna y Binance (QR en la ficha del plan).',
+        '✅ La activación se hace después de verificar tu pago.',
+        '📎 Envía el comprobante por WhatsApp.',
+      ],
+      opciones: [
+        ['📎 Enviar comprobante', 'comprobante'],
+        ['🕗 Horarios de atención', 'horario'],
+        ['⬅️ Volver', 'inicio'],
+      ],
+    },
+    comprobante: {
+      texto: [
+        '📎 Para avisar tu pago:',
+        '📝 Indica la referencia de tu pedido (CTV-…).',
+        '🧾 Adjunta la foto o PDF del comprobante.',
+        '⏳ Te confirmamos cuando esté validado.',
+      ],
+      opciones: [
+        ['📲 Enviar por WhatsApp de ventas', 'enlace:ventas:comprobante'],
+        ['⬅️ Volver', 'pagos'],
+      ],
+    },
+    horario: {
+      texto: [
+        '🕗 Horarios (hora de Ecuador):',
+        '🛒 Ventas y suscripciones: 08:00–20:00.',
+        '🛠️ Soporte y renovaciones: 08:00–18:00.',
+      ],
+      opciones: [['⬅️ Volver', 'inicio']],
+    },
+    renovar: {
+      texto: [
+        '🔁 Para renovar:',
+        '1️⃣ Ten a la mano el nombre del servicio.',
+        '2️⃣ Escribe a soporte con el servicio y la fecha de vencimiento.',
+        '3️⃣ Te indicamos el importe y cómo pagar.',
+      ],
+      opciones: [
+        ['📲 Renovar por WhatsApp', 'enlace:soporte:renovar'],
+        ['⬅️ Volver', 'inicio'],
+      ],
+    },
+    problema: {
+      texto: ['🛠️ ¿Qué te pasa?'],
+      opciones: [
+        ['📺 El servicio no abre', 'prob:noabre'],
+        ['🔑 No llegan los datos de acceso', 'prob:datos'],
+        ['💳 Pagué y no activaron', 'prob:pago'],
+        ['⬅️ Volver', 'inicio'],
+      ],
+    },
+    'prob:noabre': {
+      texto: [
+        '📺 Prueba esto primero:',
+        '🔄 Cierra la app y vuelve a abrirla.',
+        '📶 Revisa tu conexión a internet.',
+        '📱 Reinicia el dispositivo.',
+        '💬 Si sigue igual, escribe a soporte con el servicio y el problema.',
+      ],
+      opciones: [
+        ['📲 Escribir a soporte', 'enlace:soporte:problema'],
+        ['⬅️ Volver', 'problema'],
+      ],
+    },
+    'prob:datos': {
+      texto: [
+        '🔑 Los datos se envían después de confirmar el pago.',
+        '🕗 La activación puede tardar unos minutos en horario de atención.',
+        '💬 Si ya pasó ese tiempo, escribe a soporte.',
+      ],
+      opciones: [
+        ['📲 Escribir a soporte', 'enlace:soporte:datos'],
+        ['⬅️ Volver', 'problema'],
+      ],
+    },
+    'prob:pago': {
+      texto: [
+        '💳 Si ya pagaste:',
+        '🧾 Envía el comprobante con tu referencia de pedido.',
+        '⏳ Validamos el pago y activamos tu servicio.',
+      ],
+      opciones: [
+        ['📎 Enviar comprobante', 'comprobante'],
+        ['⬅️ Volver', 'problema'],
+      ],
+    },
+    agente: {
+      texto: [
+        '👤 Elige cómo quieres hablar con nosotros:',
+        '💬 Ventas: compras y consultas de planes.',
+        '🛠️ Soporte: problemas y renovaciones.',
+      ],
+      opciones: [
+        ['🟢 WhatsApp de ventas', 'enlace:ventas:general'],
+        ['🟢 WhatsApp de soporte', 'enlace:soporte:general'],
+        ['✈️ Telegram oficial', 'enlace:telegram'],
+        ['⬅️ Volver', 'inicio'],
+      ],
+    },
+  };
+
+  const mensajes = {
+    comprobante: '🧾 Hola Click TV Streaming.\n\n📎 Deseo enviar mi comprobante de pago.\n\n📝 Mi referencia de pedido: ',
+    general: '👋 Hola Click TV Streaming.\n\n💬 Tengo una consulta sobre sus servicios.',
+    renovar: '🔁 Hola Click TV Streaming.\n\nDeseo renovar mi servicio. ¿Me indican el vencimiento y el importe?',
+    problema: '🛠️ Hola Click TV Streaming.\n\nTengo un problema con mi servicio: ',
+    datos: '🔑 Hola Click TV Streaming.\n\nNo me llegan los datos de acceso de mi servicio.',
+  };
+
+  function crearDom() {
+    const boton = document.createElement('button');
+    boton.id = 'ctv-asistente-btn';
+    boton.type = 'button';
+    boton.setAttribute('aria-controls', 'ctv-asistente');
+    boton.setAttribute('aria-expanded', 'false');
+    boton.textContent = '💬 Ayuda';
+
+    const panel = document.createElement('div');
+    panel.id = 'ctv-asistente';
+    panel.className = 'ctv-asistente';
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-label', 'Asistente de CLICK TV STREAMING');
+    panel.hidden = true;
+    panel.innerHTML = `
+      <div class="ctv-asistente__cabecera">
+        <strong>💬 Asistente</strong>
+        <button type="button" class="ctv-asistente__cerrar" aria-label="Cerrar asistente">✕</button>
+      </div>
+      <div class="ctv-asistente__cuerpo" aria-live="polite"></div>`;
+
+    document.body.appendChild(boton);
+    document.body.appendChild(panel);
+    return { boton, panel, cuerpo: panel.querySelector('.ctv-asistente__cuerpo') };
+  }
+
+  function abrirEnlace(tipo, clave) {
+    if (tipo === 'telegram') return window.open(TG, '_blank', 'noopener,noreferrer');
+    const numero = tipo === 'ventas' ? WA_VENTAS : WA_SOPORTE;
+    const texto = mensajes[clave] || mensajes.general;
+    window.open(enlaceWA(numero, texto), '_blank', 'noopener,noreferrer');
+  }
+
+  function render(cuerpo, clave) {
+    const nodo = nodos[clave] || nodos.inicio;
+    cuerpo.innerHTML = '';
+
+    nodo.texto.forEach((linea) => {
+      const p = document.createElement('p');
+      p.textContent = linea;
+      cuerpo.appendChild(p);
+    });
+
+    const opciones = document.createElement('div');
+    opciones.className = 'ctv-asistente__opciones';
+    nodo.opciones.forEach(([etiqueta, destino]) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'ctv-asistente__op';
+      b.textContent = etiqueta;
+      b.addEventListener('click', () => accion(destino, cuerpo));
+      opciones.appendChild(b);
+    });
+    cuerpo.appendChild(opciones);
+  }
+
+  function accion(destino, cuerpo) {
+    if (destino.startsWith('ir:')) {
+      const sel = destino.slice(3);
+      document.querySelector(sel)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    if (destino.startsWith('enlace:')) {
+      const [, tipo, clave] = destino.split(':');
+      return abrirEnlace(tipo, clave);
+    }
+    render(cuerpo, destino);
+  }
+
+  function iniciar() {
+    if (document.getElementById('ctv-asistente-btn')) return;
+    const { boton, panel, cuerpo } = crearDom();
+    render(cuerpo, 'inicio');
+
+    boton.addEventListener('click', () => {
+      const abrir = panel.hidden;
+      panel.hidden = !abrir;
+      boton.setAttribute('aria-expanded', String(abrir));
+      if (abrir) render(cuerpo, 'inicio');
+    });
+    panel.querySelector('.ctv-asistente__cerrar').addEventListener('click', () => {
+      panel.hidden = true;
+      boton.setAttribute('aria-expanded', 'false');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) {
+        panel.hidden = true;
+        boton.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', iniciar);
+  } else {
+    iniciar();
+  }
+})();

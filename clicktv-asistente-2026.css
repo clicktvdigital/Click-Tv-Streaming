@@ -1,0 +1,81 @@
+/* CLICK TV STREAMING · Asistente guiado */
+#ctv-asistente-btn {
+  position: fixed;
+  right: 12px;
+  bottom: 96px;
+  z-index: 950;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, #1d5fbf, #0b6b3a);
+  color: #fff;
+  font-weight: 800;
+  font-size: .9rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .4);
+  cursor: pointer;
+}
+
+.ctv-asistente {
+  position: fixed;
+  right: 10px;
+  bottom: 150px;
+  z-index: 960;
+  width: min(92vw, 360px);
+  max-height: 62vh;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(96, 165, 250, .4);
+  border-radius: 16px;
+  background: #0a1830;
+  color: #e6f3ff;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, .55);
+  overflow: hidden;
+}
+.ctv-asistente[hidden] { display: none; }
+
+.ctv-asistente__cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: linear-gradient(90deg, #b71c2c, #1d5fbf 60%, #0b6b3a);
+  color: #fff;
+}
+.ctv-asistente__cerrar {
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.ctv-asistente__cuerpo {
+  padding: 12px 14px 14px;
+  overflow-y: auto;
+  font-size: .92rem;
+  line-height: 1.4;
+}
+.ctv-asistente__cuerpo p { margin: 0 0 6px; }
+
+.ctv-asistente__opciones {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+}
+.ctv-asistente__op {
+  text-align: left;
+  border: 1px solid rgba(96, 165, 250, .45);
+  border-radius: 12px;
+  padding: 9px 12px;
+  background: rgba(20, 50, 95, .7);
+  color: #fff;
+  font-weight: 700;
+  font-size: .9rem;
+  cursor: pointer;
+}
+.ctv-asistente__op:hover,
+.ctv-asistente__op:focus-visible { background: rgba(29, 95, 191, .85); outline: none; }
+
+@media (max-width: 680px) {
+  #ctv-asistente-btn { bottom: 84px; right: 10px; }
+}
