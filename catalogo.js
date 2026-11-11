@@ -32,6 +32,7 @@
       </div>`;
     }).join("");
     return `<article class="product-card reveal" data-producto="${escapar(producto.id)}">
+      <button class="product-card__enlace" type="button" onclick="copiarEnlaceProducto('${escapar(producto.id)}', this)">🔗 Copiar enlace</button>
       <div class="product-card__head"><span class="product-card__icon">${producto.icono || "📺"}</span><div><h3>${escapar(producto.nombre)}</h3><div class="product-tags">${(producto.etiquetas||[]).map(e=>`<span>${escapar(e)}</span>`).join("")}</div></div></div>
       <p>${escapar(producto.descripcion || "")}</p>
       <div class="product-plans">${planes}</div>

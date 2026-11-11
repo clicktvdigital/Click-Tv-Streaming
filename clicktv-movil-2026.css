@@ -218,3 +218,22 @@
   text-decoration: none;
   white-space: nowrap;
 }
+
+/* Enlaces directos por producto */
+.product-card__enlace {
+  display: inline-block;
+  margin: 0 0 8px auto;
+  padding: 4px 10px;
+  border: 1px solid rgba(96, 165, 250, .45);
+  border-radius: 999px;
+  background: rgba(10, 24, 46, .7);
+  color: #cfe7ff;
+  font-size: .75rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.catalogo-destacado {
+  outline: 3px solid #f8d26a;
+  outline-offset: 4px;
+  transition: outline-color .4s ease;
+}
