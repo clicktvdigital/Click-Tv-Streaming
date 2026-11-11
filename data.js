@@ -545,6 +545,24 @@ const PRODUCTOS = [
     planes: [
       { tipo: "Paquete Aki Móvil · monto a confirmar", precio: 0, consultar: true }
     ]
+  },
+  {
+    id: "tigo-combos",
+    nombre: "Tigo Combos Prepago",
+    categoria: "recargas",
+    icono: "🔵",
+    descripcion: "Combos Tigo Ecuador con precio final. No aplican cupón de descuento.",
+    etiquetas: ["🔵 TIGO", "📲 COMBOS", "🚫 SIN CUPÓN"],
+    planes: [
+      { tipo: "1 GB · vigencia 1 día", precio: 1.05, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "2 GB · vigencia 1 día", precio: 1.50, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "5 GB · vigencia 7 días", precio: 3.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "6 GB · vigencia 15 días", precio: 5.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "12 GB · vigencia 30 días", precio: 9.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "14 GB · vigencia 30 días", precio: 10.25, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "17 GB · vigencia 30 días", precio: 15.50, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "25 GB · vigencia 30 días", precio: 25.00, ivaIncluido: true, bloquearDescuento: true }
+    ]
   }
 ];
 
