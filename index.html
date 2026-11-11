@@ -74,15 +74,39 @@
   <!-- CLICKTV_CONTACTOS_RADIO_PREMIUM_2026 -->
   <link rel="stylesheet" href="clicktv-contactos-radio-premium.css?v=20261015-8">
   <link rel="stylesheet" href="clicktv-movil-2026.css?v=20261111-5">
-  <link rel="stylesheet" href="clicktv-navidad-2026.css?v=20261111-2">
+  <link rel="stylesheet" href="clicktv-navidad-2026.css?v=20261111-3">
 </head>
 <body>
   <div class="navidad-banner" role="region" aria-label="Mensaje de temporada">
     <span class="navidad-banner__texto">🎄 ¡Feliz Navidad!</span>
     <div class="navidad-banner__acciones">
       <button id="btn-musica-navidad" class="navidad-banner__boton" type="button" aria-pressed="false">🎶 Música navideña</button>
+      <input id="volumen-navidad" class="navidad-banner__volumen" type="range" min="0" max="1" step="0.05" value="0.6" aria-label="Volumen de la música navideña">
       <button id="btn-instalar-app" class="navidad-banner__boton navidad-banner__boton--app" type="button" hidden>📲 Instalar app</button>
     </div>
+  </div>
+  <div class="navidad-santa" aria-hidden="true">
+    <svg viewBox="0 0 240 90" width="240" height="90">
+      <!-- Renos -->
+      <g fill="#7a4a24">
+        <ellipse cx="40" cy="48" rx="14" ry="8"/><circle cx="54" cy="36" r="6"/>
+        <rect x="34" y="54" width="3" height="16" rx="1"/><rect x="42" y="54" width="3" height="16" rx="1"/>
+        <rect x="26" y="50" width="3" height="14" rx="1"/><rect x="48" y="52" width="3" height="14" rx="1"/>
+        <path d="M50 30 L46 20 M52 30 L56 19" stroke="#f8d26a" stroke-width="2" fill="none"/>
+      </g>
+      <circle cx="58" cy="36" r="2" fill="#ff3b3b"/>
+      <!-- Trineo -->
+      <path d="M92 58 Q130 80 175 58 L172 46 L96 46 Z" fill="#b71c2c"/>
+      <path d="M86 84 Q130 88 182 80" stroke="#f8d26a" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <!-- Papá Noel -->
+      <circle cx="128" cy="30" r="10" fill="#f6c9a0"/>
+      <path d="M116 26 Q128 4 142 24 Z" fill="#b71c2c"/>
+      <circle cx="118" cy="26" r="3" fill="#fff"/>
+      <path d="M118 36 Q128 52 138 36 Q128 42 118 36 Z" fill="#fff"/>
+      <rect x="112" y="40" width="30" height="20" rx="8" fill="#b71c2c"/>
+      <rect x="112" y="50" width="30" height="4" fill="#111"/>
+      <path d="M140 46 L172 40" stroke="#b71c2c" stroke-width="5" stroke-linecap="round"/>
+    </svg>
   </div>
   <div class="navidad-nieve" aria-hidden="true"><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span></div>
   <div class="site-bg" aria-hidden="true">
@@ -942,6 +966,6 @@
   <script src="clicktv-final-visual.js?v=20261015-3" defer></script>
   <script src="clicktv-logos-catalogo.js?v=20261111-22" defer></script>
   <script src="clicktv-app-2026.js?v=20261111-1" defer></script>
-  <script src="clicktv-navidad-musica.js?v=20261111-2" defer></script>
+  <script src="clicktv-navidad-musica.js?v=20261111-3" defer></script>
 </body>
 </html>

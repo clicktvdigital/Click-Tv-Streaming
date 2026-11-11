@@ -11,7 +11,7 @@
   gap: 8px;
   min-height: 40px;
   padding: 6px 12px;
-  background: linear-gradient(90deg, #8f0f1d, #b71c2c 60%, #0b6b3a);
+  background: linear-gradient(90deg, #b71c2c, #1d5fbf 50%, #0b6b3a);
   color: #fff;
   border-bottom: 2px solid #f8d26a;
 }
@@ -98,4 +98,39 @@ body .navidad-banner button.navidad-banner__boton {
   font-size: .7rem !important;
   line-height: 1.2 !important;
   box-shadow: none !important;
+}
+
+/* Control de volumen del banner */
+body .navidad-banner input.navidad-banner__volumen {
+  width: 72px;
+  accent-color: #f8d26a;
+  margin: 0;
+}
+body .navidad-banner input.navidad-banner__volumen[hidden] { display: none; }
+
+/* Papá Noel volando: cruza la parte superior cada 26 segundos */
+.navidad-santa {
+  position: fixed;
+  top: 92px;
+  left: 0;
+  z-index: 940;
+  pointer-events: none;
+  width: 240px;
+  opacity: 0;
+  animation: navidad-volar 26s linear infinite;
+}
+.navidad-santa svg { width: 100%; height: auto; filter: drop-shadow(0 4px 6px rgba(0,0,0,.35)); }
+@keyframes navidad-volar {
+  0%   { transform: translate(-260px, 0) rotate(-4deg); opacity: 0; }
+  4%   { opacity: 1; }
+  8%   { transform: translate(calc(50vw - 120px), -18px) rotate(-2deg); opacity: 1; }
+  12%  { transform: translate(calc(100vw + 20px), -4px) rotate(0deg); opacity: 0; }
+  100% { transform: translate(calc(100vw + 20px), -4px) rotate(0deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .navidad-santa { display: none; }
+}
+@media (max-width: 680px) {
+  .navidad-santa { width: 170px; top: 84px; }
+  body .navidad-banner input.navidad-banner__volumen { width: 56px; }
 }
