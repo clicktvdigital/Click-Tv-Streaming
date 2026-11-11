@@ -7,6 +7,9 @@
   // Nombres que usamos al compartir y que se traducen al identificador interno del catálogo.
   const ALIAS = { 'netflix-normal': 'netflix-compartido' };
 
+  // Evita que el navegador restaure la posición de desplazamiento y pise el destino del enlace.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
   function idDesdeEnlace() {
     const valor = new URLSearchParams(window.location.search).get('producto');
     if (!valor || !/^[a-z0-9-]{2,60}$/.test(valor)) return null;
@@ -43,15 +46,16 @@
     let cancelado = false;
     const cancelar = () => { cancelado = true; };
     ['touchstart', 'wheel', 'keydown'].forEach((ev) => window.addEventListener(ev, cancelar, { once: true, passive: true }));
-    [150, 600, 1200, 2200, 3500].forEach((ms) => {
+    [150, 600, 1200, 2200, 3500, 5000, 7000].forEach((ms) => {
       setTimeout(() => {
         if (cancelado) return;
+        document.documentElement.style.scrollBehavior = 'auto';
         // Se deja la tarjeta justo debajo de la cabecera fija (aprox. 170 px).
         const y = tarjeta.getBoundingClientRect().top + window.scrollY - 170;
         window.scrollTo({ top: Math.max(y, 0), behavior: 'auto' });
       }, ms);
     });
-    setTimeout(() => tarjeta.classList.remove('catalogo-destacado'), 5000);
+    setTimeout(() => tarjeta.classList.remove('catalogo-destacado'), 8000);
   }
 
   function abrirProductoDesdeEnlace(id) {
@@ -84,5 +88,10 @@
     } else {
       abrirProductoDesdeEnlace(id);
     }
+    // Cuando termina de cargar todo (imágenes, partidos), se vuelve a llevar al producto.
+    window.addEventListener('load', () => {
+      const tarjeta = buscarTarjeta(id);
+      if (tarjeta) resaltar(tarjeta);
+    });
   }
 })();
