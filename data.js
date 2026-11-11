@@ -439,60 +439,35 @@ const PRODUCTOS = [
     ]
   },
   {
-    id: "movistar-combos",
-    nombre: "Movistar Combos Prepago",
-    categoria: "recargas",
-    icono: "🔵",
-    descripcion: "Combos Movistar Ecuador con precios finales publicados por operador. No aplican cupón de descuento.",
-    etiquetas: ["🔵 MOVISTAR", "📲 COMBOS", "🚫 SIN CUPÓN"],
-    planes: [
-      { tipo: "1 GB · vigencia 1 día", precio: 1.05, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "5 GB · vigencia 7 días", precio: 3.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "6 GB · vigencia 15 días", precio: 5.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "8 GB · vigencia 20 días", precio: 7.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "8 GB · vigencia 30 días", precio: 8.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "10 GB · vigencia 30 días", precio: 9.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "14 GB · vigencia 30 días", precio: 10.25, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "19 GB · vigencia 30 días", precio: 15.50, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Recarga normal Movistar · monto a confirmar", precio: 0, consultar: true }
-    ]
-  },
-  {
     id: "tuenti-recargas-combos",
-    nombre: "Tuenti Recargas y Combos",
+    nombre: "Tigo Tuenti",
     categoria: "recargas",
     icono: "🩵",
-    descripcion: "Recargas y combos Tuenti Ecuador. Los precios finales de combos no aceptan cupón.",
-    etiquetas: ["🩵 TUENTI", "💸 RECARGAS", "🚫 SIN CUPÓN"],
+    descripcion: "Combos Tigo Tuenti Ecuador. Precio final y sin cupón.",
+    etiquetas: ["🩵 TIGO TUENTI", "📲 COMBOS", "🚫 SIN CUPÓN"],
     planes: [
-      { tipo: "Recarga normal Tuenti $1", precio: 1.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Recarga normal Tuenti $4", precio: 4.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Recarga normal Tuenti $8", precio: 8.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Combo 1/2 GB · vigencia 15 días", precio: 1.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Combo 3 GB · vigencia 15 días", precio: 4.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Combo 5 GB · vigencia 30 días", precio: 7.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Combo 8 GB + 2 GB TikTok/Instagram · vigencia 30 días", precio: 8.00, ivaIncluido: true, bloquearDescuento: true }
+      { tipo: "Combo 12 GB · vigencia 30 días", precio: 9.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "Combo 12 GB · vigencia 30 días", precio: 10.25, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "Combo 17 GB · vigencia 30 días", precio: 15.50, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "Combo 25 GB · vigencia 30 días", precio: 25.00, ivaIncluido: true, bloquearDescuento: true }
     ]
   },
   {
     id: "cnt-paquetes-prepago",
-    nombre: "CNT Paquetes Prepago",
+    nombre: "CNT Paquetes",
     categoria: "recargas",
     icono: "🟣",
-    descripcion: "Paquetes CNT Ecuador con precios finales. No aplican cupón de descuento.",
+    descripcion: "Paquetes CNT Ecuador con precio final. No aplican cupón de descuento.",
     etiquetas: ["🟣 CNT", "📲 PAQUETES", "🚫 SIN CUPÓN"],
     planes: [
-      { tipo: "Paquete Plus · vigencia 1 día", precio: 1.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Paquete Plus · vigencia 3 días", precio: 2.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Paquete Plus · vigencia 7 días", precio: 3.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Paquete Plus · vigencia 30 días", precio: 5.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Paquete Plus · vigencia 30 días", precio: 6.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Paquete Plus · vigencia 30 días", precio: 10.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Paquete Plus · vigencia 30 días", precio: 15.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Paquete Plus · vigencia 30 días", precio: 20.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Apps prepago · 1 GB para app · vigencia 1 día", precio: 1.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Herramientas colaboración · 5 GB", precio: 5.00, ivaIncluido: true, bloquearDescuento: true },
-      { tipo: "Recarga normal CNT · monto a confirmar", precio: 0, consultar: true }
+      { tipo: "1 GB · vigencia 1 día", precio: 1.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "2 GB · vigencia 3 días", precio: 2.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "4 GB · vigencia 7 días", precio: 3.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "5 GB · vigencia 30 días", precio: 5.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "7 GB · vigencia 30 días", precio: 6.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "15 GB · vigencia 30 días", precio: 10.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "20 GB · vigencia 30 días", precio: 15.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "25 GB · vigencia 30 días", precio: 20.00, ivaIncluido: true, bloquearDescuento: true }
     ]
   },
   {
@@ -507,6 +482,65 @@ const PRODUCTOS = [
       { tipo: "Recarga ilimitada Movistar · 1 mes", precio: 4.00, ivaIncluido: true, bloquearDescuento: true },
       { tipo: "Recarga ilimitada Tuenti · 1 mes", precio: 4.00, ivaIncluido: true, bloquearDescuento: true },
       { tipo: "Recarga ilimitada CNT · 1 mes", precio: 4.00, ivaIncluido: true, bloquearDescuento: true }
+    ]
+  },
+  {
+    id: "maxiplus",
+    nombre: "Maxi Plus",
+    categoria: "recargas",
+    icono: "📦",
+    descripcion: "Paquetes Maxi Plus con precio final. No aplican cupón de descuento.",
+    etiquetas: ["📦 MAXI PLUS", "📲 PAQUETES", "🚫 SIN CUPÓN"],
+    planes: [
+      { tipo: "1 GB · vigencia 1 día", precio: 1.05, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "4 GB · vigencia 7 días", precio: 3.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "5 GB · vigencia 15 días", precio: 5.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "8 GB · vigencia 20 días", precio: 7.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "8 GB · vigencia 30 días", precio: 8.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "9 GB · vigencia 30 días", precio: 9.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "12 GB · vigencia 30 días", precio: 10.25, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "17 GB · vigencia 30 días", precio: 15.50, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "35 GB · vigencia 30 días", precio: 30.81, ivaIncluido: true, bloquearDescuento: true }
+    ]
+  },
+  {
+    id: "cnt-aplicaciones",
+    nombre: "CNT Aplicaciones",
+    categoria: "recargas",
+    icono: "🟣",
+    descripcion: "Paquetes de aplicaciones CNT con precio final. No aplican cupón de descuento.",
+    etiquetas: ["🟣 CNT", "📱 APLICACIONES", "🚫 SIN CUPÓN"],
+    planes: [
+      { tipo: "YouTube · 1 GB · vigencia 1 día", precio: 1.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "Instagram · 1 GB · vigencia 1 día", precio: 1.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "Netflix · 1 GB · vigencia 1 día", precio: 1.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "Spotify · 1 GB · vigencia 1 día", precio: 1.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "TikTok · 1 GB · vigencia 1 día", precio: 1.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "Waze · 1 GB · vigencia 1 día", precio: 1.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "Paquete de datos · 25 GB · vigencia 30 días", precio: 10.00, ivaIncluido: true, bloquearDescuento: true },
+      { tipo: "Paquete de datos · 45 GB · vigencia 30 días", precio: 20.00, ivaIncluido: true, bloquearDescuento: true }
+    ]
+  },
+  {
+    id: "cnt-wifi",
+    nombre: "CNT WiFi",
+    categoria: "recargas",
+    icono: "🟣",
+    descripcion: "Paquetes CNT WiFi. Precio por confirmar.",
+    etiquetas: ["🟣 CNT", "📶 WIFI", "💬 PRECIO A CONFIRMAR"],
+    planes: [
+      { tipo: "Paquete WiFi · monto a confirmar", precio: 0, consultar: true }
+    ]
+  },
+  {
+    id: "aki-movil",
+    nombre: "Aki Móvil",
+    categoria: "recargas",
+    icono: "📱",
+    descripcion: "Paquetes Aki Móvil. Precio por confirmar.",
+    etiquetas: ["📱 AKI MÓVIL", "💬 PRECIO A CONFIRMAR"],
+    planes: [
+      { tipo: "Paquete Aki Móvil · monto a confirmar", precio: 0, consultar: true }
     ]
   }
 ];
