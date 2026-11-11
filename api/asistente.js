@@ -55,24 +55,34 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Si Gemini tarda demasiado, se responde con un mensaje en lugar de dejar la pantalla esperando.
-    const control = new AbortController();
-    const corte = setTimeout(() => control.abort(), 20000);
-    const respuesta = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODELO}:generateContent`,
-      {
-        signal: control.signal,
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": clave },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: INSTRUCCIONES }] },
-          contents: [{ role: "user", parts: [{ text: pregunta }] }],
-          generationConfig: { maxOutputTokens: 300, temperature: 0.3 },
-        }),
+    const cuerpoGemini = JSON.stringify({
+      systemInstruction: { parts: [{ text: INSTRUCCIONES }] },
+      contents: [{ role: "user", parts: [{ text: pregunta }] }],
+      generationConfig: { maxOutputTokens: 300, temperature: 0.3 },
+    });
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODELO}:generateContent`;
+
+    // Gemini a veces responde 503 (sobrecargado) o 429 (límite) por un momento:
+    // se reintenta una vez antes de avisar al cliente.
+    let respuesta = null;
+    for (let intento = 1; intento <= 2; intento++) {
+      const control = new AbortController();
+      const corte = setTimeout(() => control.abort(), 20000);
+      try {
+        respuesta = await fetch(url, {
+          signal: control.signal,
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-goog-api-key": clave },
+          body: cuerpoGemini,
+        });
+      } finally {
+        clearTimeout(corte);
       }
-    );
-    clearTimeout(corte);
-    if (!respuesta.ok) throw new Error(`Gemini HTTP ${respuesta.status}`);
+      if (respuesta.ok || ![429, 500, 503].includes(respuesta.status)) break;
+      if (intento === 1) await new Promise((r) => setTimeout(r, 1500));
+    }
+
+    if (!respuesta.ok) throw new Error(`Gemini ${respuesta.status}`);
     const datos = await respuesta.json();
     const texto = datos?.candidates?.[0]?.content?.parts?.map((p) => p.text).join("").trim();
     if (!texto) throw new Error("Respuesta vacía");
