@@ -11,7 +11,6 @@
     'zapping-pro': { src: 'assets/logos-catalogo/zapping.png', blend: true },
     'telelatino': { src: 'assets/logos-catalogo/telelatino.webp' },
     'flujo-tv': { src: 'assets/logos-catalogo/flujo-tv.jpg' },
-    'xc-tv': { src: 'assets/logos-catalogo/xc-tv.png' },
     'claro-paquetes-megas': { src: 'assets/logos-catalogo/claro.jpg' },
     'maxiplus': { src: 'assets/logos-catalogo/maxiplus.jpg' },
     'aki-movil': { src: 'assets/logos-catalogo/aki-movil.jpg' },
