@@ -11,7 +11,7 @@ const CONFIG = {
   whatsappAlternativoNumero: "593990056986",
   whatsappAlternativoLocal: "0990056986",
   whatsappAlternativoLink: "https://wa.me/593990056986",
-  whatsappGrupo: "https://chat.whatsapp.com/Jj1d8iwCAL3EokVWwu5t1D",
+  whatsappGrupo: "https://chat.whatsapp.com/CNWqZ0AhHhKDb1VKp1LqNu?s=cl&p=a&iam=2",
 
   telegramUsuario: "ClickTvDigital",
   telegramLink: "https://t.me/ClickTvDigital",
