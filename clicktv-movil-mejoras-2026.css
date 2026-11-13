@@ -1,0 +1,27 @@
+/* CLICK TV STREAMING · Mejoras visuales para celulares y ambiente navideño suave.
+   Carga al final: sobrescribe solo lo necesario, sin tocar precios, pagos ni funciones. */
+
+/* 1. Nieve navideña también en celulares: pocos copos, más lentos y pequeños para no afectar el desplazamiento. */
+@media (max-width: 680px) {
+  .navidad-nieve { display: block !important; }
+  .navidad-nieve span { font-size: 10px !important; animation-duration: 24s !important; }
+  .navidad-nieve span:nth-child(n+5) { display: none; }
+}
+
+/* 2. Botón del catálogo en la portada: ancho completo y fácil de tocar con el pulgar. */
+@media (max-width: 680px) {
+  .hero__actions .btn {
+    width: 100%;
+    min-height: 52px;
+    justify-content: center;
+    font-size: 1.05rem;
+  }
+}
+
+/* 3. Botón "Instalar app" del banner navideño: área de toque de 44 px y texto legible. */
+body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
+  min-height: 44px !important;
+  height: auto !important;
+  padding: 10px 16px !important;
+  font-size: .9rem !important;
+}
