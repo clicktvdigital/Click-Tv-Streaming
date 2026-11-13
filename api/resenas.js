@@ -32,9 +32,11 @@ function validar(cuerpo) {
   const pais = limpiar(cuerpo.pais, 60);
   const servicio = limpiar(cuerpo.servicio, 60);
   const comentario = limpiar(cuerpo.comentario, 350);
-  const estrellas = Math.round(Number(cuerpo.estrellas));
+  // La calificación es opcional: null si no se eligió.
+  const eligio = cuerpo.estrellas !== undefined && cuerpo.estrellas !== null && cuerpo.estrellas !== "";
+  const estrellas = eligio ? Math.round(Number(cuerpo.estrellas)) : null;
   if (!nombre || !pais || !servicio || !comentario) return { error: "Completa nombre, ciudad, servicio y comentario." };
-  if (!(estrellas >= 1 && estrellas <= 5)) return { error: "Las estrellas deben ser de 1 a 5." };
+  if (eligio && !(estrellas >= 1 && estrellas <= 5)) return { error: "Las estrellas deben ser de 1 a 5." };
   return { reseña: { nombre, pais, servicio, comentario, estrellas, fecha: new Date().toISOString() } };
 }
 

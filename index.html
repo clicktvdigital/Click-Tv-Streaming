@@ -738,13 +738,7 @@
               <label>Servicio que compraste
                 <input id="resena-servicio" name="servicio" type="text" placeholder="Ej: Netflix, IPTV, recarga" maxlength="60" required>
               </label>
-              <label>Calificación
-                <select id="resena-estrellas" name="estrellas" required>
-                  <option value="5">⭐⭐⭐⭐⭐ Excelente</option>
-                  <option value="4">⭐⭐⭐⭐ Muy bueno</option>
-                  <option value="3">⭐⭐⭐ Bueno</option>
-                </select>
-              </label>
+              <fieldset class="estrellas-picker"><legend>Calificación <small>(opcional)</small></legend><div class="estrellas-picker__opciones"><input type="radio" id="pub-5" name="estrellas" value="5"><label for="pub-5" title="5 estrellas"><span aria-hidden="true">★</span><span class="sr-only">5 de 5 estrellas</span></label><input type="radio" id="pub-4" name="estrellas" value="4"><label for="pub-4" title="4 estrellas"><span aria-hidden="true">★</span><span class="sr-only">4 de 5 estrellas</span></label><input type="radio" id="pub-3" name="estrellas" value="3"><label for="pub-3" title="3 estrellas"><span aria-hidden="true">★</span><span class="sr-only">3 de 5 estrellas</span></label><input type="radio" id="pub-2" name="estrellas" value="2"><label for="pub-2" title="2 estrellas"><span aria-hidden="true">★</span><span class="sr-only">2 de 5 estrellas</span></label><input type="radio" id="pub-1" name="estrellas" value="1"><label for="pub-1" title="1 estrella"><span aria-hidden="true">★</span><span class="sr-only">1 de 5 estrellas</span></label></div></fieldset>
               <label>Comentario
                 <textarea id="resena-comentario" name="comentario" rows="4" maxlength="350" placeholder="Cuéntanos cómo fue tu experiencia..." required></textarea>
               </label>
@@ -900,15 +894,7 @@
         <label>Servicio que compraste
           <input name="servicio" type="text" placeholder="Ej: Netflix, IPTV, recarga" maxlength="60" required>
         </label>
-        <label>Calificación
-          <select name="estrellas" required>
-            <option value="5">⭐⭐⭐⭐⭐ Excelente</option>
-            <option value="4">⭐⭐⭐⭐ Muy buena</option>
-            <option value="3">⭐⭐⭐ Buena</option>
-            <option value="2">⭐⭐ Regular</option>
-            <option value="1">⭐ Mala</option>
-          </select>
-        </label>
+        <fieldset class="estrellas-picker"><legend>Calificación <small>(opcional)</small></legend><div class="estrellas-picker__opciones"><input type="radio" id="car-5" name="estrellas" value="5"><label for="car-5" title="5 estrellas"><span aria-hidden="true">★</span><span class="sr-only">5 de 5 estrellas</span></label><input type="radio" id="car-4" name="estrellas" value="4"><label for="car-4" title="4 estrellas"><span aria-hidden="true">★</span><span class="sr-only">4 de 5 estrellas</span></label><input type="radio" id="car-3" name="estrellas" value="3"><label for="car-3" title="3 estrellas"><span aria-hidden="true">★</span><span class="sr-only">3 de 5 estrellas</span></label><input type="radio" id="car-2" name="estrellas" value="2"><label for="car-2" title="2 estrellas"><span aria-hidden="true">★</span><span class="sr-only">2 de 5 estrellas</span></label><input type="radio" id="car-1" name="estrellas" value="1"><label for="car-1" title="1 estrella"><span aria-hidden="true">★</span><span class="sr-only">1 de 5 estrellas</span></label></div></fieldset>
         <label>Tu experiencia
           <textarea name="comentario" rows="3" maxlength="350" placeholder="Escribe tu reseña..." required></textarea>
         </label>

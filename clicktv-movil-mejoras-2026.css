@@ -98,3 +98,24 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 .resena-card .estrellas { color: #f8d26a; font-size: 1.15rem; letter-spacing: 2px; }
 .resena-card .estrellas__vacias { color: rgba(248, 210, 106, .25); }
 .resena-card .resena-comentario { margin: 8px 0 0; font-size: 1rem; line-height: 1.5; }
+
+/* 10. Calificación de la reseña: el cliente elige las estrellas (opcional), con teclado y tamaño cómodo. */
+.estrellas-picker { border: 0; padding: 0; margin: 8px 0; min-width: 0; }
+.estrellas-picker legend { font-weight: 700; margin-bottom: 4px; }
+.estrellas-picker__opciones { display: inline-flex; flex-direction: row-reverse; justify-content: flex-end; }
+.estrellas-picker input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.estrellas-picker label {
+  cursor: pointer;
+  color: rgba(248, 210, 106, .3);
+  font-size: 2rem;
+  line-height: 1;
+  min-width: 44px;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+}
+.estrellas-picker label:hover,
+.estrellas-picker label:hover ~ label,
+.estrellas-picker input:checked ~ label { color: #f8d26a; }
+.estrellas-picker input:focus-visible + label { outline: 3px solid #7ee9ff; outline-offset: 2px; border-radius: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
