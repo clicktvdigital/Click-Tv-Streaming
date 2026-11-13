@@ -37,7 +37,7 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 
 /* 5. Selector de moneda con área de toque cómoda en celulares. */
 @media (max-width: 680px) {
-  body #selector-moneda { height: 40px !important; min-height: 40px !important; }
+  body #selector-moneda { height: 44px !important; min-height: 44px !important; }
 }
 
 /* 6. Animaciones de aparición más cortas en celulares, para llegar antes al contenido. */
@@ -119,3 +119,13 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 .estrellas-picker input:checked ~ label { color: #f8d26a; }
 .estrellas-picker input:focus-visible + label { outline: 3px solid #7ee9ff; outline-offset: 2px; border-radius: 8px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* 11. Áreas de toque de 44 px en la cabecera y en la búsqueda móvil. */
+@media (max-width: 680px) {
+  .menu-toggle,
+  .cart-btn,
+  .mobile-reviews-shortcut { width: 44px !important; min-width: 44px !important; height: 44px !important; min-height: 44px !important; }
+  #buscador-maestro { min-height: 44px !important; }
+  #selector-moneda { height: 44px !important; min-height: 44px !important; }
+}
+.radio-direct-link { min-height: 44px !important; height: auto !important; }
