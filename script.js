@@ -3142,6 +3142,15 @@ document.addEventListener("click", async (evento) => {
   const boton = evento.target.closest("#btn-copiar-pedido-resena");
   if (!boton) return;
   const texto = textoPedidoResena();
+  // En celulares, el menú del sistema permite compartir por WhatsApp, Telegram u otra app.
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: "Click TV Streaming", text: texto });
+      return;
+    } catch (e) {
+      if (e && e.name === "AbortError") return;
+    }
+  }
   try {
     await navigator.clipboard.writeText(texto);
     mostrarToast("Mensaje copiado. Pégalo en WhatsApp.", "exito");
