@@ -3218,7 +3218,33 @@ prepararBotonTelegramResena();
 
 /* Formularios de reseña: lista de productos, países y provincias/cantones de Ecuador en lugar de texto libre. */
 const PAISES_RESENA = ["Ecuador", "Perú", "Colombia", "Chile", "Argentina", "México", "Venezuela", "Panamá", "Estados Unidos", "España", "Otro país"];
-const PROVINCIAS_ECUADOR = ["Azuay", "Bolívar", "Cañar", "Carchi", "Chimborazo", "Cotopaxi", "El Oro", "Esmeraldas", "Galápagos", "Guayas", "Imbabura", "Loja", "Los Ríos", "Manabí", "Morona Santiago", "Napo", "Orellana", "Pastaza", "Pichincha", "Santa Elena", "Santo Domingo de los Tsáchilas", "Sucumbíos", "Tungurahua", "Zamora Chinchipe"];
+const CANTONES_ECUADOR = {
+  "Azuay": ["Camilo Ponce Enríquez", "Chordeleg", "Cuenca", "El Pan", "Girón", "Guachapala", "Gualaceo", "Nabón", "Oña", "Paute", "Pucará", "San Fernando", "Santa Isabel", "Sevilla de Oro", "Sígsig"],
+  "Bolívar": ["Caluma", "Chillanes", "Chimbo", "Echeandía", "Guaranda", "Las Naves", "San Miguel"],
+  "Cañar": ["Azogues", "Biblián", "Cañar", "Déleg", "El Tambo", "La Troncal", "Suscal"],
+  "Carchi": ["Bolívar", "Espejo", "Mira", "Montúfar", "San Pedro de Huaca", "Tulcán"],
+  "Cotopaxi": ["La Maná", "Latacunga", "Pangua", "Pujilí", "Salcedo", "Saquisilí", "Sigchos"],
+  "Chimborazo": ["Alausí", "Chambo", "Chunchi", "Colta", "Cumandá", "Guamote", "Guano", "Pallatanga", "Penipe", "Riobamba"],
+  "El Oro": ["Arenillas", "Atahualpa", "Balsas", "Chilla", "El Guabo", "Huaquillas", "Las Lajas", "Machala", "Marcabelí", "Pasaje", "Piñas", "Portovelo", "Santa Rosa", "Zaruma"],
+  "Esmeraldas": ["Atacames", "Eloy Alfaro", "Esmeraldas", "La Concordia", "Muisne", "Quinindé", "Río Verde", "San Lorenzo"],
+  "Guayas": ["Alfredo Baquerizo Moreno", "Balao", "Balzar", "Colimes", "Coronel Marcelino Maridueña", "Daule", "Durán", "El Triunfo", "Empalme", "General Antonio Elizalde", "Guayaquil", "Isidro Ayora", "Lomas de Sargentillo", "Milagro", "Naranjal", "Naranjito", "Nobol", "Palestina", "Pedro Carbo", "Playas", "Salitre", "Samborondón", "San Jacinto de Yaguachi", "Santa Lucía", "Simón Bolívar"],
+  "Imbabura": ["Antonio Ante", "Cotacachi", "Ibarra", "Otavalo", "Pimampiro", "San Miguel de Urcuquí"],
+  "Loja": ["Calvas", "Catamayo", "Celica", "Chaguarpamba", "Espíndola", "Gonzanamá", "Loja", "Macará", "Olmedo", "Paltas", "Pindal", "Puyango", "Quilanga", "Saraguro", "Sozoranga", "Zapotillo"],
+  "Los Ríos": ["Babahoyo", "Baba", "Buena Fe", "Mocache", "Montalvo", "Palenque", "Puebloviejo", "Quevedo", "Quinsaloma", "Urdaneta", "Valencia", "Ventanas", "Vinces"],
+  "Manabí": ["24 de Mayo", "Bolívar", "Chone", "El Carmen", "Flavio Alfaro", "Jama", "Jaramijó", "Jipijapa", "Junín", "Manta", "Montecristi", "Olmedo", "Paján", "Pedernales", "Pichincha", "Portoviejo", "Puerto López", "Rocafuerte", "San Vicente", "Santa Ana", "Sucre", "Tosagua"],
+  "Morona Santiago": ["Gualaquiza", "Huamboya", "Limón Indanza", "Logroño", "Morona", "Pablo Sexto", "Palora", "San Juan Bosco", "Santiago", "Sucúa", "Taisha", "Tiwintza"],
+  "Napo": ["Archidona", "Carlos Julio Arosemena Tola", "El Chaco", "Quijos", "Tena"],
+  "Pastaza": ["Arajuno", "Mera", "Pastaza", "Santa Clara"],
+  "Pichincha": ["Cayambe", "Mejía", "Pedro Moncayo", "Pedro Vicente Maldonado", "Puerto Quito", "Quito", "Rumiñahui", "San Miguel de los Bancos"],
+  "Tungurahua": ["Ambato", "Baños de Agua Santa", "Cevallos", "Mocha", "Patate", "Quero", "San Pedro de Pelileo", "Santiago de Píllaro", "Tisaleo"],
+  "Zamora Chinchipe": ["Centinela del Cóndor", "Chinchipe", "El Pangui", "Nangaritza", "Palanda", "Paquisha", "Yacuambi", "Yantzaza", "Zamora"],
+  "Galápagos": ["Isabela", "San Cristóbal", "Santa Cruz"],
+  "Sucumbíos": ["Cascales", "Cuyabeno", "Gonzalo Pizarro", "Lago Agrio", "Putumayo", "Shushufindi", "Sucumbíos"],
+  "Orellana": ["Aguarico", "La Joya de los Sachas", "Loreto", "Orellana"],
+  "Santo Domingo de los Tsáchilas": ["Santo Domingo"],
+  "Santa Elena": ["La Libertad", "Salinas", "Santa Elena"],
+};
+const PROVINCIAS_ECUADOR = Object.keys(CANTONES_ECUADOR);
 const CATEGORIAS_RESENA = { streaming: "Streaming", deportes: "Deportes", iptv: "IPTV", musica: "Música", apps: "Aplicaciones", recargas: "Recargas", proneet: "PRONEET VPN" };
 
 function selectorServicioResena(input) {
@@ -3248,12 +3274,18 @@ function selectorPaisResena(input) {
         <option value="">Elige tu provincia</option>
         ${PROVINCIAS_ECUADOR.map(p => `<option value="${escaparHTML(p)}">${escaparHTML(p)}</option>`).join("")}
       </select>
-      <input name="canton" type="text" placeholder="Tu cantón (ej: Quito, Ambato)" maxlength="60" aria-label="Cantón">
+      <select name="canton" aria-label="Cantón">
+        <option value="">Elige primero tu provincia</option>
+      </select>
     </div>`;
   const pais = wrap.querySelector('select[name="pais"]');
   const bloque = wrap.querySelector(".pais-ec");
   const provincia = wrap.querySelector('select[name="provincia"]');
-  const canton = wrap.querySelector('input[name="canton"]');
+  const canton = wrap.querySelector('select[name="canton"]');
+  provincia.addEventListener("change", () => {
+    const cantones = CANTONES_ECUADOR[provincia.value] || [];
+    canton.innerHTML = '<option value="">Elige tu cantón</option>' + cantones.map(c => `<option value="${escaparHTML(c)}">${escaparHTML(c)}</option>`).join("");
+  });
   pais.addEventListener("change", () => {
     const esEcuador = pais.value === "Ecuador";
     bloque.hidden = !esEcuador;
