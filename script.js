@@ -3247,18 +3247,27 @@ const CANTONES_ECUADOR = {
 const PROVINCIAS_ECUADOR = Object.keys(CANTONES_ECUADOR);
 const CATEGORIAS_RESENA = { streaming: "Streaming", deportes: "Deportes", iptv: "IPTV", musica: "Música", apps: "Aplicaciones", recargas: "Recargas", proneet: "PRONEET VPN" };
 
+let contadorBusquedaResena = 0;
+
+// Búsqueda universal: el cliente escribe y ve las opciones que coinciden (p. ej. "net" → Netflix).
 function selectorServicioResena(input) {
-  const grupos = {};
-  (typeof PRODUCTOS !== "undefined" ? PRODUCTOS : []).forEach(p => {
-    const etiqueta = CATEGORIAS_RESENA[p.categoria] || "Otros";
-    (grupos[etiqueta] = grupos[etiqueta] || []).push(p.nombre);
-  });
-  const opciones = Object.keys(grupos).map(g => `<optgroup label="${escaparHTML(g)}">${grupos[g].map(n => `<option value="${escaparHTML(n)}">${escaparHTML(n)}</option>`).join("")}</optgroup>`).join("");
-  const select = document.createElement("select");
-  select.name = "servicio";
-  select.required = true;
-  select.innerHTML = `<option value="">Elige el servicio que compraste</option>${opciones}<optgroup label="Otro"><option value="Otro">Otro servicio (indícalo en el comentario)</option></optgroup>`;
-  input.replaceWith(select);
+  const id = `lista-servicios-resena-${++contadorBusquedaResena}`;
+  const nombres = (typeof PRODUCTOS !== "undefined" ? PRODUCTOS : []).map(p => p.nombre);
+  const campo = document.createElement("input");
+  campo.type = "text";
+  campo.name = "servicio";
+  campo.required = true;
+  campo.setAttribute("list", id);
+  campo.autocomplete = "off";
+  campo.maxLength = 60;
+  campo.placeholder = "Escribe o busca: Netflix, IPTV, recarga…";
+  campo.setAttribute("aria-label", "Servicio que compraste");
+  campo.innerHTML = "";
+  const lista = document.createElement("datalist");
+  lista.id = id;
+  lista.innerHTML = [...nombres, "Otro"].map(n => `<option value="${escaparHTML(n)}"></option>`).join("");
+  input.replaceWith(campo);
+  campo.after(lista);
 }
 
 function selectorPaisResena(input) {
@@ -3274,17 +3283,20 @@ function selectorPaisResena(input) {
         <option value="">Elige tu provincia</option>
         ${PROVINCIAS_ECUADOR.map(p => `<option value="${escaparHTML(p)}">${escaparHTML(p)}</option>`).join("")}
       </select>
-      <select name="canton" aria-label="Cantón">
-        <option value="">Elige primero tu provincia</option>
-      </select>
+      <input name="canton" type="text" autocomplete="off" maxlength="60" placeholder="Busca tu cantón" aria-label="Cantón" list="">
+      <datalist class="lista-cantones"></datalist>
     </div>`;
   const pais = wrap.querySelector('select[name="pais"]');
   const bloque = wrap.querySelector(".pais-ec");
   const provincia = wrap.querySelector('select[name="provincia"]');
-  const canton = wrap.querySelector('select[name="canton"]');
+  const canton = wrap.querySelector('input[name="canton"]');
+  const listaCantones = wrap.querySelector("datalist.lista-cantones");
+  const idCantones = `lista-cantones-resena-${++contadorBusquedaResena}`;
+  listaCantones.id = idCantones;
+  canton.setAttribute("list", idCantones);
   provincia.addEventListener("change", () => {
     const cantones = CANTONES_ECUADOR[provincia.value] || [];
-    canton.innerHTML = '<option value="">Elige tu cantón</option>' + cantones.map(c => `<option value="${escaparHTML(c)}">${escaparHTML(c)}</option>`).join("");
+    listaCantones.innerHTML = cantones.map(c => `<option value="${escaparHTML(c)}"></option>`).join("");
   });
   pais.addEventListener("change", () => {
     const esEcuador = pais.value === "Ecuador";
