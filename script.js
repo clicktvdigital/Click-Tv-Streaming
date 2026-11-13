@@ -2857,7 +2857,10 @@ async function registrarResenaCarrito(evento) {
   const formulario = evento.currentTarget || evento.target;
   const datosFormulario = new FormData(formulario);
   const nombre = String(datosFormulario.get("nombre") || "").trim();
-  const pais = String(datosFormulario.get("pais") || "").trim();
+  const paisElegido = String(datosFormulario.get("pais") || "").trim();
+  const pais = paisElegido === "Ecuador"
+    ? [datosFormulario.get("canton"), datosFormulario.get("provincia"), "Ecuador"].map(v => String(v || "").trim()).filter(Boolean).join(", ")
+    : paisElegido;
   // La calificación es opcional: si no se elige, la reseña queda sin estrellas.
   const estrellasElegidas = datosFormulario.get("estrellas");
   const estrellas = estrellasElegidas ? Number(estrellasElegidas) : null;
@@ -3212,3 +3215,60 @@ function prepararBotonTelegramResena() {
   });
 }
 prepararBotonTelegramResena();
+
+/* Formularios de reseña: lista de productos, países y provincias/cantones de Ecuador en lugar de texto libre. */
+const PAISES_RESENA = ["Ecuador", "Perú", "Colombia", "Chile", "Argentina", "México", "Venezuela", "Panamá", "Estados Unidos", "España", "Otro país"];
+const PROVINCIAS_ECUADOR = ["Azuay", "Bolívar", "Cañar", "Carchi", "Chimborazo", "Cotopaxi", "El Oro", "Esmeraldas", "Galápagos", "Guayas", "Imbabura", "Loja", "Los Ríos", "Manabí", "Morona Santiago", "Napo", "Orellana", "Pastaza", "Pichincha", "Santa Elena", "Santo Domingo de los Tsáchilas", "Sucumbíos", "Tungurahua", "Zamora Chinchipe"];
+const CATEGORIAS_RESENA = { streaming: "Streaming", deportes: "Deportes", iptv: "IPTV", musica: "Música", apps: "Aplicaciones", recargas: "Recargas", proneet: "PRONEET VPN" };
+
+function selectorServicioResena(input) {
+  const grupos = {};
+  (typeof PRODUCTOS !== "undefined" ? PRODUCTOS : []).forEach(p => {
+    const etiqueta = CATEGORIAS_RESENA[p.categoria] || "Otros";
+    (grupos[etiqueta] = grupos[etiqueta] || []).push(p.nombre);
+  });
+  const opciones = Object.keys(grupos).map(g => `<optgroup label="${escaparHTML(g)}">${grupos[g].map(n => `<option value="${escaparHTML(n)}">${escaparHTML(n)}</option>`).join("")}</optgroup>`).join("");
+  const select = document.createElement("select");
+  select.name = "servicio";
+  select.required = true;
+  select.innerHTML = `<option value="">Elige el servicio que compraste</option>${opciones}<optgroup label="Otro"><option value="Otro">Otro servicio (indícalo en el comentario)</option></optgroup>`;
+  input.replaceWith(select);
+}
+
+function selectorPaisResena(input) {
+  const wrap = document.createElement("div");
+  wrap.className = "pais-selector";
+  wrap.innerHTML = `
+    <select name="pais" required aria-label="País">
+      <option value="">Elige tu país</option>
+      ${PAISES_RESENA.map(p => `<option value="${escaparHTML(p)}">${escaparHTML(p)}</option>`).join("")}
+    </select>
+    <div class="pais-ec" hidden>
+      <select name="provincia" aria-label="Provincia">
+        <option value="">Elige tu provincia</option>
+        ${PROVINCIAS_ECUADOR.map(p => `<option value="${escaparHTML(p)}">${escaparHTML(p)}</option>`).join("")}
+      </select>
+      <input name="canton" type="text" placeholder="Tu cantón (ej: Quito, Ambato)" maxlength="60" aria-label="Cantón">
+    </div>`;
+  const pais = wrap.querySelector('select[name="pais"]');
+  const bloque = wrap.querySelector(".pais-ec");
+  const provincia = wrap.querySelector('select[name="provincia"]');
+  const canton = wrap.querySelector('input[name="canton"]');
+  pais.addEventListener("change", () => {
+    const esEcuador = pais.value === "Ecuador";
+    bloque.hidden = !esEcuador;
+    provincia.required = esEcuador;
+    canton.required = esEcuador;
+  });
+  input.replaceWith(wrap);
+}
+
+function prepararFormulariosResena() {
+  document.querySelectorAll("[data-review-form]").forEach(form => {
+    const servicio = form.querySelector('input[name="servicio"]');
+    const pais = form.querySelector('input[name="pais"]');
+    if (servicio) selectorServicioResena(servicio);
+    if (pais) selectorPaisResena(pais);
+  });
+}
+prepararFormulariosResena();
