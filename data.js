@@ -592,13 +592,7 @@ const PRODUCTOS = [
   }
 ];
 
-const RESENAS = [
-  { nombre: "Cliente de Quito", pais: "Quito - Ecuador", comentario: "Activación rápida y soporte claro por WhatsApp." },
-  { nombre: "Cliente de Lima", pais: "Lima - Perú", comentario: "Compré Disney+ y me ayudaron en todo el proceso." },
-  { nombre: "Cliente de Bogotá", pais: "Bogotá - Colombia", comentario: "Paramount+ funcionando perfecto, recomendado." },
-  { nombre: "Cliente de Guayaquil", pais: "Guayaquil - Ecuador", comentario: "IPTV Ultra estable para ver deportes y películas." },
-  { nombre: "Cliente de Santiago", pais: "Santiago - Chile", comentario: "Atención rápida y buen servicio." }
-];
+const RESENAS = [];
 
 const ACTIVIDAD_RECIENTE = [
   "🟢 Cliente de Quito - Ecuador activó IPTV Premium",
