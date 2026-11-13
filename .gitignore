@@ -1,3 +1,5 @@
 
 # Grafo generado por graphify (se regenera con `graphify update .`)
 graphify-out/
+.vercel
+.env*
