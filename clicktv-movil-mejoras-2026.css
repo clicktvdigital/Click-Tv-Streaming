@@ -25,3 +25,48 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
   padding: 10px 16px !important;
   font-size: .9rem !important;
 }
+
+/* 4. Portada móvil más corta y con el catálogo al alcance: sin altura mínima fija y botones antes de las ventajas. */
+@media (max-width: 680px) {
+  .hero .hero__content { min-height: 0 !important; }
+  .hero .hero__content > .hero__actions { order: 2; }
+  .hero .hero__content > .master-search { order: 1; }
+  .hero .hero__content > .ctvc-benefits { order: 3; }
+  .hero .hero__content > .activity-pill { order: 4; }
+}
+
+/* 5. Selector de moneda con área de toque cómoda en celulares. */
+@media (max-width: 680px) {
+  body #selector-moneda { height: 40px !important; min-height: 40px !important; }
+}
+
+/* 6. Animaciones de aparición más cortas en celulares, para llegar antes al contenido. */
+@media (max-width: 680px) {
+  .js .reveal { transition-duration: .4s !important; }
+}
+
+/* 7. Usuarios que reducen el movimiento: sin nieve animada. */
+@media (prefers-reduced-motion: reduce) {
+  .navidad-nieve { display: none !important; }
+}
+
+/* 8. Catálogo en celulares: los planes de cada producto se abren con un botón grande, así la lista no ocupa tanta altura. */
+.product-plans-wrap > summary {
+  list-style: none;
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  padding: 12px 14px;
+  margin-top: 10px;
+  min-height: 48px;
+  border-radius: 12px;
+  border: 1px solid rgba(96, 165, 250, .55);
+  background: rgba(29, 95, 191, .25);
+  color: #e6f3ff;
+  font-weight: 800;
+}
+.product-plans-wrap > summary::-webkit-details-marker { display: none; }
+.product-plans-wrap > summary:focus-visible { outline: 3px solid #7ee9ff; outline-offset: 2px; }
+@media (min-width: 681px) {
+  .product-plans-wrap > summary { display: none; }
+}
