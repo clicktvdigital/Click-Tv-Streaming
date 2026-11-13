@@ -3183,3 +3183,12 @@ async function cargarResenasPublicas() {
 }
 
 cargarResenasPublicas();
+
+/* Botón de Telegram: abre Telegram con el texto del pedido de opiniones listo para enviar a un grupo o canal. */
+function prepararEnlaceTelegramResena() {
+  const enlace = document.getElementById("btn-telegram-resena");
+  if (!enlace) return;
+  const url = "https://click-tv-streaming.vercel.app/#resenas";
+  enlace.href = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(textoPedidoResena())}`;
+}
+prepararEnlaceTelegramResena();
