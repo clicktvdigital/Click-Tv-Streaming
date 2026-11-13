@@ -2769,7 +2769,7 @@ function cargarResenas() {
 
   const resenas = obtenerTodasLasResenas();
   if (!resenas.length) {
-    contenedor.innerHTML = '<p class="resenas-vacias">Pronto aparecerán nuevas reseñas verificadas.</p>';
+    contenedor.innerHTML = '<p class="resenas-vacias">Pronto aparecerán nuevas opiniones de clientes.</p>';
     return;
   }
 
@@ -2794,12 +2794,19 @@ function reiniciarProgresoResena() {
 }
 
 function crearResena(resena) {
+  const inicial = String(resena.pais || resena.nombre || "?").trim().charAt(0).toUpperCase();
+  const estrellas = Math.min(5, Math.max(1, Number(resena.estrellas) || 5));
   return `
     <article class="resena-card activa" aria-live="polite">
-      <div class="estrellas">${"★".repeat(Number(resena.estrellas) || 5)}</div>
-      <h3>${escaparHTML(resena.nombre)}</h3>
-      <p class="resena-pais">${escaparHTML(resena.pais)}</p>
-      <p>${escaparHTML(resena.comentario)}</p>
+      <div class="resena-card__top">
+        <span class="resena-avatar" aria-hidden="true">${escaparHTML(inicial)}</span>
+        <div>
+          <h3>${escaparHTML(resena.nombre)}</h3>
+          <p class="resena-pais">${escaparHTML(resena.pais)}</p>
+        </div>
+      </div>
+      <div class="estrellas" role="img" aria-label="${estrellas} de 5 estrellas">${"★".repeat(estrellas)}<span class="estrellas__vacias">${"★".repeat(5 - estrellas)}</span></div>
+      <p class="resena-comentario">“${escaparHTML(resena.comentario)}”</p>
     </article>
   `;
 }
