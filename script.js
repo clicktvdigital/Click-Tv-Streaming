@@ -3249,25 +3249,61 @@ const CATEGORIAS_RESENA = { streaming: "Streaming", deportes: "Deportes", iptv: 
 
 let contadorBusquedaResena = 0;
 
-// Búsqueda universal: el cliente escribe y ve las opciones que coinciden (p. ej. "net" → Netflix).
+function normalizarBusquedaResena(texto = "") {
+  return String(texto).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+
+// Buscador con lupa: muestra debajo del campo las opciones que coinciden y permite elegir una al tocarla.
+function crearBuscadorResena(campo, opcionesActuales) {
+  const caja = document.createElement("div");
+  caja.className = "buscador";
+  campo.replaceWith(caja);
+  caja.appendChild(campo);
+  campo.setAttribute("autocomplete", "off");
+  campo.setAttribute("role", "combobox");
+  campo.setAttribute("aria-autocomplete", "list");
+  const lista = document.createElement("ul");
+  lista.className = "buscador__lista";
+  lista.setAttribute("role", "listbox");
+  lista.hidden = true;
+  caja.appendChild(lista);
+
+  const mostrar = () => {
+    const q = normalizarBusquedaResena(campo.value);
+    const coinciden = opcionesActuales().filter(o => !q || normalizarBusquedaResena(o).includes(q)).slice(0, 8);
+    lista.innerHTML = coinciden.map(o => `<li role="option">${escaparHTML(o)}</li>`).join("");
+    lista.hidden = coinciden.length === 0;
+    campo.setAttribute("aria-expanded", String(!lista.hidden));
+  };
+  const ocultar = () => { lista.hidden = true; campo.setAttribute("aria-expanded", "false"); };
+
+  // Al abrir un buscador se cierran los demás, para que no se mezclen las opciones.
+  const cerrarOtros = () => document.querySelectorAll(".buscador__lista").forEach(l => { if (l !== lista) l.hidden = true; });
+  campo.addEventListener("focus", () => { cerrarOtros(); mostrar(); });
+  campo.addEventListener("input", mostrar);
+  campo.addEventListener("blur", () => setTimeout(ocultar, 180));
+  // Evita que el campo pierda el foco antes de que se registre el toque en la opción.
+  lista.addEventListener("mousedown", (e) => e.preventDefault());
+  lista.addEventListener("click", (e) => {
+    const opcion = e.target.closest("li");
+    if (!opcion) return;
+    campo.value = opcion.textContent;
+    ocultar();
+    campo.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+}
+
+// Búsqueda universal de servicio: escribir "net" muestra Netflix.
 function selectorServicioResena(input) {
-  const id = `lista-servicios-resena-${++contadorBusquedaResena}`;
-  const nombres = (typeof PRODUCTOS !== "undefined" ? PRODUCTOS : []).map(p => p.nombre);
   const campo = document.createElement("input");
   campo.type = "text";
   campo.name = "servicio";
   campo.required = true;
-  campo.setAttribute("list", id);
-  campo.autocomplete = "off";
   campo.maxLength = 60;
-  campo.placeholder = "Escribe o busca: Netflix, IPTV, recarga…";
+  campo.placeholder = "Busca tu servicio: Netflix, IPTV, recarga…";
   campo.setAttribute("aria-label", "Servicio que compraste");
-  campo.innerHTML = "";
-  const lista = document.createElement("datalist");
-  lista.id = id;
-  lista.innerHTML = [...nombres, "Otro"].map(n => `<option value="${escaparHTML(n)}"></option>`).join("");
   input.replaceWith(campo);
-  campo.after(lista);
+  crearBuscadorResena(campo, () => [...(typeof PRODUCTOS !== "undefined" ? PRODUCTOS.map(p => p.nombre) : []), "Otro"]);
 }
 
 function selectorPaisResena(input) {
@@ -3283,21 +3319,15 @@ function selectorPaisResena(input) {
         <option value="">Elige tu provincia</option>
         ${PROVINCIAS_ECUADOR.map(p => `<option value="${escaparHTML(p)}">${escaparHTML(p)}</option>`).join("")}
       </select>
-      <input name="canton" type="text" autocomplete="off" maxlength="60" placeholder="Busca tu cantón" aria-label="Cantón" list="">
-      <datalist class="lista-cantones"></datalist>
+      <input name="canton" type="text" maxlength="60" placeholder="Busca tu cantón" aria-label="Cantón">
     </div>`;
   const pais = wrap.querySelector('select[name="pais"]');
   const bloque = wrap.querySelector(".pais-ec");
   const provincia = wrap.querySelector('select[name="provincia"]');
   const canton = wrap.querySelector('input[name="canton"]');
-  const listaCantones = wrap.querySelector("datalist.lista-cantones");
-  const idCantones = `lista-cantones-resena-${++contadorBusquedaResena}`;
-  listaCantones.id = idCantones;
-  canton.setAttribute("list", idCantones);
-  provincia.addEventListener("change", () => {
-    const cantones = CANTONES_ECUADOR[provincia.value] || [];
-    listaCantones.innerHTML = cantones.map(c => `<option value="${escaparHTML(c)}"></option>`).join("");
-  });
+  wrap.querySelector("datalist.lista-cantones")?.remove();
+  canton.removeAttribute("list");
+  crearBuscadorResena(canton, () => CANTONES_ECUADOR[provincia.value] || []);
   pais.addEventListener("change", () => {
     const esEcuador = pais.value === "Ecuador";
     bloque.hidden = !esEcuador;

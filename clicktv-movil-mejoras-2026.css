@@ -142,3 +142,43 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 /* 14. Acciones de la sección de opiniones: formulario, WhatsApp y Telegram. */
 .contact-review-preview__acciones { display: grid; gap: 10px; margin-top: 12px; }
 .contact-review-preview__acciones .btn { min-height: 48px; justify-content: center; }
+
+/* 15. Buscador con lupa para servicio y cantón en el formulario de reseñas. */
+.buscador { position: relative; }
+.buscador::before {
+  content: "🔍";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+.buscador input { width: 100%; min-height: 48px; padding-left: 40px !important; box-sizing: border-box; }
+.buscador__lista {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 50;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  max-height: 260px;
+  overflow-y: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(96, 165, 250, .55);
+  background: #0c2140;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .45);
+}
+.buscador__lista[hidden] { display: none; }
+.buscador__lista li {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #e6f3ff;
+}
+.buscador__lista li:hover, .buscador__lista li:active { background: rgba(29, 95, 191, .45); }
