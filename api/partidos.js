@@ -9,8 +9,14 @@ const COMPETENCIAS = [
 const ESPN_LIGAS = [
   { slug: "conmebol.libertadores", label: "Copa Libertadores" },
   { slug: "conmebol.sudamericana", label: "Copa Sudamericana" },
-  { slug: "ecu.1", label: "LigaPro Ecuabet Ecuador" }
+  { slug: "ecu.1", label: "LigaPro Ecuabet Ecuador" },
+  // Amistosos internacionales: solo se muestran los partidos en los que juega Ecuador.
+  { slug: "fifa.friendly", label: "Amistosos internacionales", soloEcuador: true }
 ];
+
+function esEcuador(partido) {
+  return /Ecuador/i.test(JSON.stringify([partido.homeTeam || {}, partido.awayTeam || {}]));
+}
 
 function fechaCompacta(valor = "") { return String(valor).replaceAll("-", ""); }
 
@@ -66,12 +72,12 @@ async function cargarEspn(dateFrom, dateTo) {
     `${ESPN_BASE}/SLUG/scoreboard?dates=${dates}`,
     `${ESPN_BASE}/SLUG/scoreboard`
   ];
-  const resultados = await Promise.allSettled(ESPN_LIGAS.map(async ({ slug, label }) => {
+  const resultados = await Promise.allSettled(ESPN_LIGAS.map(async ({ slug, label, soloEcuador }) => {
     let ultimoError = null;
     for (const plantilla of intentos) {
       try {
         const data = await fetchJson(plantilla.replace("SLUG", slug));
-        return (data.events || []).map(e => normalizarEspnEvento(e, label));
+        return (data.events || []).map(e => normalizarEspnEvento(e, label)).filter(m => !soloEcuador || esEcuador(m));
       } catch (error) {
         ultimoError = error;
       }
