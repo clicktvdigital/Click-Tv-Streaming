@@ -138,3 +138,7 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 .pais-selector { display: grid; gap: 8px; }
 .pais-ec { display: grid; gap: 8px; }
 .pais-ec[hidden] { display: none; }
+
+/* 14. Acciones de la sección de opiniones: formulario, WhatsApp y Telegram. */
+.contact-review-preview__acciones { display: grid; gap: 10px; margin-top: 12px; }
+.contact-review-preview__acciones .btn { min-height: 48px; justify-content: center; }
