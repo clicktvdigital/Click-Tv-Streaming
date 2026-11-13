@@ -93,6 +93,33 @@ async function cargarEspn(dateFrom, dateTo) {
   return { matches: resultados.flatMap(r => r.status === "fulfilled" ? r.value : []), ligas };
 }
 
+// Compara nombres ignorando tildes, abreviaturas comunes y signos.
+function normalizarNombreEquipo(nombre = "") {
+  return String(nombre).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+    .replace(/\b(se|sc|fc|cf|ac|club|de|la|el)\b/g, "").replace(/[^a-z0-9]/g, "");
+}
+
+function mismoEquipo(a = {}, b = {}) {
+  if (a.tla && b.tla && a.tla === b.tla) return true;
+  const x = normalizarNombreEquipo(a.name);
+  const y = normalizarNombreEquipo(b.name);
+  return Boolean(x && y && (x === y || x.includes(y) || y.includes(x)));
+}
+
+function mismoPartido(a, b) {
+  return String(a.utcDate || "").slice(0, 10) === String(b.utcDate || "").slice(0, 10)
+    && mismoEquipo(a.homeTeam, b.homeTeam)
+    && mismoEquipo(a.awayTeam, b.awayTeam);
+}
+
+function quitarDuplicados(lista) {
+  const salida = [];
+  for (const m of lista) {
+    if (!salida.some(o => mismoPartido(o, m))) salida.push(m);
+  }
+  return salida;
+}
+
 function clave(m) {
   const dia = String(m.utcDate || "").slice(0, 10);
   const local = (m.homeTeam?.name || "").toLowerCase();
@@ -127,7 +154,8 @@ export default async function handler(req, res) {
     const [footballData, espnRes] = await Promise.all([cargarFootballData(dateFrom, dateTo), cargarEspn(dateFrom, dateTo)]);
     const espn = espnRes.matches;
     const mapa = new Map();
-    [...espn, ...footballData].forEach(m => mapa.set(clave(m), m));
+    // Une ESPN y football-data sin repetir el mismo partido.
+    quitarDuplicados([...espn, ...footballData].filter(m => m.homeTeam?.name && m.awayTeam?.name)).forEach(m => mapa.set(clave(m), m));
     const matches = [...mapa.values()].sort((a,b) => new Date(a.utcDate)-new Date(b.utcDate));
     const fuentes = [];
     if (footballData.some(m => m.competition?.code === "WC")) fuentes.push("Mundial");

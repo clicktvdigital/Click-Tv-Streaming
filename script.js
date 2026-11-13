@@ -2362,8 +2362,9 @@ function crearCardPartido(p) {
         </div>
       </div>
       <p>📅 ${formatearFechaPartidoCliente(fecha)}</p>
-      <p>⏰ ${formatearHoraPartidoCliente(fecha)} ${obtenerEtiquetaHoraCliente()}</p>
-      ${sede ? `<p class="match-venue">📍 ${escaparHTML(sede)}</p>` : ""}
+      <p>⏰ ${formatearHoraPartidoCliente(fecha)} hora de Ecuador</p>
+      ${sede ? `<p class="match-venue">📍 ${escaparHTML(sede)}</p>
+      <a class="match-indicaciones" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(sede + ", Ecuador")}" target="_blank" rel="noopener noreferrer">🧭 Cómo llegar / indicaciones</a>` : ""}
     </article>`;
 }
 function crearNombreEquipoConBandera(nombre, codigo = "") {
@@ -2471,7 +2472,7 @@ function normalizarTextoPais(texto = "") {
 
 function formatearFechaPartidoCliente(fecha) {
   return fecha.toLocaleDateString("es-EC", {
-    timeZone: ubicacionCliente.zonaHoraria || obtenerZonaHorariaNavegador(),
+    timeZone: "America/Guayaquil",
     weekday: "short",
     day: "2-digit",
     month: "short"
@@ -2480,7 +2481,7 @@ function formatearFechaPartidoCliente(fecha) {
 
 function formatearHoraPartidoCliente(fecha) {
   return fecha.toLocaleTimeString("es-EC", {
-    timeZone: ubicacionCliente.zonaHoraria || obtenerZonaHorariaNavegador(),
+    timeZone: "America/Guayaquil",
     hour: "2-digit",
     minute: "2-digit",
     hour12: false
