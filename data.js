@@ -593,11 +593,11 @@ const PRODUCTOS = [
 ];
 
 const RESENAS = [
-  { nombre: "Cliente Verificado", pais: "Quito - Ecuador", estrellas: 5, comentario: "Activación rápida y soporte claro por WhatsApp." },
-  { nombre: "Cliente Verificado", pais: "Lima - Perú", estrellas: 5, comentario: "Compré Disney+ y me ayudaron en todo el proceso." },
-  { nombre: "Cliente Verificado", pais: "Bogotá - Colombia", estrellas: 5, comentario: "Paramount+ funcionando perfecto, recomendado." },
-  { nombre: "Cliente Verificado", pais: "Guayaquil - Ecuador", estrellas: 5, comentario: "IPTV Ultra estable para ver deportes y películas." },
-  { nombre: "Cliente Verificado", pais: "Santiago - Chile", estrellas: 5, comentario: "Atención rápida y buen servicio." }
+  { nombre: "Cliente de Quito", pais: "Quito - Ecuador", estrellas: 5, comentario: "Activación rápida y soporte claro por WhatsApp." },
+  { nombre: "Cliente de Lima", pais: "Lima - Perú", estrellas: 5, comentario: "Compré Disney+ y me ayudaron en todo el proceso." },
+  { nombre: "Cliente de Bogotá", pais: "Bogotá - Colombia", estrellas: 5, comentario: "Paramount+ funcionando perfecto, recomendado." },
+  { nombre: "Cliente de Guayaquil", pais: "Guayaquil - Ecuador", estrellas: 5, comentario: "IPTV Ultra estable para ver deportes y películas." },
+  { nombre: "Cliente de Santiago", pais: "Santiago - Chile", estrellas: 5, comentario: "Atención rápida y buen servicio." }
 ];
 
 const ACTIVIDAD_RECIENTE = [

@@ -70,3 +70,31 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 @media (min-width: 681px) {
   .product-plans-wrap > summary { display: none; }
 }
+
+/* 9. Reseñas de clientes: tarjetas con avatar de inicial, estrellas en dorado y comentario destacado. */
+.resena-card {
+  border: 1px solid rgba(96, 165, 250, .35);
+  border-left: 4px solid #f8d26a;
+  border-radius: 16px;
+  padding: 16px 18px;
+  background: linear-gradient(160deg, rgba(14, 42, 84, .92), rgba(8, 22, 46, .92));
+  text-align: left;
+}
+.resena-card__top { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.resena-card__top h3 { margin: 0; font-size: 1.02rem; }
+.resena-card__top .resena-pais { margin: 2px 0 0; font-size: .9rem; opacity: .85; }
+.resena-avatar {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: #0a1a33;
+  background: linear-gradient(135deg, #f8d26a, #7ee9ff);
+}
+.resena-card .estrellas { color: #f8d26a; font-size: 1.15rem; letter-spacing: 2px; }
+.resena-card .estrellas__vacias { color: rgba(248, 210, 106, .25); }
+.resena-card .resena-comentario { margin: 8px 0 0; font-size: 1rem; line-height: 1.5; }
