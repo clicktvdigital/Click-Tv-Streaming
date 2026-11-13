@@ -3129,15 +3129,11 @@ function textoPedidoResena() {
   return [
     "Hola 👋 Gracias por confiar en Click TV Streaming.",
     "",
-    "¿Nos regalas tu opinión? Escríbela con:",
-    "• Tu nombre (como quieras que aparezca)",
-    "• Tu ciudad",
-    "• El servicio que compraste",
-    "• Tus estrellas del 1 al 5 ⭐",
-    "• Tu comentario",
+    "¿Nos regalas tu opinión? Llena el formulario en 1 minuto:",
+    "https://click-tv-streaming.vercel.app/#form-resena-publica",
     "",
-    `Escríbela en el grupo: ${linkResenaWhatsApp()}`,
-    "O en la tienda: https://click-tv-streaming.vercel.app/#resenas",
+    "También puedes comentar en Telegram:",
+    "https://t.me/click_tv_streaming/5181",
   ].join("\n");
 }
 
