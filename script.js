@@ -300,10 +300,11 @@ function inicializarBotonesFlotantes() {
   const soporte = document.getElementById("btn-soporte");
   const catalogo = document.getElementById("btn-catalogo-flotante");
 
-  if (wa) { wa.href = "#"; wa.addEventListener("click", (e) => { e.preventDefault(); contactarWhatsAppGeneral(); }); }
+  // El href real sirve de respaldo (sin JavaScript, nueva pestaña); el clic lo maneja la función de contacto.
+  if (wa) { wa.href = CONFIG.whatsappLink; wa.addEventListener("click", (e) => { e.preventDefault(); contactarWhatsAppGeneral(); }); }
   if (grupo) configurarLinkExterno(grupo, CONFIG.whatsappGrupo);
-  if (tg) { tg.href = "#"; tg.addEventListener("click", (e) => { e.preventDefault(); contactarTelegramGeneral(); }); }
-  if (signal) { signal.href = "#"; signal.addEventListener("click", (e) => { e.preventDefault(); contactarSignalGeneral(); }); }
+  if (tg) { tg.href = CONFIG.telegramLink; tg.addEventListener("click", (e) => { e.preventDefault(); contactarTelegramGeneral(); }); }
+  if (signal) { signal.href = CONFIG.signalLink; signal.addEventListener("click", (e) => { e.preventDefault(); contactarSignalGeneral(); }); }
   if (catalogo) catalogo.href = "#streaming";
 
   if (soporte) {
