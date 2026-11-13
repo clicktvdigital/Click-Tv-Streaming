@@ -87,6 +87,8 @@
     'recargas-ilimitadas-operador':defined('', '', '#175c99','SIM')
   };
   const fallbackInitials = name => String(name || 'TV').split(/\s+/).filter(Boolean).slice(0,2).map(w => w[0]).join('').toUpperCase();
+  // Para reseñas: devuelve la ruta del logo verificado de un producto, o null si no hay.
+  window.ctvLogoProducto = id => { const local = LOCAL[id]; if (local) return local.src; const info = BRANDS[id]; return info && info.slug ? 'https://cdn.jsdelivr.net/npm/simple-icons@v15/icons/' + info.slug + '.svg' : null; };
   function decorate(card) {
     if (card.dataset.ctvLogoReady === '1') return;
     const icon = card.querySelector('.product-card__icon');

@@ -2795,6 +2795,24 @@ function reiniciarProgresoResena() {
   progreso.style.animation = "reviewProgress 10s linear forwards";
 }
 
+// Busca el producto del catálogo que coincide con el servicio que escribió el cliente.
+function productoDeServicio(servicio = "") {
+  const t = String(servicio).trim().toLowerCase();
+  if (!t || typeof PRODUCTOS === "undefined") return null;
+  return PRODUCTOS.find(p => {
+    const nombre = String(p.nombre || "").toLowerCase();
+    return nombre.includes(t) || t.includes(nombre.split(" ")[0]);
+  }) || null;
+}
+
+function avatarResena(resena) {
+  const inicial = String(resena.pais || resena.nombre || "?").trim().charAt(0).toUpperCase();
+  const producto = productoDeServicio(resena.servicio);
+  const logo = producto && window.ctvLogoProducto ? window.ctvLogoProducto(producto.id) : null;
+  if (!logo) return `<span class="resena-avatar" aria-hidden="true">${escaparHTML(inicial)}</span>`;
+  return `<span class="resena-avatar resena-avatar--logo" aria-hidden="true"><img src="${escaparHTML(logo)}" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode('${inicial}'))"></span>`;
+}
+
 function crearResena(resena) {
   const inicial = String(resena.pais || resena.nombre || "?").trim().charAt(0).toUpperCase();
   const estrellas = Number(resena.estrellas) >= 1 && Number(resena.estrellas) <= 5 ? Math.round(Number(resena.estrellas)) : 0;
@@ -2804,7 +2822,7 @@ function crearResena(resena) {
   return `
     <article class="resena-card activa" aria-live="polite">
       <div class="resena-card__top">
-        <span class="resena-avatar" aria-hidden="true">${escaparHTML(inicial)}</span>
+        ${avatarResena(resena)}
         <div>
           <h3>${escaparHTML(resena.nombre)}</h3>
           <p class="resena-pais">${escaparHTML(resena.pais)}</p>
