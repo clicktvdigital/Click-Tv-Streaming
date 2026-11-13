@@ -2796,7 +2796,10 @@ function reiniciarProgresoResena() {
 
 function crearResena(resena) {
   const inicial = String(resena.pais || resena.nombre || "?").trim().charAt(0).toUpperCase();
-  const estrellas = Math.min(5, Math.max(1, Number(resena.estrellas) || 5));
+  const estrellas = Number(resena.estrellas) >= 1 && Number(resena.estrellas) <= 5 ? Math.round(Number(resena.estrellas)) : 0;
+  const filaEstrellas = estrellas
+    ? `<div class="estrellas" role="img" aria-label="${estrellas} de 5 estrellas">${"★".repeat(estrellas)}<span class="estrellas__vacias">${"★".repeat(5 - estrellas)}</span></div>`
+    : "";
   return `
     <article class="resena-card activa" aria-live="polite">
       <div class="resena-card__top">
@@ -2806,7 +2809,7 @@ function crearResena(resena) {
           <p class="resena-pais">${escaparHTML(resena.pais)}</p>
         </div>
       </div>
-      <div class="estrellas" role="img" aria-label="${estrellas} de 5 estrellas">${"★".repeat(estrellas)}<span class="estrellas__vacias">${"★".repeat(5 - estrellas)}</span></div>
+      ${filaEstrellas}
       ${resena.servicio ? `<p class="resena-servicio">Compró: ${escaparHTML(resena.servicio)}</p>` : ""}
       <p class="resena-comentario">“${escaparHTML(resena.comentario)}”</p>
     </article>
@@ -2821,7 +2824,7 @@ function renderResenasCarrito() {
 
   contenedor.innerHTML = resenas.map((resena) => `
     <article class="cart-review-card">
-      <div class="estrellas">${"★".repeat(Number(resena.estrellas) || 5)}</div>
+      ${Number(resena.estrellas) >= 1 && Number(resena.estrellas) <= 5 ? `<div class="estrellas">${"★".repeat(Math.round(Number(resena.estrellas)))}</div>` : ""}
       <strong>${escaparHTML(resena.nombre)}</strong>
       <span>${escaparHTML(resena.pais)}</span>
       <p>${escaparHTML(resena.comentario)}</p>
@@ -2836,7 +2839,9 @@ async function registrarResenaCarrito(evento) {
   const datosFormulario = new FormData(formulario);
   const nombre = String(datosFormulario.get("nombre") || "").trim();
   const pais = String(datosFormulario.get("pais") || "").trim();
-  const estrellas = Number(datosFormulario.get("estrellas") || 5);
+  // La calificación es opcional: si no se elige, la reseña queda sin estrellas.
+  const estrellasElegidas = datosFormulario.get("estrellas");
+  const estrellas = estrellasElegidas ? Number(estrellasElegidas) : null;
   const comentario = String(datosFormulario.get("comentario") || "").trim();
   const servicio = String(datosFormulario.get("servicio") || "").trim();
 
@@ -2866,7 +2871,7 @@ async function registrarResenaCarrito(evento) {
   formulario.reset();
 
   const mensaje = encodeURIComponent(
-    `Nueva reseña Click Tv Streaming:\n\nNombre: ${nombre}\nPaís/Ciudad: ${pais}\nServicio: ${servicio}\nCalificación: ${"⭐".repeat(estrellas)}\nComentario: ${comentario}`
+    `Nueva reseña Click Tv Streaming:\n\nNombre: ${nombre}\nPaís/Ciudad: ${pais}\nServicio: ${servicio}\nCalificación: ${estrellas ? "⭐".repeat(estrellas) : "No indicada"}\nComentario: ${comentario}`
   );
   window.open(`${CONFIG.whatsappLink}?text=${mensaje}`, "_blank", "noopener,noreferrer");
   mostrarToast("Gracias por dejar tu reseña.", "exito");
