@@ -2769,7 +2769,7 @@ function cargarResenas() {
 
   const resenas = obtenerTodasLasResenas();
   if (!resenas.length) {
-    contenedor.innerHTML = '<p class="resenas-vacias">Pronto aparecerán nuevas opiniones de clientes.</p>';
+    contenedor.innerHTML = `<div class="resenas-vacias"><p>Aún no hay opiniones publicadas. Sé el primero en compartir tu experiencia.</p><a class="btn btn--primary" href="${linkResenaWhatsApp()}" target="_blank" rel="noopener noreferrer">💬 Escribir mi opinión por WhatsApp</a></div>`;
     return;
   }
 
@@ -2806,6 +2806,7 @@ function crearResena(resena) {
         </div>
       </div>
       <div class="estrellas" role="img" aria-label="${estrellas} de 5 estrellas">${"★".repeat(estrellas)}<span class="estrellas__vacias">${"★".repeat(5 - estrellas)}</span></div>
+      ${resena.servicio ? `<p class="resena-servicio">Compró: ${escaparHTML(resena.servicio)}</p>` : ""}
       <p class="resena-comentario">“${escaparHTML(resena.comentario)}”</p>
     </article>
   `;
@@ -2836,8 +2837,9 @@ function registrarResenaCarrito(evento) {
   const pais = String(datosFormulario.get("pais") || "").trim();
   const estrellas = Number(datosFormulario.get("estrellas") || 5);
   const comentario = String(datosFormulario.get("comentario") || "").trim();
+  const servicio = String(datosFormulario.get("servicio") || "").trim();
 
-  if (!nombre || !pais || !comentario) {
+  if (!nombre || !pais || !servicio || !comentario) {
     mostrarToast("Completa tu nombre, país y comentario.", "error");
     return;
   }
@@ -2847,6 +2849,7 @@ function registrarResenaCarrito(evento) {
     pais,
     estrellas,
     comentario,
+    servicio,
     fecha: new Date().toISOString()
   };
 
@@ -2859,7 +2862,7 @@ function registrarResenaCarrito(evento) {
   evento.target.reset();
 
   const mensaje = encodeURIComponent(
-    `Nueva reseña Click Tv Streaming:\n\nNombre: ${nombre}\nPaís/Ciudad: ${pais}\nCalificación: ${"⭐".repeat(estrellas)}\nComentario: ${comentario}`
+    `Nueva reseña Click Tv Streaming:\n\nNombre: ${nombre}\nPaís/Ciudad: ${pais}\nServicio: ${servicio}\nCalificación: ${"⭐".repeat(estrellas)}\nComentario: ${comentario}`
   );
   window.open(`${CONFIG.whatsappLink}?text=${mensaje}`, "_blank", "noopener,noreferrer");
   mostrarToast("Gracias por dejar tu reseña.", "exito");
@@ -3102,3 +3105,43 @@ function normalizarCuponCodigo(texto) {
     .toUpperCase()
     .replace(/[^A-Z0-9]/g, "");
 }
+
+/* Reseñas: enlace y mensaje para que los clientes escriban por WhatsApp. */
+function linkResenaWhatsApp() {
+  const texto = "Hola, quiero dejar mi opinión sobre Click TV Streaming.\n\nNombre:\nCiudad:\nServicio que compré:\nEstrellas (1 a 5):\nComentario:";
+  return `https://wa.me/${CONFIG.whatsappNumero}?text=${encodeURIComponent(texto)}`;
+}
+
+function textoPedidoResena() {
+  return [
+    "Hola 👋 Gracias por confiar en Click TV Streaming.",
+    "",
+    "¿Nos regalas tu opinión? Solo responde con:",
+    "• Tu nombre (como quieras que aparezca)",
+    "• Tu ciudad",
+    "• El servicio que compraste",
+    "• Tus estrellas del 1 al 5 ⭐",
+    "• Tu comentario",
+    "",
+    `Escríbela aquí: ${linkResenaWhatsApp()}`,
+    "O en la tienda: https://click-tv-streaming.vercel.app/#resenas",
+  ].join("\n");
+}
+
+document.addEventListener("click", async (evento) => {
+  const boton = evento.target.closest("#btn-copiar-pedido-resena");
+  if (!boton) return;
+  const texto = textoPedidoResena();
+  try {
+    await navigator.clipboard.writeText(texto);
+    mostrarToast("Mensaje copiado. Pégalo en WhatsApp.", "exito");
+  } catch (e) {
+    const area = document.createElement("textarea");
+    area.value = texto;
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand("copy");
+    area.remove();
+    mostrarToast("Mensaje copiado. Pégalo en WhatsApp.", "exito");
+  }
+});
