@@ -1,0 +1,46 @@
+/* Áreas táctiles mínimas de 44 × 44 px (WCAG 2.5.5) en controles de la tienda.
+   Solo amplía el área de toque; no cambia colores ni tipografía. */
+
+:root {
+  --ctv-touch-min: 44px;
+}
+
+.nav-link,
+.menu-toggle,
+.icon-btn,
+.cart-btn,
+.geo-modal__close,
+.mobile-reviews-shortcut,
+.navidad-banner__boton,
+.radio-direct-link,
+.catalogo-ayuda__duda,
+#btn-instalar-app,
+#btn-abrir-carrito,
+#btn-menu-movil,
+#btn-cerrar-carrito,
+#btn-cerrar-modal-ubicacion,
+#selector-moneda {
+  min-height: var(--ctv-touch-min);
+  min-width: var(--ctv-touch-min);
+}
+
+/* Radios y casillas nativas: el control se agranda; la etiqueta envolvente sigue siendo el área de clic. */
+input[type="radio"],
+input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+}
+
+/* Respeta la preferencia del sistema para reducir movimiento. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
