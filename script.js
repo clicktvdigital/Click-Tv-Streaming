@@ -2871,11 +2871,14 @@ async function registrarResenaCarrito(evento) {
   await cargarResenasPublicas();
   formulario.reset();
 
-  const mensaje = encodeURIComponent(
-    `Nueva reseña Click Tv Streaming:\n\nNombre: ${nombre}\nPaís/Ciudad: ${pais}\nServicio: ${servicio}\nCalificación: ${estrellas ? "⭐".repeat(estrellas) : "No indicada"}\nComentario: ${comentario}`
-  );
-  window.open(`${CONFIG.whatsappLink}?text=${mensaje}`, "_blank", "noopener,noreferrer");
-  mostrarToast("Gracias por dejar tu reseña.", "exito");
+  const textoGrupo = `Opinión de cliente: ${nombre} (${pais})\nServicio: ${servicio}\nCalificación: ${estrellas ? "⭐".repeat(estrellas) : "No indicada"}\n${comentario}`;
+  try {
+    await navigator.clipboard.writeText(textoGrupo);
+  } catch (e) {
+    // Sin permiso para copiar: la reseña ya quedó publicada en la tienda.
+  }
+  window.open(CONFIG.whatsappGrupo, "_blank", "noopener,noreferrer");
+  mostrarToast("Tu opinión quedó publicada. Pega el texto copiado en el grupo que se abrió.", "exito");
 }
 
 function enviarContactoInternacional(evento) {
@@ -3117,23 +3120,23 @@ function normalizarCuponCodigo(texto) {
 }
 
 /* Reseñas: enlace y mensaje para que los clientes escriban por WhatsApp. */
+// Enlace al grupo de WhatsApp: los enlaces de grupo no pueden traer texto, por eso el mensaje se copia.
 function linkResenaWhatsApp() {
-  const texto = "Hola, quiero dejar mi opinión sobre Click TV Streaming.\n\nNombre:\nCiudad:\nServicio que compré:\nEstrellas (1 a 5):\nComentario:";
-  return `https://wa.me/${CONFIG.whatsappNumero}?text=${encodeURIComponent(texto)}`;
+  return CONFIG.whatsappGrupo;
 }
 
 function textoPedidoResena() {
   return [
     "Hola 👋 Gracias por confiar en Click TV Streaming.",
     "",
-    "¿Nos regalas tu opinión? Solo responde con:",
+    "¿Nos regalas tu opinión? Escríbela con:",
     "• Tu nombre (como quieras que aparezca)",
     "• Tu ciudad",
     "• El servicio que compraste",
     "• Tus estrellas del 1 al 5 ⭐",
     "• Tu comentario",
     "",
-    `Escríbela aquí: ${linkResenaWhatsApp()}`,
+    `Escríbela en el grupo: ${linkResenaWhatsApp()}`,
     "O en la tienda: https://click-tv-streaming.vercel.app/#resenas",
   ].join("\n");
 }
