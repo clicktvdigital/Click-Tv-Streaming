@@ -3184,11 +3184,17 @@ async function cargarResenasPublicas() {
 
 cargarResenasPublicas();
 
-/* Botón de Telegram: abre Telegram con el texto del pedido de opiniones listo para enviar a un grupo o canal. */
-function prepararEnlaceTelegramResena() {
+/* Botón de Telegram: copia el texto del pedido y abre la publicación del canal, donde se deja el comentario. */
+function prepararBotonTelegramResena() {
   const enlace = document.getElementById("btn-telegram-resena");
   if (!enlace) return;
-  const url = "https://click-tv-streaming.vercel.app/#resenas";
-  enlace.href = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(textoPedidoResena())}`;
+  enlace.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(textoPedidoResena());
+      mostrarToast("Texto copiado. Pégalo en el comentario de Telegram.", "exito");
+    } catch (e) {
+      // Sin permiso para copiar: el enlace igual abre la publicación.
+    }
+  });
 }
-prepararEnlaceTelegramResena();
+prepararBotonTelegramResena();
