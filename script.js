@@ -2760,7 +2760,8 @@ function obtenerResenasCliente() {
 }
 
 function obtenerTodasLasResenas() {
-  return [...(RESENAS || []), ...obtenerResenasCliente()];
+  // Primero las reseñas publicadas por clientes (más recientes primero), luego las fijas de la tienda.
+  return [...(window.RESENAS_PUBLICAS || []), ...(RESENAS || [])];
 }
 
 function cargarResenas() {
@@ -2828,7 +2829,7 @@ function renderResenasCarrito() {
   `).join("");
 }
 
-function registrarResenaCarrito(evento) {
+async function registrarResenaCarrito(evento) {
   evento.preventDefault();
 
   const formulario = evento.currentTarget || evento.target;
@@ -2844,22 +2845,25 @@ function registrarResenaCarrito(evento) {
     return;
   }
 
-  const nuevaResena = {
-    nombre,
-    pais,
-    estrellas,
-    comentario,
-    servicio,
-    fecha: new Date().toISOString()
-  };
+  mostrarToast("Enviando tu opinión…", "exito");
+  try {
+    const respuesta = await fetch("/api/resenas", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombre, pais, servicio, estrellas, comentario }),
+    });
+    const datos = await respuesta.json().catch(() => ({}));
+    if (!respuesta.ok) {
+      mostrarToast(datos.error || "No se pudo enviar tu opinión.", "error");
+      return;
+    }
+  } catch {
+    mostrarToast("Sin conexión. Intenta de nuevo.", "error");
+    return;
+  }
 
-  const resenasCliente = obtenerResenasCliente();
-  resenasCliente.push(nuevaResena);
-  localStorage.setItem(CLAVE_RESENAS_CLIENTES, JSON.stringify(resenasCliente.slice(-20)));
-
-  renderResenasCarrito();
-  cargarResenas();
-  evento.target.reset();
+  await cargarResenasPublicas();
+  formulario.reset();
 
   const mensaje = encodeURIComponent(
     `Nueva reseña Click Tv Streaming:\n\nNombre: ${nombre}\nPaís/Ciudad: ${pais}\nServicio: ${servicio}\nCalificación: ${"⭐".repeat(estrellas)}\nComentario: ${comentario}`
@@ -3145,3 +3149,19 @@ document.addEventListener("click", async (evento) => {
     mostrarToast("Mensaje copiado. Pégalo en WhatsApp.", "exito");
   }
 });
+
+/* Reseñas publicadas por clientes, guardadas en el servidor y visibles para todos los visitantes. */
+async function cargarResenasPublicas() {
+  try {
+    const respuesta = await fetch("/api/resenas", { cache: "no-store" });
+    if (!respuesta.ok) return;
+    const datos = await respuesta.json();
+    window.RESENAS_PUBLICAS = Array.isArray(datos.resenas) ? datos.resenas : [];
+    cargarResenas();
+    renderResenasCarrito();
+  } catch {
+    // Sin conexión: se muestran solo las reseñas fijas de la tienda.
+  }
+}
+
+cargarResenasPublicas();
