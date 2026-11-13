@@ -2871,14 +2871,14 @@ async function registrarResenaCarrito(evento) {
   await cargarResenasPublicas();
   formulario.reset();
 
-  const textoGrupo = `Opinión de cliente: ${nombre} (${pais})\nServicio: ${servicio}\nCalificación: ${estrellas ? "⭐".repeat(estrellas) : "No indicada"}\n${comentario}`;
+  const textoGrupo = `Opinión de cliente: ${nombre} (${pais})\nServicio: ${servicio}\nCalificación: ${estrellas ? "⭐".repeat(estrellas) : "No indicada"}\n${comentario}\n\nVer todas las reseñas: https://click-tv-streaming.vercel.app/#resenas\nComentar en Telegram: https://t.me/click_tv_streaming/5181`;
   try {
     await navigator.clipboard.writeText(textoGrupo);
   } catch (e) {
     // Sin permiso para copiar: la reseña ya quedó publicada en la tienda.
   }
   window.open(CONFIG.whatsappGrupo, "_blank", "noopener,noreferrer");
-  mostrarToast("Tu opinión quedó publicada. Pega el texto copiado en el grupo que se abrió.", "exito");
+  mostrarToast("Tu opinión ya está publicada. Pega el texto copiado en el grupo que se abrió.", "exito");
 }
 
 function enviarContactoInternacional(evento) {
