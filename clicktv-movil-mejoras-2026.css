@@ -133,3 +133,8 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 /* 12. Avatar de reseña con el logo del producto comprado. */
 .resena-avatar--logo { background: #fff; padding: 6px; }
 .resena-avatar--logo img { width: 100%; height: 100%; object-fit: contain; }
+
+/* 13. Selectores de país, provincia y cantón en el formulario de reseñas. */
+.pais-selector { display: grid; gap: 8px; }
+.pais-ec { display: grid; gap: 8px; }
+.pais-ec[hidden] { display: none; }
