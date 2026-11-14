@@ -81,12 +81,6 @@
 </head>
 <body>
 <div id="top" tabindex="-1"></div>
-  <div class="navidad-banner" role="region" aria-label="Mensaje de temporada">
-    <span class="navidad-banner__texto">🎄 ¡Feliz Navidad!</span>
-    <div class="navidad-banner__acciones">
-      <button id="btn-instalar-app" class="navidad-banner__boton navidad-banner__boton--app" type="button">📲 Instalar app</button>
-    </div>
-  </div>
   <div class="navidad-santa" aria-hidden="true">
     <svg viewBox="0 0 240 90" width="240" height="90">
       <!-- Renos -->
@@ -160,6 +154,11 @@
       <span id="pais-detectado">🌎 Ecuador / Internacional</span>
       <button id="btn-activar-ubicacion" class="geo-btn" type="button">📍 Activar ubicación</button>
       <button id="btn-villancicos" class="geo-btn" type="button" aria-pressed="false">🎵 Villancicos</button>
+      <div class="navidad-banner" role="region" aria-label="Instalar la app">
+        <div class="navidad-banner__acciones">
+          <button id="btn-instalar-app" class="navidad-banner__boton navidad-banner__boton--app" type="button">📲 Instalar app</button>
+        </div>
+      </div>
       <label class="currency-label">💱
         <select id="selector-moneda" aria-label="Seleccionar moneda">
           <option value="USD">USD</option>
