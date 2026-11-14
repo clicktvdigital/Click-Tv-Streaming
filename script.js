@@ -1348,7 +1348,8 @@ function renderCarrito() {
   if (!contenedor) return;
 
   if (carrito.length === 0) {
-    contenedor.innerHTML = `<p class="carrito-vacio">Tu carrito está vacío. Explora el catálogo y agrega tus servicios favoritos. 🛍️</p>`;
+    contenedor.innerHTML = `<div class="carrito-vacio"><p>Tu carrito está vacío. Explora el catálogo y agrega tus servicios favoritos. 🛍️</p><a class="btn btn--primary" href="#streaming">🎬 Explorar catálogo</a></div>`;
+    contenedor.querySelector(".btn")?.addEventListener("click", () => { if (typeof cerrarCarrito === "function") cerrarCarrito(); });
   } else {
     contenedor.innerHTML = carrito.map((item) => `
       <div class="carrito-item" data-producto="${item.productoId}">
