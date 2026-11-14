@@ -889,6 +889,8 @@ function inicializarUbicacion() {
   const selectorPais = document.getElementById("selector-pais-manual");
   const elPais = document.getElementById("pais-detectado");
 
+  // El país detectado abre el selector de ubicación: es el único acceso visible, así la cabecera queda en una sola franja.
+  elPais?.addEventListener("click", mostrarModalUbicacion);
   btnUbicacion?.addEventListener("click", mostrarModalUbicacion);
   btnModalUbicacion?.addEventListener("click", detectarPais);
   btnCerrarModal?.addEventListener("click", cerrarModalUbicacion);
