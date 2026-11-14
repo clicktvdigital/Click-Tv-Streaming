@@ -589,3 +589,37 @@ body .nav-menu .nav-menu__close {
 .savings-quick .btn { min-height: 40px; }
 .savings-acciones { display: grid; gap: 8px; margin-top: 10px; }
 body .nav-menu.abierto { background: rgba(5, 12, 26, .97) !important; backdrop-filter: blur(16px); }
+
+/* 35. Revisión visual de toda la página (sin ocultar nada).
+   Celular: barra inferior sin cortes; insignia "WA" fuera del texto; botones de WhatsApp con buen contraste. */
+@media (max-width: 680px) {
+  body .floating-actions { padding-inline: 8px !important; }
+  body .floating-actions .float-btn__label { white-space: nowrap !important; overflow: visible !important; }
+  body .floating-actions .float-btn__badge {
+    position: absolute !important;
+    top: 2px !important;
+    left: calc(50% + 6px) !important;
+    margin: 0 !important;
+  }
+}
+body .main .btn--primary[href*="wa.me"],
+main .btn--primary[href*="wa.me"] {
+  background: linear-gradient(135deg, #15803d, #0f6b35) !important;
+  color: #fff !important;
+  border-color: rgba(134, 239, 172, .55) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+}
+
+/* Escritorio: el título "Menú" y su X son solo del menú móvil; el contenido no queda debajo de la columna de íconos. */
+@media (min-width: 681px) {
+  .nav-menu__toolbar { display: none !important; }
+}
+@media (min-width: 1000px) {
+  main .container { width: min(var(--max), calc(100vw - 240px)) !important; }
+  /* El botón de Ayuda y su panel se separan de la columna de íconos de la derecha. */
+  #ctv-asistente-btn { right: 104px !important; bottom: 24px !important; }
+  .ctv-asistente { right: 104px !important; }
+}
+@media (max-width: 680px) {
+  body .home-categorias { padding-inline: 16px !important; scroll-padding-inline: 16px; }
+}
