@@ -267,5 +267,5 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 
 /* 18. Carrito vacío: también se oculta el bloque de canales de pedido. */
 @media (max-width: 680px) {
-  .panel-carrito:has(.carrito-vacio) .cart-contact-options { display: none !important; }
+  #panel-carrito:has(.carrito-vacio) .cart-contact-options { display: none !important; }
 }
