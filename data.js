@@ -123,7 +123,8 @@ const CUPONES = {
   SAVE10: { porcentaje: 10, descripcion: "10% de descuento general" },
   WELCOME: { porcentaje: 15, descripcion: "15% de descuento de bienvenida" },
   IPTV50: { porcentaje: 20, descripcion: "20% exclusivo en IPTV" },
-  CLICKTVMUNDIAL: { porcentaje: 15, descripcion: "15% de descuento especial Mundial 2026 cuando aplica" }
+  CLICKTVMUNDIAL: { porcentaje: 15, descripcion: "15% de descuento especial Mundial 2026 cuando aplica" },
+  CLICKTVDIGITAL: { porcentaje: 10, descripcion: "10% de descuento Click TV Digital" }
 };
 
 const PRODUCTOS = [
@@ -339,7 +340,7 @@ const PRODUCTOS = [
     nombre: "ORA Player",
     categoria: "iptv",
     icono: "🛰️",
-    descripcion: "Acceso anual a ORA Player con soporte según disponibilidad del servicio.",
+    descripcion: "Reproductor IPTV compatible con Android, Android TV, LG WebOS, Samsung Tizen, VegaOS, Fire TV, iPhone, iPad, Windows y Mac. Acceso anual con soporte según disponibilidad del servicio.",
     etiquetas: ["📺 IPTV", "🗓️ ANUAL"],
     planes: [
       { tipo: "Anual · 1 dispositivo", precio: 7, ivaIncluido: true },
