@@ -3,3 +3,6 @@
 graphify-out/
 .vercel
 .env*
+
+# Dependencias locales
+node_modules/
