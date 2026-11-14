@@ -478,10 +478,37 @@ body .header button.pais-chip {
     font-size: 11px !important;
   }
   body .header .topbar { gap: 5px !important; }
-  body .header .currency-label select { font-size: 11px !important; padding: 4px 22px 4px 8px !important; }
+  body .header .currency-label select { font-size: 16px !important; padding: 4px 22px 4px 8px !important; }
 }
 
 /* 29c. Moneda a la misma altura que los demás controles de la cabecera. */
 .header .topbar .currency-label { height: 34px !important; }
 .header .topbar .currency-label select { height: 34px !important; min-height: 34px !important; }
 .header .topbar { padding-block: 6px !important; }
+
+/* 30. Accesibilidad de toda la página (revisión con los criterios de los skills de diseño web):
+   - Campos de texto a 16 px o más: iPhone no hace zoom automático al enfocarlos.
+   - Estrellas de reseña con área táctil de 44 px, aunque el dibujo siga siendo pequeño.
+   - Foco visible en cualquier control que reciba el teclado. */
+@media (max-width: 680px) {
+  input:not([type="radio"]):not([type="checkbox"]), textarea, select,
+  .header .currency-label select { font-size: 16px !important; }
+  .header .topbar .currency-label select { padding: 4px 22px 4px 8px !important; }
+}
+.estrellas-picker__opciones label {
+  min-width: 44px !important;
+  min-height: 44px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer;
+}
+:is(a, button, input, select, textarea, label[for]):focus-visible {
+  outline: 3px solid #7ee9ff;
+  outline-offset: 2px;
+}
+
+/* 30b. Selector de moneda de la cabecera: texto de 16 px (sin zoom en iPhone) dentro de la misma franja. */
+@media (max-width: 680px) {
+  body #selector-moneda { font-size: 16px !important; height: 34px !important; min-height: 34px !important; padding: 4px 22px 4px 8px !important; }
+}
