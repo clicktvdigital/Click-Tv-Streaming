@@ -280,10 +280,9 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
   .section-head h2 { font-size: 1.55rem !important; }
 }
 
-/* 20. Revisión de portada: en celulares, la primera pantalla tiene dos acciones claras y un solo botón flotante de contacto. */
+/* 20. Revisión de portada: en celulares, la primera pantalla tiene menos acciones. */
 @media (max-width: 680px) {
   .hero__actions a[href="#iptv"],
   .hero__actions a[href="#clicktv-atencion"],
   .hero__actions a[href="https://wa.me/593990056986?text=Hola%2C%20quiero%20armar%20un%20combo%20con%20Click%20TV%20Streaming.%0A%0AServicios%20que%20quiero%3A%0A"] { display: none !important; }
-  #btn-carrito-flotante, #btn-menu-flotante, #btn-catalogo-flotante, #btn-scroll-top { display: none !important; }
 }
