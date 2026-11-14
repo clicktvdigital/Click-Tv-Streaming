@@ -368,3 +368,23 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
   100% { transform: translate(130vw, -50%) scale(1.04); opacity: 0; }
 }
 @media (max-width: 680px) { .navidad-escena img { height: 46vh; } }
+
+/* 27. Ayuda: un solo ícono de asistente con un pulso suave (se apaga si el visitante reduce el movimiento). */
+@media (max-width: 680px) {
+  #ctv-asistente-btn svg { display: none !important; }
+  #ctv-asistente-btn::after { content: "🤖"; font-size: 24px; line-height: 1; color: #fff; }
+  #ctv-asistente-btn { animation: ctv-asistente-pulso 2.8s ease-in-out infinite; }
+}
+@keyframes ctv-asistente-pulso {
+  0%, 100% { transform: scale(1); box-shadow: 0 6px 18px rgba(0, 0, 0, .35), 0 0 0 0 rgba(126, 233, 255, .45); }
+  50% { transform: scale(1.06); box-shadow: 0 6px 18px rgba(0, 0, 0, .35), 0 0 0 8px rgba(126, 233, 255, 0); }
+}
+@media (prefers-reduced-motion: reduce) { #ctv-asistente-btn { animation: none !important; } }
+
+/* 28. Instalar app: fondo translúcido, igual que los demás botones de la cabecera. */
+body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
+  background: rgba(29, 95, 191, .28) !important;
+  color: #eaf4ff !important;
+  border: 1px solid rgba(96, 165, 250, .55) !important;
+  box-shadow: none !important;
+}
