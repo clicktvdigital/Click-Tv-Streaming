@@ -328,7 +328,7 @@ const PRODUCTOS = [
     nombre: "IBO Player",
     categoria: "iptv",
     icono: "📡",
-    descripcion: "Licencia de reproductor IPTV compatible con Android, Android TV, LG WebOS, Samsung Tizen, Fire TV, iPhone, iPad, Windows y Mac.",
+    descripcion: "Licencia de reproductor IPTV compatible con Android, Android TV, LG WebOS, Samsung Tizen, VegaOS, Fire TV, iPhone, iPad, Windows y Mac.",
     etiquetas: ["💎 PREMIUM"],
     planes: [
       { tipo: "Licencia anual", precio: 10, ivaIncluido: true },

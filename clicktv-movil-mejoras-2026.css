@@ -313,3 +313,14 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 }
 .navidad-banner__texto { display: none !important; }
 .navidad-banner__acciones { display: flex; }
+
+/* 23. Correcciones finales. */
+/* Celular: "Ayuda" queda solo como botón circular con el ícono, para tapar menos contenido. */
+@media (max-width: 680px) {
+  #ctv-asistente-btn { width: 52px !important; height: 52px !important; padding: 0 !important; border-radius: 50% !important; font-size: 0 !important; }
+  #ctv-asistente-btn::after { content: "💬"; font-size: 22px; line-height: 1; }
+  /* "Ayuda" repite lo que ya está en "Contacto" y la barra inferior: en celular no se muestra. */
+  #ayuda { display: none !important; }
+}
+/* Foco visible para quien navega con teclado. */
+:focus-visible { outline: 3px solid #7ee9ff; outline-offset: 2px; }
