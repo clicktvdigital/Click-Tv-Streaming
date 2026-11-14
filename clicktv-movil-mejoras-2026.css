@@ -182,3 +182,29 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
   color: #e6f3ff;
 }
 .buscador__lista li:hover, .buscador__lista li:active { background: rgba(29, 95, 191, .45); }
+
+/* 16. Pulido de interacción (criterio de Emil Kowalski): respuesta al presionar, curvas de salida y propiedades concretas. */
+:root { --ease-out-pulido: cubic-bezier(0.23, 1, 0.32, 1); }
+
+.btn,
+.cart-btn,
+.menu-toggle,
+.icon-btn,
+.float-btn,
+.product-card__enlace,
+.product-plan .btn {
+  transition: transform 160ms var(--ease-out-pulido), background-color 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.btn:active,
+.cart-btn:active,
+.menu-toggle:active,
+.icon-btn:active,
+.float-btn:active,
+.product-card__enlace:active,
+.product-plan .btn:active {
+  transform: scale(0.97);
+}
+
+.product-card {
+  transition: transform 220ms var(--ease-out-pulido), box-shadow 220ms var(--ease-out-pulido), border-color 220ms var(--ease-out-pulido);
+}
