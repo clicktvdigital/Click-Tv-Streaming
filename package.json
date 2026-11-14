@@ -2,5 +2,11 @@
   "name": "click-tv-streaming",
   "private": true,
   "type": "module",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "devDependencies": {
+    "playwright": "^1.65.1"
+  },
+  "scripts": {
+    "test": "node --test tests/smoke.test.mjs"
+  }
 }
