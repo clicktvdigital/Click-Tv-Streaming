@@ -29,10 +29,15 @@
         <div class="product-plan__info"><strong>${escapar(plan.tipo)}</strong><span>${precio}</span></div>
         <div class="product-plan__actions">
           <button class="btn btn--primary btn--small" type="button" onclick="agregarPlanCatalogo('${producto.id}',${i},'compra')">🛒 Añadir al carrito</button>
+          <details class="plan-mas">
+          <summary>Más opciones</summary>
+          <div class="plan-mas__botones">
           <button class="btn btn--outline btn--small" type="button" onclick="contactarPlanWhatsApp('${producto.id}',${i},'compra')">🟢 Comprar por WhatsApp</button>
           <button class="btn btn--outline btn--small" type="button" onclick="contactarPlanTelegram('${producto.id}',${i},'compra')">✈️ Comprar por Telegram</button>
           <button class="btn btn--outline btn--small" type="button" onclick="contactarPlanSignal('${producto.id}',${i},'compra')">🔵 Comprar por Signal</button>
           <button class="btn btn--ghost btn--small" type="button" onclick="marcarPlanRenovacion('${producto.id}',${i})">🔄 Renovar</button>
+          </div>
+          </details>
         </div>
       </div>`;
     }).join("");

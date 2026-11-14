@@ -208,3 +208,64 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 .product-card {
   transition: transform 220ms var(--ease-out-pulido), box-shadow 220ms var(--ease-out-pulido), border-color 220ms var(--ease-out-pulido);
 }
+
+/* 17. Pulido de catálogo y carrito en celulares (propuesta de Impeccable: crítica aprobada). */
+@media (max-width: 680px) {
+  /* Categorías en una fila que se desliza, en lugar de nueve botones apilados. */
+  .filter-tabs {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 8px;
+    margin: 0 -16px 18px;
+    padding: 4px 16px 8px;
+    scrollbar-width: none;
+  }
+  .filter-tabs::-webkit-scrollbar { display: none; }
+  .filter-tabs > * { flex: 0 0 auto; scroll-snap-align: start; white-space: nowrap; }
+
+  /* Carrito: el resumen y el cupón van antes que la confianza, y la confianza va al final. */
+  .panel-carrito { display: flex; flex-direction: column; }
+  .panel-carrito > * { order: 10; }
+  .panel-carrito > .panel-carrito__header { order: 0; }
+  .panel-carrito > .carrito-items { order: 1; }
+  .panel-carrito > .cart-summary { order: 2; }
+  .panel-carrito > .cupon-box { order: 3; }
+  .panel-carrito > .cart-trust { order: 4; padding: 12px 14px; }
+  .cart-trust p, .cart-trust li, .cart-trust span { font-size: .92rem; }
+
+  /* Carrito vacío: solo el mensaje y el botón para explorar; sin resumen ni cupón. */
+  .panel-carrito:has(.carrito-vacio) > .cart-trust,
+  .panel-carrito:has(.carrito-vacio) > .cupon-box,
+  .panel-carrito:has(.carrito-vacio) > .cart-summary,
+  .panel-carrito:has(.carrito-vacio) > .cart-payment,
+  .panel-carrito:has(.carrito-vacio) > .cart-reviews { display: none !important; }
+  .carrito-vacio { display: grid; gap: 14px; text-align: center; padding: 20px 16px; }
+
+  /* Planes de producto: el botón principal queda visible y el resto se abre con "Más opciones". */
+  .plan-mas { margin-top: 8px; }
+  .plan-mas > summary {
+    list-style: none;
+    cursor: pointer;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px dashed rgba(96, 165, 250, .6);
+    color: #cfe6ff;
+    font-weight: 700;
+    font-size: .9rem;
+  }
+  .plan-mas > summary::-webkit-details-marker { display: none; }
+  .plan-mas__botones { display: grid; gap: 8px; margin-top: 8px; }
+
+  /* Ayuda flotante más compacta para no tapar tanto contenido. */
+  #ctv-asistente-btn { padding: 7px 11px !important; font-size: .8rem !important; }
+}
+
+/* 18. Carrito vacío: también se oculta el bloque de canales de pedido. */
+@media (max-width: 680px) {
+  .panel-carrito:has(.carrito-vacio) .cart-contact-options { display: none !important; }
+}
