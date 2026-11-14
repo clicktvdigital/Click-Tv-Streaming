@@ -54,6 +54,22 @@
     .ayuda a:active { transform: scale(0.97); }
     footer { padding: 28px 0 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
 
+
+    /* v2: categorías, preguntas frecuentes y mejor jerarquía */
+    .cats { display: grid; gap: 10px; grid-template-columns: repeat(2, 1fr); }
+    .cat { display: grid; justify-items: center; gap: 8px; padding: 14px 8px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); color: var(--ink); text-decoration: none; font-weight: 700; font-size: .92rem; text-align: center; transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms ease; min-height: 44px; }
+    .cat:hover { transform: translateY(-2px); border-color: var(--blue-hi); }
+    .cat:active { transform: scale(0.97); }
+    .cat span.ico { font-size: 1.6rem; }
+    details.faq { border-radius: 14px; background: var(--panel); border: 1px solid var(--line); padding: 14px 16px; margin-bottom: 10px; }
+    details.faq summary { cursor: pointer; font-weight: 800; min-height: 44px; display: flex; align-items: center; list-style: none; }
+    details.faq summary::-webkit-details-marker { display: none; }
+    details.faq p { margin-top: 8px; }
+    .hero h1 { background: linear-gradient(100deg, #fff 30%, var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .sello { display: inline-block; margin-top: 16px; font-size: .9rem; color: var(--gold); }
+    :focus-visible { outline: 3px solid #7ee9ff; outline-offset: 2px; }
+    @media (min-width: 760px) { .cats { grid-template-columns: repeat(4, 1fr); } }
+
     @media (min-width: 760px) {
       .acciones { grid-template-columns: auto auto; justify-content: start; }
       .tarjetas { grid-template-columns: repeat(3, 1fr); }
@@ -69,6 +85,7 @@
   <div class="wrap">
     <header class="hero">
       <span class="eyebrow">Activación tras verificar el pago</span>
+      <p class="sello">Precios en USD · Atención en horarios establecidos</p>
       <h1>Todo tu entretenimiento en un solo lugar</h1>
       <p class="lead">Streaming, TV en vivo, recargas y apps premium. Precios claros y soporte en horarios establecidos.</p>
       <div class="acciones">
@@ -91,6 +108,27 @@
         <a class="tarjeta" href="index.html#iptv"><img src="assets/logos-catalogo/telelatino.webp" alt=""><div><strong>IPTV y TV en vivo</strong><span>Canales en vivo y eventos</span></div></a>
         <a class="tarjeta" href="index.html#recargas"><img src="assets/logos-catalogo/tigo-combos.jpg" alt=""><div><strong>Recargas y combos</strong><span>Paquetes para tu línea</span></div></a>
       </div>
+    </section>
+
+    <section>
+      <h2>Explora por categoría</h2>
+      <div class="cats">
+        <a class="cat" href="index.html#streaming"><span class="ico">🎬</span>Streaming</a>
+        <a class="cat" href="index.html#streaming"><span class="ico">📺</span>IPTV</a>
+        <a class="cat" href="index.html#streaming"><span class="ico">🎵</span>Música</a>
+        <a class="cat" href="index.html#streaming"><span class="ico">🎓</span>Premium Apps</a>
+        <a class="cat" href="index.html#streaming"><span class="ico">🚀</span>ProNeet VPN</a>
+        <a class="cat" href="index.html#streaming"><span class="ico">📲</span>Recargas</a>
+        <a class="cat" href="index.html#streaming"><span class="ico">⚽</span>Deportes</a>
+        <a class="cat" href="index.html#streaming"><span class="ico">🌟</span>Todos</a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Preguntas frecuentes</h2>
+      <details class="faq"><summary>¿Cuánto demora la activación?</summary><p>La activación se gestiona tras confirmar el pago y la disponibilidad del servicio.</p></details>
+      <details class="faq"><summary>¿Puedo pagar desde otro país?</summary><p>Sí. Los precios base están en USD y la página muestra una conversión referencial según tu moneda.</p></details>
+      <details class="faq"><summary>¿Cómo renuevo mi servicio?</summary><p>Escribe por WhatsApp de atención indicando tu servicio y te guiamos.</p></details>
     </section>
 
     <section>
