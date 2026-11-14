@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
   iniciarSeguro("interfaz", inicializarUI);
   iniciarSeguro("pagos rápidos", inicializarPagosRapidos);
   iniciarSeguro("calculadora de ahorro", inicializarCalculadoraAhorro);
+  iniciarSeguro("pie de página", inicializarPieFuncional);
   iniciarSeguro("ubicación", inicializarUbicacion);
   iniciarSeguro("tasas de cambio", actualizarTasasCambio);
   iniciarSeguro("usuarios conectados", actualizarUsuariosConectados);
@@ -149,12 +150,6 @@ function inicializarUI() {
     document.getElementById("btn-cerrar-menu")?.addEventListener("click", cerrarMenuMovil);
     document.getElementById("menu-overlay")?.addEventListener("click", cerrarMenuMovil);
     document.getElementById("btn-menu-flotante")?.addEventListener("click", abrirMenuMovil);
-    document.getElementById("btn-menu-subir")?.addEventListener("click", () => {
-      navMenu.scrollBy({ top: -Math.max(220, navMenu.clientHeight * 0.72), behavior: "smooth" });
-    });
-    document.getElementById("btn-menu-bajar")?.addEventListener("click", () => {
-      navMenu.scrollBy({ top: Math.max(220, navMenu.clientHeight * 0.72), behavior: "smooth" });
-    });
     prepararMenuMovilEnViewport();
     window.addEventListener("resize", prepararMenuMovilEnViewport, { passive: true });
 
@@ -911,11 +906,11 @@ function inicializarUbicacion() {
   detectarUbicacionPorIP();
 
   if (localStorage.getItem(CLAVE_MONEDA)) {
-    if (elPais) elPais.textContent = `🌎 Moneda: ${monedaActual}`;
+    if (elPais) setPais(`🌎 Moneda: ${monedaActual}`);
     return;
   }
 
-  if (elPais) elPais.textContent = "🌎 Activa ubicación o elige moneda";
+  if (elPais) setPais("🌎 Activa ubicación o elige moneda");
 }
 
 function mostrarModalUbicacion() {
@@ -954,7 +949,7 @@ function seleccionarMoneda(moneda, pais = "") {
   if (selector) selector.value = monedaActual;
 
   const elPais = document.getElementById("pais-detectado");
-  if (elPais) elPais.textContent = pais ? `${ubicacionCliente.bandera || "🌎"} ${pais} · ${monedaActual}` : `🌎 Moneda: ${monedaActual}`;
+  if (elPais) setPais(pais ? `${ubicacionCliente.bandera || "🌎"} ${pais} · ${monedaActual}` : `🌎 Moneda: ${monedaActual}`);
 
   renderCatalogo();
   renderCarrito();
@@ -1008,7 +1003,7 @@ async function detectarUbicacionPorIP() {
 
     if (ubicacion) {
       const elPais = document.getElementById("pais-detectado");
-      if (elPais) elPais.textContent = `${ubicacionCliente.bandera} ${ubicacion}`;
+      if (elPais) setPais(`${ubicacionCliente.bandera} ${ubicacion}`);
     }
 
     if (!localStorage.getItem(CLAVE_MONEDA) && codigoPais) {
@@ -1051,6 +1046,17 @@ async function actualizarTasasCambio() {
   }
 }
 
+// Muestra solo la bandera del país en la cabecera; el texto completo queda en aria-label y title.
+function setPais(texto) {
+  const el = document.getElementById("pais-detectado");
+  if (!el) return;
+  const bandera = (String(texto).match(/^(\p{Regional_Indicator}{2}|\p{Extended_Pictographic}\uFE0F?)/u) || ["🌎"])[0];
+  const detalle = String(texto).replace(/^\S+\s*/, "");
+  el.textContent = bandera;
+  el.title = detalle;
+  el.setAttribute("aria-label", `Ubicación: ${detalle}. Cambiar ubicación`);
+}
+
 function detectarPais(evento) {
   // Solo muestra avisos cuando el visitante pulsa el botón; la detección automática al abrir la página es silenciosa.
   const manual = Boolean(evento && evento.type === "click");
@@ -1065,12 +1071,12 @@ function detectarPais(evento) {
   }
 
   if (!navigator.geolocation) {
-    elPais.textContent = "🌎 Ubicación no disponible";
+    setPais("🌎 Ubicación no disponible");
     if (manual) mostrarToast("Tu navegador no permite ubicación. Selecciona tu país manualmente.", "info");
     return;
   }
 
-  elPais.textContent = "📍 Detectando país...";
+  setPais("📍 Detectando país...");
   if (btnUbicacion) {
     btnUbicacion.disabled = true;
     btnUbicacion.textContent = "📍 Detectando...";
@@ -1091,12 +1097,12 @@ function detectarPais(evento) {
         const codigoPais = datos?.address?.country_code?.toUpperCase() || "";
         const ubicacion = formatearUbicacion(ciudad, pais) || pais;
         actualizarUbicacionCliente({ ciudad, pais, codigoPais, zonaHoraria: obtenerZonaHorariaNavegador() });
-        elPais.textContent = `${ubicacionCliente.bandera} ${ubicacion}`;
+        setPais(`${ubicacionCliente.bandera} ${ubicacion}`);
         sugerirMonedaPorPais(ubicacion, codigoPais, true);
         renderMundial(true);
         cerrarModalUbicacion();
       } catch {
-        elPais.textContent = "🌎 Ubicación GPS detectada";
+        setPais("🌎 Ubicación GPS detectada");
       }
       if (btnUbicacion) {
         btnUbicacion.disabled = false;
@@ -1108,7 +1114,7 @@ function detectarPais(evento) {
       }
     },
     () => {
-      elPais.textContent = "🌎 Ecuador / Internacional";
+      setPais("🌎 Ecuador / Internacional");
       if (btnUbicacion) {
         btnUbicacion.disabled = false;
         btnUbicacion.textContent = "📍 Activar ubicación";
@@ -1522,13 +1528,13 @@ function inicializarCalculadoraAhorro() {
   const contenedor = document.getElementById("ahorro-servicios");
   if (!contenedor || typeof PRODUCTOS === "undefined") return;
 
-  contenedor.innerHTML = SERVICIOS_AHORRO.map((servicio, index) => {
+  contenedor.innerHTML = SERVICIOS_AHORRO.map((servicio) => {
     const data = obtenerServicioAhorro(servicio);
     if (!data) return "";
 
     return `
       <label class="saving-option">
-        <input type="checkbox" value="${servicio.id}" ${index < 3 ? "checked" : ""}>
+        <input type="checkbox" value="${servicio.id}">
         <span>
           <strong>${servicio.nombre}</strong>
           <small>${data.plan.tipo} · Click TV ${formatearPrecio(data.plan.precio)} · Normal ref. $${servicio.precioNormal.toFixed(2)}</small>
@@ -1542,7 +1548,17 @@ function inicializarCalculadoraAhorro() {
   });
 
   document.getElementById("btn-aplicar-cupon-ahorro")?.addEventListener("click", aplicarCuponAhorro);
-  document.getElementById("btn-ahorro-whatsapp")?.addEventListener("click", enviarAhorroWhatsApp);
+  document.getElementById("btn-ahorro-todos")?.addEventListener("click", () => {
+    contenedor.querySelectorAll("input").forEach((input) => { input.checked = true; });
+    actualizarCalculadoraAhorro();
+  });
+  document.getElementById("btn-ahorro-limpiar")?.addEventListener("click", () => {
+    contenedor.querySelectorAll("input").forEach((input) => { input.checked = false; });
+    actualizarCalculadoraAhorro();
+  });
+  document.getElementById("btn-ahorro-whatsapp")?.addEventListener("click", () => enviarAhorroWhatsApp(CONFIG.whatsappLink));
+  document.getElementById("btn-ahorro-whatsapp-atencion")?.addEventListener("click", () => enviarAhorroWhatsApp(CONFIG.whatsappAlternativoLink));
+  document.getElementById("btn-ahorro-carrito")?.addEventListener("click", agregarComboAhorroAlCarrito);
   actualizarCalculadoraAhorro();
 }
 
@@ -1599,7 +1615,7 @@ function aplicarCuponAhorro() {
   mostrarToast(`Cupón ${codigo} aplicado manualmente en la calculadora.`, "exito");
 }
 
-function enviarAhorroWhatsApp() {
+function enviarAhorroWhatsApp(enlaceBase = CONFIG.whatsappLink) {
   const totales = calcularAhorroSeleccionado();
   if (!totales.seleccionados.length) return mostrarToast("Selecciona al menos un servicio para consultar.", "error");
 
@@ -1611,7 +1627,65 @@ function enviarAhorroWhatsApp() {
 `🧮 Hola Click TV Streaming, deseo consultar este combo simulado.\n\n${servicios}\n\n🧾 Subtotal Click TV: $${totales.subtotal.toFixed(2)} USD\n🏷️ Cupón: ${cuponAhorroAplicado ? `${cuponAhorroAplicado.codigo} (-$${totales.descuento.toFixed(2)} USD)` : "Sin cupón"}\n✅ Total estimado: $${totales.total.toFixed(2)} USD\n💰 Ahorro aproximado: $${totales.ahorro.toFixed(2)} USD\n\n📲 Por favor, confirmen disponibilidad y precio final.`
   );
 
-  window.open(`${CONFIG.whatsappLink}?text=${mensaje}`, "_blank", "noopener,noreferrer");
+  window.open(`${enlaceBase}?text=${mensaje}`, "_blank", "noopener,noreferrer");
+}
+
+function agregarComboAhorroAlCarrito() {
+  const totales = calcularAhorroSeleccionado();
+  if (!totales.seleccionados.length) return mostrarToast("Selecciona al menos un servicio para tu combo.", "error");
+
+  const nombres = totales.seleccionados.map((item) => `${item.nombre} (${item.data.plan.tipo})`).join(" + ");
+  const producto = { id: "combo-simulado", nombre: "Combo personalizado", icono: "🧩", descripcion: nombres };
+  const plan = { tipo: nombres, precio: totales.subtotal, operacion: "compra" };
+  agregarAlCarrito(producto, plan);
+
+  // El cupón de la calculadora pasa al carrito, así se aplica también al pagar.
+  if (cuponAhorroAplicado && !cuponAplicado) {
+    cuponAplicado = { ...cuponAhorroAplicado };
+    renderCarrito();
+  }
+}
+
+// ---------------------------------------------------------------------------
+// PIE DE PÁGINA: métodos de pago y recomendar la página
+// ---------------------------------------------------------------------------
+function inicializarPieFuncional() {
+  const URL_SITIO = "https://click-tv-streaming.vercel.app/";
+  const TEXTO = "Mira Click TV Streaming: películas, series, deportes, IPTV y recargas, con activación tras verificar tu pago.";
+
+  document.querySelectorAll("[data-pago]").forEach((boton) => {
+    boton.addEventListener("click", () => {
+      const mensaje = `💳 Hola Click TV Streaming, deseo información para pagar con ${boton.dataset.pago}.`;
+      window.open(`${CONFIG.whatsappLink}?text=${encodeURIComponent(mensaje)}`, "_blank", "noopener,noreferrer");
+    });
+  });
+
+  const enlaces = {
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(`${TEXTO} ${URL_SITIO}`)}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(URL_SITIO)}`,
+    x: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`${TEXTO} ${URL_SITIO}`)}`,
+    telegram: `https://t.me/share/url?url=${encodeURIComponent(URL_SITIO)}&text=${encodeURIComponent(TEXTO)}`,
+  };
+
+  const copiarEnlace = () => {
+    if (!navigator.clipboard) return mostrarToast("Copia este enlace: " + URL_SITIO, "info");
+    navigator.clipboard.writeText(URL_SITIO)
+      .then(() => mostrarToast("Enlace copiado. Compártelo con tus amigos.", "exito"))
+      .catch(() => mostrarToast("No se pudo copiar. Copia el enlace manualmente.", "error"));
+  };
+
+  document.querySelectorAll("[data-compartir]").forEach((boton) => {
+    boton.addEventListener("click", async () => {
+      const tipo = boton.dataset.compartir;
+      if (tipo === "copiar") return copiarEnlace();
+      if (tipo === "nativo") {
+        if (!navigator.share) return copiarEnlace();
+        try { await navigator.share({ title: "Click TV Streaming", text: TEXTO, url: URL_SITIO }); } catch { /* el visitante canceló */ }
+        return;
+      }
+      window.open(enlaces[tipo], "_blank", "noopener,noreferrer");
+    });
+  });
 }
 
 // ---------------------------------------------------------------------------

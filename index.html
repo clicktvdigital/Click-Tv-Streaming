@@ -151,14 +151,14 @@
 
   <header class="header" id="inicio">
     <div class="topbar">
-      <button id="pais-detectado" class="pais-chip" type="button" aria-label="Cambiar ubicación o país">🌎 Ecuador / Internacional</button>
+      <button id="pais-detectado" class="pais-chip" type="button" aria-label="Ubicación: Ecuador / Internacional. Cambiar ubicación" title="Ecuador / Internacional">🌎</button>
       <button id="btn-villancicos" class="geo-btn" type="button" aria-pressed="false">🎵 Villancicos</button>
       <div class="navidad-banner" role="region" aria-label="Instalar la app">
         <div class="navidad-banner__acciones">
           <button id="btn-instalar-app" class="navidad-banner__boton navidad-banner__boton--app" type="button">📲 Instalar app</button>
         </div>
       </div>
-      <label class="currency-label">💱
+      <label class="currency-label">
         <select id="selector-moneda" aria-label="Seleccionar moneda">
           <option value="USD">USD</option>
           <option value="PEN">PEN</option>
@@ -193,10 +193,9 @@
 
       <div id="menu-overlay" class="menu-overlay" aria-hidden="true"></div>
       <div id="nav-menu" class="nav-menu">
-        <div class="nav-menu__toolbar" role="group" aria-label="Controles del menú">
-          <button id="btn-menu-subir" class="nav-menu__control" type="button" aria-label="Subir dentro del menú">↑ <span>Subir</span></button>
-          <button id="btn-cerrar-menu" class="nav-menu__close" type="button" aria-label="Cerrar menú">✕ <span>Cerrar menú</span></button>
-          <button id="btn-menu-bajar" class="nav-menu__control" type="button" aria-label="Bajar dentro del menú">↓ <span>Bajar</span></button>
+        <div class="nav-menu__toolbar">
+          <span class="nav-menu__titulo">Menú</span>
+          <button id="btn-cerrar-menu" class="nav-menu__close" type="button" aria-label="Cerrar menú">✕</button>
         </div>
         <a class="nav-link" href="#inicio">🏠 Inicio</a>
         <a class="nav-link" href="#streaming">🎬 Streaming</a>
@@ -241,8 +240,7 @@
           <div class="hero__actions">
             <a class="btn btn--primary" href="#iptv">Comprar o ver TV</a>
             <a class="btn btn--outline" href="#streaming">Ver catálogo</a>
-            <a class="btn btn--outline" href="https://wa.me/593939166222?text=Hola%2C%20quiero%20armar%20un%20combo%20con%20Click%20TV%20Streaming.%0A%0AServicios%20que%20quiero%3A%0A" target="_blank" rel="noopener noreferrer">🧩 Armar combo · ventas</a>
-            <a class="btn btn--outline" href="https://wa.me/593990056986?text=Hola%2C%20quiero%20armar%20un%20combo%20con%20Click%20TV%20Streaming.%0A%0AServicios%20que%20quiero%3A%0A" target="_blank" rel="noopener noreferrer">🧩 Armar combo · atención</a>
+            <a class="btn btn--outline" href="#calculadora-ahorro">🧩 Armar combo</a>
             <a class="btn btn--outline" href="#radio-app">Escuchar la radio</a>
             <a class="btn btn--outline" href="#teleamazonas-player">Ver TV en vivo</a>
             <a id="link-catalogo-oficial" class="btn btn--ghost" href="#clicktv-atencion">Renovar o pedir ayuda</a>
@@ -773,6 +771,7 @@
           <h2>Simula tus servicios favoritos</h2>
           <p>🧮 Elige los servicios más comprados y revisa un estimado con tu cupón.</p>
           <p>💬 El valor final se confirma por WhatsApp, Signal o Telegram, según disponibilidad.</p>
+          <div class="savings-quick"><button id="btn-ahorro-todos" class="btn btn--ghost" type="button">Seleccionar todos</button><button id="btn-ahorro-limpiar" class="btn btn--ghost" type="button">Limpiar selección</button></div>
           <div id="ahorro-servicios" class="savings-options"></div>
         </div>
 
@@ -793,7 +792,7 @@
             <p class="total"><span>Total estimado</span><strong id="ahorro-total">$0.00 USD</strong></p>
             <p class="saving-line"><span>Ahorro aproximado</span><strong id="ahorro-total-ahorrado">$0.00 USD</strong></p>
           </div>
-          <button id="btn-ahorro-whatsapp" class="btn btn--primary btn--full" type="button">📲 Consultar este combo</button>
+          <div class="savings-acciones"><button id="btn-ahorro-whatsapp" class="btn btn--primary btn--full" type="button">📲 Pedir por WhatsApp · ventas</button><button id="btn-ahorro-whatsapp-atencion" class="btn btn--outline btn--full" type="button">📲 Pedir por WhatsApp · atención</button><button id="btn-ahorro-carrito" class="btn btn--outline btn--full" type="button">🛒 Añadir combo al carrito</button></div>
         </div>
       </div>
     </section>
@@ -1002,13 +1001,25 @@
         <p>© <span id="anio-actual"></span> Click TV Digital. Todos los derechos reservados.</p>
       </div>
       <div class="footer-payments" aria-label="Métodos de pago">
-        <span>🏦 Banco Pichincha</span>
-        <span>🏦 Banco Guayaquil</span>
-        <span>💚 DEUNA</span>
-        <span>📱 PayPhone</span>
-        <span>🅿️ PayPal</span>
-        <span>🌎 Remitly</span>
-        <span>💳 Stripe</span>
+        <button type="button" class="footer-pago" data-pago="Banco Pichincha">🏦 Banco Pichincha</button>
+        <button type="button" class="footer-pago" data-pago="Banco Guayaquil">🏦 Banco Guayaquil</button>
+        <button type="button" class="footer-pago" data-pago="DEUNA">💚 DEUNA</button>
+        <button type="button" class="footer-pago" data-pago="PayPhone">📱 PayPhone</button>
+        <button type="button" class="footer-pago" data-pago="PayPal">🅿️ PayPal</button>
+        <button type="button" class="footer-pago" data-pago="Binance">🟡 Binance</button>
+        <button type="button" class="footer-pago" data-pago="Remitly">🌎 Remitly</button>
+        <button type="button" class="footer-pago" data-pago="Stripe">💳 Stripe</button>
+      </div>
+      <div class="footer-share" aria-label="Recomendar Click TV">
+        <p><strong>💚 Recomienda Click TV</strong> · comparte con tus amigos y familia</p>
+        <div class="footer-share__botones">
+          <button type="button" class="footer-share__btn" data-compartir="nativo">📤 Compartir</button>
+          <button type="button" class="footer-share__btn" data-compartir="whatsapp">🟢 WhatsApp</button>
+          <button type="button" class="footer-share__btn" data-compartir="facebook">📘 Facebook</button>
+          <button type="button" class="footer-share__btn" data-compartir="x">✖️ X</button>
+          <button type="button" class="footer-share__btn" data-compartir="telegram">✈️ Telegram</button>
+          <button type="button" class="footer-share__btn" data-compartir="copiar">🔗 Copiar enlace</button>
+        </div>
       </div>
     </div>
   </footer>

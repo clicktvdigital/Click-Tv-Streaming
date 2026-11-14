@@ -512,3 +512,80 @@ body .header button.pais-chip {
 @media (max-width: 680px) {
   body #selector-moneda { font-size: 16px !important; height: 34px !important; min-height: 34px !important; padding: 4px 22px 4px 8px !important; }
 }
+
+/* 31. Cabecera: el país se muestra solo como bandera (la moneda queda sin icono). */
+body .header button.pais-chip {
+  min-width: 40px !important;
+  justify-content: center !important;
+  padding: 5px 10px !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+}
+
+/* 32. Menú móvil: sin flechas; título en mayúsculas y una sola X para cerrar. */
+.nav-menu__control { display: none !important; }
+.nav-menu__toolbar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 4px 4px 12px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  margin-bottom: 8px;
+}
+.nav-menu__titulo {
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #9fd0ff;
+}
+body .nav-menu .nav-menu__close {
+  display: inline-flex !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+}
+.nav-menu { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+
+/* 33. Pie de página: métodos de pago como botones y bloque para recomendar la página. */
+.footer-payments { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.footer-pago {
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid rgba(96, 165, 250, .42);
+  border-radius: 999px;
+  background: rgba(29, 95, 191, .18);
+  color: #eaf4ff;
+  font: inherit;
+  font-size: .85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.footer-pago:hover { background: rgba(29, 95, 191, .34); }
+.footer-share { margin-top: 18px; text-align: center; }
+.footer-share p { margin: 0 0 10px; }
+.footer-share__botones { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.footer-share__btn {
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .06);
+  color: #fff;
+  font: inherit;
+  font-size: .85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* 34. Simulador de combos: selección libre y acciones claras. */
+.savings-quick { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.savings-quick .btn { min-height: 40px; }
+.savings-acciones { display: grid; gap: 8px; margin-top: 10px; }
+body .nav-menu.abierto { background: rgba(5, 12, 26, .97) !important; backdrop-filter: blur(16px); }
