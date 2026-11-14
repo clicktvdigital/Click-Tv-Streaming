@@ -332,3 +332,18 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
   .home-categorias::-webkit-scrollbar { display: none; }
   .home-categorias__btn { flex: 0 0 auto; scroll-snap-align: start; }
 }
+
+/* 25. Instalar app: fijo dentro de la barra superior (no flota ni tapa contenido). */
+.navidad-banner {
+  position: static !important;
+  inset: auto !important;
+  width: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  z-index: auto !important;
+}
+.navidad-banner__texto { display: none !important; }
+.navidad-banner__boton--app { min-height: 44px; padding: 6px 12px; font-size: .85rem; }
