@@ -390,3 +390,98 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 
 /* Quita la línea dorada inferior de la barra navideña. */
 .navidad-banner { border-bottom: 0 !important; }
+
+/* 29. Cabecera en una sola franja: país, villancicos, instalar y moneda en una misma fila. */
+.header .topbar {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-height: 0 !important;
+  padding: 8px 12px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, .08) !important;
+}
+.header .navidad-banner,
+.header .navidad-banner__acciones { display: contents !important; }
+.header .topbar button,
+.header .topbar select {
+  min-height: 34px !important;
+  height: auto !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+  line-height: 1.2 !important;
+}
+.header #pais-detectado,
+body .header button.pais-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  flex: 0 1 auto !important;
+  max-width: 42vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 6px 12px !important;
+  border: 1px solid rgba(96, 165, 250, .42) !important;
+  border-radius: 999px !important;
+  background: rgba(29, 95, 191, .22) !important;
+  color: #eaf4ff !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer;
+}
+.header .geo-btn,
+.header .navidad-banner__boton {
+  flex: 0 0 auto !important;
+  padding: 6px 12px !important;
+  border: 1px solid rgba(96, 165, 250, .42) !important;
+  border-radius: 999px !important;
+  background: rgba(29, 95, 191, .22) !important;
+  color: #eaf4ff !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+}
+.header .currency-label {
+  flex: 0 0 auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  font-size: 12px !important;
+}
+.header .currency-label select {
+  padding: 5px 26px 5px 10px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(96, 165, 250, .42) !important;
+  background: rgba(29, 95, 191, .22) !important;
+  color: #eaf4ff !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+@media (max-width: 420px) {
+  .header .topbar { gap: 6px !important; padding: 7px 8px !important; }
+  .header #pais-detectado, body .header button.pais-chip { max-width: 34vw; padding: 5px 9px !important; }
+  .header .geo-btn, .header .navidad-banner__boton { padding: 5px 9px !important; }
+}
+
+/* 29b. Cabecera móvil: el botón Instalar app y el país deben caber en la misma fila sin cortarse. */
+@media (max-width: 420px) {
+  body .header .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
+    min-height: 34px !important;
+    padding: 5px 9px !important;
+    font-size: 11px !important;
+  }
+  body .header #pais-detectado,
+  body .header button.pais-chip {
+    max-width: 30vw !important;
+    padding: 5px 8px !important;
+    font-size: 11px !important;
+  }
+  body .header .topbar { gap: 5px !important; }
+  body .header .currency-label select { font-size: 11px !important; padding: 4px 22px 4px 8px !important; }
+}
+
+/* 29c. Moneda a la misma altura que los demás controles de la cabecera. */
+.header .topbar .currency-label { height: 34px !important; }
+.header .topbar .currency-label select { height: 34px !important; min-height: 34px !important; }
+.header .topbar { padding-block: 6px !important; }
