@@ -17,6 +17,7 @@
   let ancho = 0, alto = 0, escala = 1;
   let cohetes = [], chispas = [], regalos = [], trineo = null;
   let proximoCohete = 0.4, proximoTrineo = 1.2, proximoRegalo = 0;
+  const TRINEO_DIBUJADO = false; // el trineo ahora son las ilustraciones de fondo
   let splash = 5.2;               // segundos de splash al abrir
   let ultimo = performance.now();
   let activo = true;
@@ -109,7 +110,7 @@
     if (proximoCohete <= 0) { lanzarCohete(); proximoCohete = splash > 0 ? 0.35 + Math.random() * 0.25 : 4 + Math.random() * 4; }
 
     proximoTrineo -= dt;
-    if (!trineo && proximoTrineo <= 0) {
+    if (TRINEO_DIBUJADO && !trineo && proximoTrineo <= 0) {
       trineo = { x: -140, y: alto * (splash > 0 ? 0.16 : 0.1 + Math.random() * 0.12), t: 0 };
       proximoRegalo = 0.7;
     }
