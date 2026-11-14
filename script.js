@@ -1049,20 +1049,22 @@ async function actualizarTasasCambio() {
   }
 }
 
-function detectarPais() {
+function detectarPais(evento) {
+  // Solo muestra avisos cuando el visitante pulsa el botón; la detección automática al abrir la página es silenciosa.
+  const manual = Boolean(evento && evento.type === "click");
   const elPais = document.getElementById("pais-detectado");
   const btnUbicacion = document.getElementById("btn-activar-ubicacion");
   const btnModalUbicacion = document.getElementById("btn-modal-activar-ubicacion");
   if (!elPais) return;
 
   if (!window.isSecureContext) {
-    mostrarToast("El GPS solo se activa en HTTPS. Usa Vercel o selecciona tu país manualmente.", "error");
+    if (manual) mostrarToast("El GPS solo se activa en HTTPS. Usa Vercel o selecciona tu país manualmente.", "error");
     return;
   }
 
   if (!navigator.geolocation) {
     elPais.textContent = "🌎 Ubicación no disponible";
-    mostrarToast("Tu navegador no permite ubicación. Selecciona tu país manualmente.", "info");
+    if (manual) mostrarToast("Tu navegador no permite ubicación. Selecciona tu país manualmente.", "info");
     return;
   }
 
@@ -1113,7 +1115,7 @@ function detectarPais() {
         btnModalUbicacion.disabled = false;
         btnModalUbicacion.textContent = "Activar ubicación";
       }
-      mostrarToast("Ubicación no activada. Puedes elegir tu país con el selector de arriba.", "info");
+      if (manual) mostrarToast("Ubicación no activada. Puedes elegir tu país con el selector de arriba.", "info");
     },
     { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
   );
