@@ -126,5 +126,6 @@
 .ctv-asistente__cabecera strong { font-size: .92rem; }
 .ctv-asistente__opciones { gap: 5px; margin-top: 8px; }
 .ctv-asistente__aviso { font-size: .7rem; }
-#ctv-asistente-btn svg { vertical-align: -3px; margin-right: 4px; }
-#ctv-asistente-btn { display: inline-flex; align-items: center; }
+#ctv-asistente-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+#ctv-asistente-btn .ctv-asistente-btn__icono { display: inline-grid; place-items: center; }
+#ctv-asistente-btn .ctv-asistente-btn__icono svg { display: block; }

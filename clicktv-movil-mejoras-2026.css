@@ -317,8 +317,8 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 /* 23. Correcciones finales. */
 /* Celular: "Ayuda" queda solo como botón circular con el ícono, para tapar menos contenido. */
 @media (max-width: 680px) {
-  #ctv-asistente-btn { width: 52px !important; height: 52px !important; padding: 0 !important; border-radius: 50% !important; color: transparent !important; font-size: 0 !important; }
-  #ctv-asistente-btn::after { content: "💬"; font-size: 22px; line-height: 1; color: #fff; }
+  #ctv-asistente-btn { width: 52px !important; height: 52px !important; padding: 0 !important; border-radius: 50% !important; color: #fff !important; }
+  #ctv-asistente-btn .ctv-asistente-btn__texto { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 /* Foco visible para quien navega con teclado. */
 :focus-visible { outline: 3px solid #7ee9ff; outline-offset: 2px; }
@@ -369,11 +369,10 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 }
 @media (max-width: 680px) { .navidad-escena img { height: 46vh; } }
 
-/* 27. Ayuda: un solo ícono de asistente con un pulso suave (se apaga si el visitante reduce el movimiento). */
+/* 27. Ayuda: un solo icono de asistente centrado, con un pulso suave (se apaga si el visitante reduce el movimiento). */
 @media (max-width: 680px) {
-  #ctv-asistente-btn svg { display: none !important; }
-  #ctv-asistente-btn::after { content: "🤖"; font-size: 24px; line-height: 1; color: #fff; }
-  #ctv-asistente-btn { animation: ctv-asistente-pulso 2.8s ease-in-out infinite; }
+  #ctv-asistente-btn { display: flex !important; align-items: center !important; justify-content: center !important; animation: ctv-asistente-pulso 2.8s ease-in-out infinite; }
+  #ctv-asistente-btn .ctv-asistente-btn__icono svg { width: 24px; height: 24px; }
 }
 @keyframes ctv-asistente-pulso {
   0%, 100% { transform: scale(1); box-shadow: 0 6px 18px rgba(0, 0, 0, .35), 0 0 0 0 rgba(126, 233, 255, .45); }
@@ -388,3 +387,6 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
   border: 1px solid rgba(96, 165, 250, .55) !important;
   box-shadow: none !important;
 }
+
+/* Quita la línea dorada inferior de la barra navideña. */
+.navidad-banner { border-bottom: 0 !important; }
