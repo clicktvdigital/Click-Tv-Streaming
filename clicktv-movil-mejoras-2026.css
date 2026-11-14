@@ -319,8 +319,16 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 @media (max-width: 680px) {
   #ctv-asistente-btn { width: 52px !important; height: 52px !important; padding: 0 !important; border-radius: 50% !important; font-size: 0 !important; }
   #ctv-asistente-btn::after { content: "💬"; font-size: 22px; line-height: 1; }
-  /* "Ayuda" repite lo que ya está en "Contacto" y la barra inferior: en celular no se muestra. */
-  #ayuda { display: none !important; }
 }
 /* Foco visible para quien navega con teclado. */
 :focus-visible { outline: 3px solid #7ee9ff; outline-offset: 2px; }
+
+/* 24. Categorías del catálogo en la portada: fila que se desliza en celular, en filas en computadora. */
+.home-categorias { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 14px 0 0; }
+.home-categorias__btn { min-height: 44px; display: inline-flex; align-items: center; padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(96, 165, 250, .55); background: rgba(29, 95, 191, .25); color: #eaf4ff; font-weight: 700; text-decoration: none; white-space: nowrap; transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
+.home-categorias__btn:active { transform: scale(0.97); }
+@media (max-width: 680px) {
+  .home-categorias { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; scroll-snap-type: x mandatory; margin-inline: -16px; padding: 4px 16px 8px; scrollbar-width: none; }
+  .home-categorias::-webkit-scrollbar { display: none; }
+  .home-categorias__btn { flex: 0 0 auto; scroll-snap-align: start; }
+}
