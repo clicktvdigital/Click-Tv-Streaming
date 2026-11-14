@@ -157,7 +157,7 @@
     boton.type = 'button';
     boton.setAttribute('aria-controls', 'ctv-asistente');
     boton.setAttribute('aria-expanded', 'false');
-    boton.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/></svg> Ayuda';
+    boton.innerHTML = '<span class="ctv-asistente-btn__icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2.5"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M9 13v2"/><path d="M15 13v2"/></svg></span><span class="ctv-asistente-btn__texto">Ayuda</span>';
 
     const panel = document.createElement('div');
     panel.id = 'ctv-asistente';
