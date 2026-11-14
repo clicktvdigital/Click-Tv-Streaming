@@ -295,3 +295,21 @@ body .navidad-banner button.navidad-banner__boton.navidad-banner__boton--app {
 .panel-instalar__enlace a { color: #7ee9ff; word-break: break-all; }
 .panel-instalar__acciones { display: grid; gap: 10px; margin-top: 12px; }
 .panel-instalar__acciones .btn { min-height: 48px; justify-content: center; }
+
+/* 22. Banner navideño: ya no ocupa la parte de arriba. Queda solo el botón "Instalar app", flotante y pequeño. */
+.navidad-banner {
+  position: fixed !important;
+  top: auto !important;
+  bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+  left: 12px !important;
+  right: auto !important;
+  width: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  z-index: 940 !important;
+  justify-content: flex-start !important;
+}
+.navidad-banner__texto { display: none !important; }
+.navidad-banner__acciones { display: flex; }
