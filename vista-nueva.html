@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Click TV Streaming · Vista nueva (propuesta)</title>
+  <meta name="description" content="Streaming, IPTV, recargas y apps premium en Ecuador. Activación tras verificar el pago.">
+  <style>
+    :root {
+      --bg: #071a33;
+      --panel: #0d2748;
+      --line: rgba(96, 165, 250, .28);
+      --ink: #eaf4ff;
+      --muted: #a9c4e3;
+      --blue: #1a73e8;
+      --blue-hi: #3ea0ff;
+      --gold: #f8d26a;
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .wrap { width: min(1080px, 100% - 32px); margin-inline: auto; }
+    h1, h2, h3 { font-family: "Inter", system-ui, sans-serif; line-height: 1.15; margin: 0; letter-spacing: -0.01em; }
+    h1 { font-size: clamp(2rem, 6vw, 3.4rem); font-weight: 800; }
+    h2 { font-size: clamp(1.4rem, 3.4vw, 2rem); font-weight: 800; margin-bottom: 14px; }
+    p { margin: 0; color: var(--muted); }
+
+    /* Portada */
+    .hero { padding: 40px 0 28px; }
+    .eyebrow { display: inline-block; font-size: .85rem; font-weight: 700; color: var(--gold); border: 1px solid rgba(248, 210, 106, .4); border-radius: 999px; padding: 6px 12px; margin-bottom: 16px; }
+    .hero p.lead { font-size: 1.1rem; max-width: 40ch; margin-top: 14px; }
+    .acciones { display: grid; gap: 10px; margin-top: 22px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 12px 20px; border-radius: 14px; font-weight: 800; text-decoration: none; border: 1px solid transparent; transition: transform 160ms var(--ease-out), background-color 180ms ease; }
+    .btn:active { transform: scale(0.97); }
+    .btn--primary { background: linear-gradient(120deg, var(--blue-hi), var(--blue)); color: #fff; }
+    .btn--ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+    .logos { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-top: 26px; }
+    .logos img { height: 40px; width: auto; max-width: 96px; object-fit: contain; background: #fff; border-radius: 10px; padding: 6px; }
+
+    /* Secciones */
+    section { padding: 36px 0; border-top: 1px solid var(--line); }
+    .tarjetas { display: grid; gap: 12px; grid-template-columns: 1fr; }
+    .tarjeta { display: flex; gap: 14px; align-items: center; padding: 16px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); color: var(--ink); text-decoration: none; transition: transform 200ms var(--ease-out), border-color 200ms var(--ease-out); }
+    .tarjeta:hover { transform: translateY(-2px); border-color: var(--blue-hi); }
+    .tarjeta img { width: 52px; height: 52px; object-fit: contain; background: #fff; border-radius: 12px; padding: 6px; flex: 0 0 auto; }
+    .tarjeta strong { display: block; font-size: 1.05rem; }
+    .tarjeta span { color: var(--muted); font-size: .92rem; }
+    .pasos { display: grid; gap: 12px; counter-reset: paso; }
+    .paso { padding: 16px 16px 16px 60px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); position: relative; }
+    .paso::before { counter-increment: paso; content: counter(paso); position: absolute; left: 16px; top: 14px; width: 32px; height: 32px; border-radius: 50%; background: var(--blue); color: #fff; font-weight: 800; display: grid; place-items: center; }
+    .paso strong { display: block; }
+    .ayuda { display: grid; gap: 10px; }
+    .ayuda a { display: flex; justify-content: center; align-items: center; min-height: 52px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); color: var(--ink); text-decoration: none; font-weight: 700; transition: transform 160ms var(--ease-out); }
+    .ayuda a:active { transform: scale(0.97); }
+    footer { padding: 28px 0 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+
+    @media (min-width: 760px) {
+      .acciones { grid-template-columns: auto auto; justify-content: start; }
+      .tarjetas { grid-template-columns: repeat(3, 1fr); }
+      .ayuda { grid-template-columns: repeat(3, 1fr); }
+      .pasos { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <span class="eyebrow">Activación tras verificar el pago</span>
+      <h1>Todo tu entretenimiento en un solo lugar</h1>
+      <p class="lead">Streaming, TV en vivo, recargas y apps premium. Precios claros y soporte en horarios establecidos.</p>
+      <div class="acciones">
+        <a class="btn btn--primary" href="index.html#streaming">Ver catálogo</a>
+        <a class="btn btn--ghost" href="https://wa.me/593939166222?text=Hola%2C%20quiero%20armar%20un%20combo%20con%20Click%20TV%20Streaming.">Armar combo</a>
+      </div>
+      <div class="logos" aria-label="Servicios disponibles">
+        <img src="assets/logos-catalogo/zapping.png" alt="Zapping">
+        <img src="assets/logos-catalogo/directv-go.png" alt="DIRECTV GO">
+        <img src="assets/logos-catalogo/claro.jpg" alt="Claro">
+        <img src="assets/logos-catalogo/tigo-combos.jpg" alt="Tigo">
+        <img src="assets/logos-catalogo/proneet.jpg" alt="ProNeet VPN">
+      </div>
+    </header>
+
+    <section>
+      <h2>Elige tu servicio</h2>
+      <div class="tarjetas">
+        <a class="tarjeta" href="index.html#streaming"><img src="assets/logos-catalogo/directv-go.png" alt=""><div><strong>Streaming</strong><span>Películas, series y más</span></div></a>
+        <a class="tarjeta" href="index.html#iptv"><img src="assets/logos-catalogo/telelatino.webp" alt=""><div><strong>IPTV y TV en vivo</strong><span>Canales en vivo y eventos</span></div></a>
+        <a class="tarjeta" href="index.html#recargas"><img src="assets/logos-catalogo/tigo-combos.jpg" alt=""><div><strong>Recargas y combos</strong><span>Paquetes para tu línea</span></div></a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Cómo comprar en tres pasos</h2>
+      <div class="pasos">
+        <div class="paso"><strong>Elige tu servicio</strong><p>Revisa el plan y el precio en USD.</p></div>
+        <div class="paso"><strong>Añade al carrito</strong><p>Agrega uno o varios servicios.</p></div>
+        <div class="paso"><strong>Confirma por WhatsApp</strong><p>Enviamos tu pedido y activamos tras verificar el pago.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>¿Necesitas ayuda?</h2>
+      <div class="ayuda">
+        <a href="https://wa.me/593939166222">WhatsApp de ventas</a>
+        <a href="https://chat.whatsapp.com/CNWqZ0AhHhKDb1VKp1LqNu?s=cl&amp;p=a&amp;iam=2">Grupo de WhatsApp</a>
+        <a href="https://t.me/ClickTvDigital">Telegram</a>
+      </div>
+    </section>
+
+    <footer>Click TV Digital · Ecuador · Precios en USD sujetos a confirmación antes de pagar.</footer>
+  </div>
+</body>
+</html>
