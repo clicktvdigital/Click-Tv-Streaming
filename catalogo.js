@@ -29,6 +29,7 @@
         <div class="product-plan__info"><strong>${escapar(plan.tipo)}</strong><span>${precio}</span></div>
         <div class="product-plan__actions">
           <button class="btn btn--primary btn--small" type="button" onclick="agregarPlanCatalogo('${producto.id}',${i},'compra')">🛒 Añadir al carrito</button>
+          ${plan.tipo === "1 mes" && window.PAYPAL_PLANES?.[producto.id] ? `<button class="btn btn--outline btn--small" type="button" onclick="suscribirsePayPal('${producto.id}')">🔁 Suscripción mensual con PayPal</button>` : ""}
           <details class="plan-mas">
           <summary>Más opciones</summary>
           <div class="plan-mas__botones">
@@ -85,6 +86,24 @@
   };
 
   window.marcarPlanRenovacion = (p,i) => agregarPlanCatalogo(p,i,'renovacion');
+
+  // Crea la suscripción mensual en PayPal y lleva al visitante a aprobarla.
+  window.suscribirsePayPal = async function (productoId) {
+    const planId = window.PAYPAL_PLANES?.[productoId];
+    if (!planId) return typeof mostrarToast === 'function' && mostrarToast('Esta suscripción todavía no está disponible.', 'error');
+    try {
+      const respuesta = await fetch('/api/paypal-suscripcion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ planId }),
+      });
+      const datos = await respuesta.json();
+      if (!respuesta.ok || !datos.approveUrl) throw new Error(datos.error || 'No se pudo iniciar la suscripción.');
+      window.location.href = datos.approveUrl;
+    } catch (error) {
+      if (typeof mostrarToast === 'function') mostrarToast(error.message || 'No se pudo iniciar la suscripción.', 'error');
+    }
+  };
 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-categoria]').forEach(btn => btn.addEventListener('click', () => seleccionarCategoriaCatalogo(btn.dataset.categoria)));
