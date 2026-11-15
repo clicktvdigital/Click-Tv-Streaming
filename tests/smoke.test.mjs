@@ -95,10 +95,10 @@ test('pie: métodos de pago abren WhatsApp con el método elegido', async () => 
   const { pagina, errores } = await abrirPagina({ width: 1280, height: 800 });
   // Se registra la URL que la página intenta abrir (no se navega: no hay red en la prueba).
   await pagina.evaluate(() => { window.__abiertos = []; window.open = (url) => { window.__abiertos.push(String(url)); return null; }; });
-  await pagina.click('[data-pago="Binance"]');
+  await pagina.click('[data-pago="PayPal"]');
   const url = await pagina.evaluate(() => window.__abiertos[0] || '');
   assert.match(url, /wa\.me|whatsapp/i);
-  assert.match(decodeURIComponent(url), /Binance/);
+  assert.match(decodeURIComponent(url), /PayPal/);
   assert.deepEqual(errores, []);
   await pagina.context().close();
 });
