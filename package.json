@@ -7,6 +7,6 @@
     "playwright": "^1.65.1"
   },
   "scripts": {
-    "test": "node --test tests/smoke.test.mjs"
+    "test": "node --test tests/smoke.test.mjs tests/paypal.test.mjs"
   }
 }
