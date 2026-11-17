@@ -2646,7 +2646,9 @@ body.cart-open { overflow: hidden; }
 #contador-carrito.is-bumping { animation: cartBump .42s cubic-bezier(.2,.8,.2,1); }
 @keyframes cartBump { 45% { transform: scale(1.4) rotate(-8deg); } }
 
-.carrito-item { animation: cartItemEnter .34s ease both; }
+/* Solo la fila recién agregada entra animada; volver a pintar el carrito (cantidad, moneda,
+   renovación) no repite la entrada, que hacía parpadear filas y logos. */
+.carrito-item.is-new { animation: cartItemEnter .24s cubic-bezier(.23,1,.32,1) both; }
 @keyframes cartItemEnter { from { opacity:0; transform:translateX(18px); } }
 .carrito-item__title-row,
 .carrito-item__quantity-row,

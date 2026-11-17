@@ -7,18 +7,31 @@
   // Nombres que usamos al compartir y que se traducen al identificador interno del catálogo.
   const ALIAS = { 'netflix-normal': 'netflix-compartido' };
 
+  // En los enlaces públicos la palabra "iptv" se escribe "television-por-internet":
+  // iptv-premium → television-por-internet-premium, plataformas-iptv → plataformas-television-por-internet.
+  // El identificador interno del catálogo no cambia, y los enlaces antiguos (?producto=iptv-premium) siguen abriendo.
+  const PALABRA_INTERNA = 'iptv';
+  const PALABRA_PUBLICA = 'television-por-internet';
+  const slugPublico = (id) => String(id).split('-').map((p) => (p === PALABRA_INTERNA ? PALABRA_PUBLICA : p)).join('-');
+  const idDesdeSlug = (slug) => {
+    const valor = String(slug);
+    const id = `-${valor}-`.split(`-${PALABRA_PUBLICA}-`).join(`-${PALABRA_INTERNA}-`).slice(1, -1);
+    return ALIAS[valor] || ALIAS[id] || id;
+  };
+  window.ctvSlugProducto = { slugPublico, idDesdeSlug };
+
   // Evita que el navegador restaure la posición de desplazamiento y pise el destino del enlace.
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
   function idDesdeEnlace() {
     const valor = new URLSearchParams(window.location.search).get('producto');
-    if (!valor || !/^[a-z0-9-]{2,60}$/.test(valor)) return null;
-    return ALIAS[valor] || valor;
+    if (!valor || !/^[a-z0-9-]{2,80}$/.test(valor)) return null;
+    return idDesdeSlug(valor);
   }
 
   function enlaceDeProducto(id) {
     const base = window.location.origin + window.location.pathname;
-    return `${base}?producto=${encodeURIComponent(id)}`;
+    return `${base}?producto=${encodeURIComponent(slugPublico(id))}`;
   }
 
   window.enlaceDeProducto = enlaceDeProducto;
