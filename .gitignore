@@ -6,6 +6,3 @@ graphify-out/
 
 # Dependencias locales
 node_modules/
-
-# Herramientas locales de Claude Code (skills, ajustes); no forman parte del sitio.
-.claude/
