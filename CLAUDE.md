@@ -22,3 +22,7 @@ Al terminar cada tarea y subirla a GitHub, entrega SIEMPRE este resumen sin que 
 1. **Tabla Visual (Antes vs. Después):** Qué cambió en la interfaz, alertas o rendimiento.
 2. **Release Notes listas para GitHub:** Lista limpia con viñetas de mejoras y correcciones para la próxima versión.
 3. **Estado del Push:** Confirmación de que los cambios ya están en GitHub compilándose.
+
+## 5. Copia automática al portapapeles (Termux)
+- Al terminar cada respuesta o reporte largo, copia **siempre** el resumen al portapapeles con `termux-clipboard-set` (por ejemplo: `printf '%s' "$RESUMEN" | timeout 15 termux-clipboard-set`).
+- Guarda además el reporte completo en `$PREFIX/tmp/respuesta.txt`. En Termux, `/tmp` no tiene permiso de escritura.
