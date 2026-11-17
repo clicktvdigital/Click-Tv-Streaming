@@ -39,8 +39,9 @@ after(async () => {
   await new Promise((ok) => servidor?.close(ok));
 });
 
-async function abrirPagina(vista) {
+async function abrirPagina(vista, { fecha } = {}) {
   const pagina = await navegador.newPage({ viewport: vista, isMobile: vista.width < 600, hasTouch: vista.width < 600 });
+  if (fecha) await pagina.clock.setFixedTime(fecha);
   const errores = [];
   pagina.on('pageerror', (e) => errores.push(e.message));
   // Las APIs externas no están disponibles en la prueba: se responden vacías.
@@ -99,6 +100,36 @@ test('pie: métodos de pago abren WhatsApp con el método elegido', async () => 
   const url = await pagina.evaluate(() => window.__abiertos[0] || '');
   assert.match(url, /wa\.me|whatsapp/i);
   assert.match(decodeURIComponent(url), /PayPal/);
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
+
+test('Black Days: la promo de IPTV llega al carrito y al mensaje de WhatsApp con su desglose', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 }, { fecha: new Date('2026-11-17T15:00:00Z') });
+  assert.equal(await pagina.isVisible('#black-days-aviso'), true);
+  await pagina.click('[data-bd-ver-iptv]');
+  const caja = pagina.locator('[data-producto="iptv-premium"] .ctv-bd');
+  await caja.locator('input[value="2"]').check({ force: true });
+  await caja.locator('input[value="bd-paga3"]').check({ force: true });
+  assert.match(await caja.locator('[data-bd-desglose]').textContent(), /41[.,]50/);
+  await caja.locator('[data-bd-accion="carrito"]').click();
+  assert.equal((await pagina.textContent('#contador-carrito')).trim(), '1');
+  const itemCarrito = await pagina.textContent('#carrito-items');
+  assert.match(itemCarrito, /Más Beneficio: Paga 3 meses y recibe 3 meses gratis/);
+  assert.match(itemCarrito, /Ahorras/);
+  assert.equal(await pagina.isHidden('#carrito-ahorro-promo-fila'), false);
+  const mensaje = await pagina.evaluate(() => generarResumenPedido());
+  assert.match(mensaje, /Meses pagados: 3 · 🎁 Meses gratis: 3 · ✅ Meses activados: 6/);
+  assert.match(mensaje, /Ahorro Black Days \(ya incluido en los precios\): \$37\.00 USD/);
+  assert.match(mensaje, /Total: \$41\.50 USD/);
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
+
+test('Black Days: después del 20 de noviembre no aparece la promoción', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 1280, height: 800 }, { fecha: new Date('2026-11-21T06:00:00Z') });
+  assert.equal(await pagina.isHidden('#black-days-aviso'), true);
+  assert.equal(await pagina.locator('.ctv-bd').count(), 0);
   assert.deepEqual(errores, []);
   await pagina.context().close();
 });

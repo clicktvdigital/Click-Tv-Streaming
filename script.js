@@ -1162,6 +1162,24 @@ function normalizarCarritoDesdeCatalogo() {
 
   carrito = carrito.map((item) => {
     const producto = PRODUCTOS.find((p) => p.id === item.productoId);
+
+    // Promoción Black Days: se recalcula con los precios públicos y se retira si ya venció.
+    if (item.promo) {
+      const vigente = window.PromoBlackDays?.planParaCarrito(producto, item.promo.dispositivos || item.dispositivos, item.promo.promoId);
+      if (!vigente) return null;
+      return {
+        ...item,
+        plan: vigente.tipo,
+        precio: vigente.precio,
+        consultar: false,
+        ivaIncluido: true,
+        bloquearDescuento: true,
+        dispositivos: vigente.dispositivos,
+        promo: vigente.promo,
+        operacion: item.operacion === "renovacion" ? "renovacion" : "compra"
+      };
+    }
+
     const plan = producto?.planes?.find((p) => p.tipo === item.plan);
     if (!plan) return item;
 
@@ -1173,7 +1191,7 @@ function normalizarCarritoDesdeCatalogo() {
       bloquearDescuento: Boolean(plan.bloquearDescuento),
       operacion: item.operacion === "renovacion" ? "renovacion" : "compra"
     };
-  });
+  }).filter(Boolean);
 }
 
 function guardarCarritoEnStorage() {
@@ -1216,6 +1234,7 @@ function agregarAlCarrito(producto, plan) {
     existente.ivaIncluido = existente.ivaIncluido || Boolean(plan.ivaIncluido);
     existente.bloquearDescuento = existente.bloquearDescuento || Boolean(plan.bloquearDescuento);
     existente.dispositivos = plan.dispositivos || existente.dispositivos || null;
+    existente.promo = plan.promo || null;
     existente.operacion = operacion;
   } else {
     carrito.push({
@@ -1230,6 +1249,7 @@ function agregarAlCarrito(producto, plan) {
       ivaIncluido: Boolean(plan.ivaIncluido),
       bloquearDescuento: Boolean(plan.bloquearDescuento),
       dispositivos: plan.dispositivos || null,
+      promo: plan.promo || null,
       operacion
     });
   }
@@ -1321,10 +1341,34 @@ function obtenerMensajeRenovacion(item) {
   // El mensaje sigue la operación del producto: compra nueva o renovación.
   const cantidad = item.cantidad || 1;
   const precio = item.consultar ? "Por confirmar" : formatearPrecio(item.precio);
+  const promo = textoPromoItem(item);
   if (item.operacion === "renovacion") {
-    return `🔁 Hola Click TV Streaming, deseo renovar mi servicio.\n\n📺 Servicio: ${item.nombre}\n📦 Plan: ${item.plan}\n🔢 Cantidad: ${cantidad}\n\n✅ ¿Me indican el vencimiento y el importe?`;
+    return `🔁 Hola Click TV Streaming, deseo renovar mi servicio.\n\n📺 Servicio: ${item.nombre}\n📦 Plan: ${item.plan}\n🔢 Cantidad: ${cantidad}${promo}\n\n✅ ¿Me indican el vencimiento y el importe?`;
   }
-  return `🛒 Hola Click TV Streaming, quiero contratar este servicio.\n\n📺 Servicio: ${item.nombre}\n📦 Plan: ${item.plan}\n🔢 Cantidad: ${cantidad}\n💲 Precio mostrado: ${precio}\n\n✅ ¿Me confirman disponibilidad y activación antes de pagar?`;
+  return `🛒 Hola Click TV Streaming, quiero contratar este servicio.\n\n📺 Servicio: ${item.nombre}\n📦 Plan: ${item.plan}\n🔢 Cantidad: ${cantidad}\n💲 Precio mostrado: ${precio}${promo}\n\n✅ ¿Me confirman disponibilidad y activación antes de pagar?`;
+}
+
+// Desglose de la promoción Black Days para los mensajes (vacío si el producto no está en promoción).
+function textoPromoItem(item) {
+  const lineas = window.PromoBlackDays?.lineasPedido(item.promo, item.cantidad) || [];
+  return lineas.length ? `\n${lineas.join("\n")}` : "";
+}
+
+function htmlPromoCarrito(item) {
+  const promo = item.promo;
+  if (!promo) return "";
+  const cantidad = Math.max(1, Number(item.cantidad) || 1);
+  const mesesTexto = (n) => `${n} ${n === 1 ? "mes" : "meses"}`;
+  return `<div class="ctv-bd-item" role="group" aria-label="Detalle de la promoción Black Days">
+    <p class="ctv-bd-item__nombre">🖤 ${escaparHTML(promo.nombre)}</p>
+    <ul>
+      <li>💳 Pagas: ${mesesTexto(promo.mesesPagados)}</li>
+      <li>🎁 Gratis: ${mesesTexto(promo.mesesGratis)}</li>
+      <li>✅ Se activan: ${mesesTexto(promo.mesesActivados)} · ${promo.dispositivos} ${promo.dispositivos === 1 ? "dispositivo" : "dispositivos"}</li>
+      <li>🏷️ Precio normal ${mesesTexto(promo.mesesActivados)}: ${formatearPrecio(promo.precioReferencia * cantidad)}</li>
+      <li class="ctv-bd-item__ahorro">💸 Ahorras: ${formatearPrecio(promo.ahorro * cantidad)}</li>
+    </ul>
+  </div>`;
 }
 
 function renovarItemWhatsApp(itemId) {
@@ -1370,7 +1414,8 @@ function renderCarrito() {
             <span class="operation-badge ${item.operacion === "renovacion" ? "is-renewal" : ""}">${item.operacion === "renovacion" ? "Renovación" : "Compra nueva"}</span>
           </div>
           <p class="carrito-item__plan">${item.plan} · ${item.consultar ? "Precio por confirmar" : formatearPrecio(item.precio)}${item.bloquearDescuento ? " · Sin cupón" : ""}</p>
-          ${item.dispositivos ? `
+          ${htmlPromoCarrito(item)}
+          ${item.promo ? "" : item.dispositivos ? `
             <label class="mini-label">Dispositivos
               <input type="number" min="1" max="10" value="${item.dispositivos}" onchange="modificarDispositivos('${item.itemId}', this.value)">
             </label>
@@ -1400,6 +1445,9 @@ function renderCarrito() {
   const totales = calcularTotales();
   actualizarTexto("carrito-subtotal", formatearPrecio(totales.subtotal));
   actualizarTexto("carrito-descuento", `- ${formatearPrecio(totales.descuento)}`);
+  actualizarTexto("carrito-ahorro-promo", formatearPrecio(totales.ahorroPromo));
+  const filaAhorroPromo = document.getElementById("carrito-ahorro-promo-fila");
+  if (filaAhorroPromo) filaAhorroPromo.hidden = !(totales.ahorroPromo > 0);
   const contienePreciosPorConfirmar = carrito.some((item) => item.consultar);
   actualizarTexto("carrito-total", `${formatearPrecio(totales.total)}${contienePreciosPorConfirmar ? " + valores por confirmar" : ""}`);
   actualizarTexto("paypal-total", `$${totales.totalPaypal.toFixed(2)} USD`);
@@ -1422,13 +1470,15 @@ function calcularTotales() {
     return acc + Number(item.precio) * Number(item.cantidad);
   }, 0);
   const descuento = cuponManualActivo ? subtotalDescontable * (Number(cuponManualActivo.porcentaje) / 100) : 0;
+  // Ahorro informativo de Black Days: ya está incluido en el precio de cada producto en promoción.
+  const ahorroPromo = carrito.reduce((acc, item) => acc + (item.promo ? Number(item.promo.ahorro) * Number(item.cantidad) : 0), 0);
   const base = Math.max(subtotal - descuento, 0);
   const total = base;
   const totalPaypal = total > 0
     ? (total + CONFIG.paypalComisionFija) / (1 - CONFIG.paypalComisionPorcentaje)
     : 0;
 
-  return { subtotal, descuento, base, total, totalPaypal };
+  return { subtotal, descuento, ahorroPromo, base, total, totalPaypal };
 }
 
 function obtenerCuponManualActivo() {
@@ -1868,11 +1918,12 @@ function generarResumenPedido() {
   const resumen = carrito.map((item) => {
     const operacion = item.operacion === "renovacion" ? "RENOVACIÓN" : "COMPRA NUEVA";
     const precioLinea = item.consultar ? " · PRECIO POR CONFIRMAR" : ` · $${Number(item.precio).toFixed(2)} USD c/u`;
-    return `• ${operacion}: ${item.nombre} (${item.plan}) x${item.cantidad}${precioLinea}`;
+    return `• ${operacion}: ${item.nombre} (${item.plan}) x${item.cantidad}${precioLinea}${textoPromoItem(item)}`;
   }).join("\n");
   const totales = calcularTotales();
   const cuponManualActivo = obtenerCuponManualActivo();
-  return `🛒 Hola Click TV Streaming, quiero finalizar mi compra.\n\n${resumen}\n\n💳 Método elegido: ${obtenerNombreMetodoPago(metodoPagoActual)}\n🧾 Subtotal: $${totales.subtotal.toFixed(2)} USD\n🏷️ Descuento aplicado: $${totales.descuento.toFixed(2)} USD\n✅ Total: $${totales.total.toFixed(2)} USD${cuponManualActivo ? `\nCupón: ${cuponManualActivo.codigo} (no aplica a recargas o combos oficiales de operadora)` : ""}\n\n📲 Por favor, confirmen disponibilidad y pasos para activar.`;
+  const ahorroPromo = totales.ahorroPromo > 0 ? `\n🖤 Ahorro Black Days (ya incluido en los precios): $${totales.ahorroPromo.toFixed(2)} USD` : "";
+  return `🛒 Hola Click TV Streaming, quiero finalizar mi compra.\n\n${resumen}\n\n💳 Método elegido: ${obtenerNombreMetodoPago(metodoPagoActual)}\n🧾 Subtotal: $${totales.subtotal.toFixed(2)} USD${ahorroPromo}\n🏷️ Descuento aplicado: $${totales.descuento.toFixed(2)} USD\n✅ Total: $${totales.total.toFixed(2)} USD${cuponManualActivo ? `\nCupón: ${cuponManualActivo.codigo} (no aplica a recargas o combos oficiales de operadora)` : ""}\n\n📲 Por favor, confirmen disponibilidad y pasos para activar.`;
 }
 
 function enviarPedidoWhatsApp() {

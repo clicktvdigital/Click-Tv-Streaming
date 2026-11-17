@@ -1,0 +1,95 @@
+/* CLICK TV STREAMING · Promoción Black Days · 17/11/2026
+   Diseño azul de la tienda, contraste alto, objetivos táctiles de 44 px y foco visible. */
+:root {
+  --ctv-bd-fondo:#06152b; --ctv-bd-panel:#0b2a50; --ctv-bd-borde:#4aa3ff;
+  --ctv-bd-tinta:#f5faff; --ctv-bd-suave:#cfe6ff; --ctv-bd-acento:#7fd0ff;
+  --ctv-bd-ahorro:#8ff0b8; --ctv-bd-foco:#ffd84d;
+}
+
+/* Selector dentro de cada tarjeta IPTV */
+.ctv-bd {
+  margin:.9rem 0; padding:1rem; border-radius:16px;
+  background:linear-gradient(160deg,var(--ctv-bd-fondo),var(--ctv-bd-panel));
+  border:2px solid var(--ctv-bd-borde); color:var(--ctv-bd-tinta);
+  min-width:0; overflow-wrap:anywhere;
+}
+.ctv-bd__sello {
+  display:inline-block; margin:0 0 .35rem; padding:.2rem .65rem; border-radius:999px;
+  background:#000; color:#fff; border:1px solid var(--ctv-bd-acento);
+  font-size:.78rem; font-weight:900; letter-spacing:.02em;
+}
+.ctv-bd__titulo { margin:.2rem 0 .7rem; font-size:1.05rem; color:#fff; }
+.ctv-bd__grupo { border:0; margin:0 0 .75rem; padding:0; min-width:0; }
+.ctv-bd__grupo legend { padding:0; margin-bottom:.4rem; font-weight:850; color:var(--ctv-bd-suave); }
+.ctv-bd__chips { display:flex; flex-wrap:wrap; gap:.45rem; }
+.ctv-bd__opciones { display:grid; gap:.45rem; }
+
+.ctv-bd__chip, .ctv-bd__opcion { position:relative; display:block; cursor:pointer; }
+.ctv-bd__chip input, .ctv-bd__opcion input {
+  position:absolute; inset:0; width:100%; height:100%; margin:0; opacity:0; cursor:pointer;
+}
+.ctv-bd__chip span, .ctv-bd__opcion > span {
+  display:flex; min-height:44px; align-items:center; border-radius:12px;
+  background:#0a2142; border:1.5px solid #3d79b4; color:var(--ctv-bd-tinta);
+  transition:background-color .15s ease, border-color .15s ease;
+}
+.ctv-bd__chip span { padding:.45rem .9rem; font-weight:800; }
+.ctv-bd__opcion > span { flex-direction:column; align-items:flex-start; justify-content:center; padding:.55rem .85rem; }
+.ctv-bd__opcion strong { color:#fff; font-weight:900; }
+.ctv-bd__opcion small { color:var(--ctv-bd-suave); font-size:.86rem; }
+.ctv-bd__chip input:checked + span, .ctv-bd__opcion input:checked + span {
+  background:#0d4f9c; border-color:var(--ctv-bd-acento); box-shadow:inset 0 0 0 1px var(--ctv-bd-acento);
+}
+.ctv-bd__opcion input:checked + span strong::before { content:"✓ "; }
+.ctv-bd__chip input:focus-visible + span, .ctv-bd__opcion input:focus-visible + span {
+  outline:3px solid var(--ctv-bd-foco); outline-offset:2px;
+}
+
+.ctv-bd__desglose { margin:.2rem 0 .8rem; padding:.75rem .85rem; border-radius:12px; background:#041227; border:1px solid #2f6aa3; }
+.ctv-bd__lista { margin:0; display:grid; gap:.3rem; }
+.ctv-bd__fila { display:flex; justify-content:space-between; gap:.75rem; flex-wrap:wrap; }
+.ctv-bd__fila dt { color:var(--ctv-bd-suave); }
+.ctv-bd__fila dd { margin:0; font-weight:850; color:#fff; text-align:right; }
+.ctv-bd__fila s { color:#b9cde4; }
+.ctv-bd__fila--ahorro dt, .ctv-bd__fila--ahorro dd { color:var(--ctv-bd-ahorro); font-weight:900; }
+.ctv-bd__fila--total { margin-top:.3rem; padding-top:.45rem; border-top:1px solid #2f6aa3; font-size:1.08rem; }
+.ctv-bd__fila--total dt { color:#fff; font-weight:900; }
+
+.ctv-bd__acciones { display:flex; flex-wrap:wrap; gap:.5rem; }
+.ctv-bd__acciones .btn { min-height:44px; flex:1 1 12rem; }
+.ctv-bd__acciones .btn:active { transform:scale(.97); }
+.ctv-bd__nota { margin:.6rem 0 0; font-size:.82rem; color:var(--ctv-bd-suave); }
+
+/* Aviso en la sección de promociones */
+.ctv-bd-aviso { margin-bottom:1.2rem; }
+.ctv-bd-aviso[hidden] { display:none !important; }
+.ctv-bd-aviso__caja {
+  padding:1.2rem; border-radius:18px; color:var(--ctv-bd-tinta);
+  background:linear-gradient(150deg,#000 0%,#071d3c 55%,#0b3a74 100%);
+  border:2px solid var(--ctv-bd-borde);
+}
+.ctv-bd-aviso__caja h2 { margin:.3rem 0 .6rem; font-size:clamp(1.3rem,4.5vw,1.9rem); color:#fff; }
+.ctv-bd-aviso__lista { margin:0 0 1rem; padding:0; list-style:none; display:grid; gap:.4rem; }
+.ctv-bd-aviso__lista li { color:var(--ctv-bd-suave); }
+.ctv-bd-aviso__lista strong { color:#fff; }
+.ctv-bd-aviso .btn { min-height:44px; }
+
+/* Detalle de la promoción dentro del carrito */
+#panel-carrito .ctv-bd-item {
+  margin:.4rem 0; padding:.55rem .7rem; border-radius:10px;
+  background:#041227; border:1px solid var(--ctv-bd-borde);
+}
+#panel-carrito .ctv-bd-item__nombre { margin:0 0 .25rem; font-weight:900; color:#fff !important; }
+#panel-carrito .ctv-bd-item ul { margin:0; padding:0; list-style:none; display:grid; gap:.15rem; font-size:.88rem; }
+#panel-carrito .ctv-bd-item li { color:var(--ctv-bd-suave) !important; }
+#panel-carrito .ctv-bd-item .ctv-bd-item__ahorro { color:var(--ctv-bd-ahorro) !important; font-weight:900; }
+#panel-carrito .cart-summary .ctv-bd-resumen-ahorro[hidden] { display:none !important; }
+#panel-carrito .cart-summary .ctv-bd-resumen-ahorro :is(span,strong) { color:var(--ctv-bd-ahorro) !important; font-weight:900; }
+
+/* Resumen de la ventana de pago */
+.ctv-pg-promo { margin:.4rem 0 0; padding:.5rem .7rem; border-radius:10px; border:1px solid var(--ctv-bd-borde); background:#041227; color:var(--ctv-bd-suave); white-space:pre-line; }
+
+@media (prefers-reduced-motion:reduce) {
+  .ctv-bd__chip span, .ctv-bd__opcion > span { transition:none; }
+  .ctv-bd__acciones .btn:active { transform:none; }
+}
