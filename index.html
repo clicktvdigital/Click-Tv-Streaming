@@ -78,6 +78,7 @@
   <link rel="stylesheet" href="clicktv-asistente-2026.css?v=20261111-5">
   <link rel="stylesheet" href="clicktv-accesibilidad-tactil.css?v=20261113-1">
   <link rel="stylesheet" href="clicktv-movil-mejoras-2026.css?v=20261113-2">
+  <link rel="stylesheet" href="clicktv-promo-black-days.css?v=20261117-1">
 </head>
 <body>
 <div id="top" tabindex="-1"></div>
@@ -491,6 +492,18 @@
     </section>
 
     <section id="promos" class="section section--accent">
+      <div id="black-days-aviso" class="container ctv-bd-aviso" hidden>
+        <div class="ctv-bd-aviso__caja">
+          <p class="ctv-bd__sello">🖤 Black Days · Del 15 al 20 de noviembre</p>
+          <h2>Hasta 6 meses gratis en IPTV</h2>
+          <ul class="ctv-bd-aviso__lista">
+            <li><strong>Promo Especial:</strong> Paga 2 meses y recibe 1 mes gratis.</li>
+            <li><strong>Más Beneficio:</strong> Paga 3 meses y recibe 3 meses gratis.</li>
+            <li><strong>Black Days:</strong> Paga 6 meses y recibe 6 meses gratis.</li>
+          </ul>
+          <a class="btn btn--primary" href="#streaming" data-bd-ver-iptv>📺 Ver planes IPTV en promoción</a>
+        </div>
+      </div>
       <div class="container stats-grid">
         <div class="stat-card"><strong>🌎 14</strong><span>países atendidos</span></div>
         <div class="stat-card"><strong>⚡</strong><span>Activación tras confirmar pago</span></div>
@@ -834,6 +847,7 @@
 
     <div class="cart-summary">
       <p><span>Subtotal</span><strong id="carrito-subtotal">$0.00 USD</strong></p>
+      <p id="carrito-ahorro-promo-fila" class="ctv-bd-resumen-ahorro" hidden><span>🖤 Ahorro Black Days (ya incluido)</span><strong id="carrito-ahorro-promo">$0.00 USD</strong></p>
       <p><span>Cupón de descuento</span><strong id="carrito-descuento">- $0.00 USD</strong></p>
       <p class="total"><span>Total final</span><strong id="carrito-total">$0.00 USD</strong></p>
     </div>
@@ -1028,13 +1042,14 @@
   <script src="clicktv-navidad-fx.js?v=20261114-1" defer></script>
   <script src="clicktv-navidad-escena.js?v=20261114-1" defer></script>
   <script src="clicktv-precios-publico-2026.js?v=20261015-4" defer></script>
-  <script src="catalogo.js" defer></script>
+  <script src="clicktv-promo-black-days.js?v=20261117-1" defer></script>
+  <script src="catalogo.js?v=20261117-1" defer></script>
   <script src="clicktv-enlaces-2026.js?v=20261111-6" defer></script>
   <script src="clicktv-asistente-2026.js?v=20261111-4" defer></script>
-  <script src="script.js" defer></script>
+  <script src="script.js?v=20261117-1" defer></script>
   <script src="clicktv-accesible.js?v=20261015-4" defer></script>
   <script src="clicktv-atencion-pagos.js?v=20261015-2" defer></script>
-  <script src="clicktv-pago-producto.js?v=20261111-4" defer></script>
+  <script src="clicktv-pago-producto.js?v=20261117-1" defer></script>
   <script src="clicktv-final-visual.js?v=20261015-3" defer></script>
   <script src="clicktv-logos-catalogo.js?v=20261111-22" defer></script>
   <script src="clicktv-app-2026.js?v=20261111-4" defer></script>

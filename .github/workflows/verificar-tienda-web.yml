@@ -98,7 +98,7 @@ jobs:
 
       - name: Validar sintaxis JavaScript
         run: |
-          for archivo in data.js catalogo.js script.js clicktv-accesible.js clicktv-precios-publico-2026.js clicktv-atencion-pagos.js clicktv-pago-producto.js; do
+          for archivo in data.js catalogo.js script.js clicktv-accesible.js clicktv-precios-publico-2026.js clicktv-atencion-pagos.js clicktv-pago-producto.js clicktv-promo-black-days.js; do
             test -s "$archivo" || { echo "Falta: $archivo"; exit 1; }
             node --check "$archivo"
           done
@@ -106,6 +106,18 @@ jobs:
             test -s "$archivo" || { echo "Falta: $archivo"; exit 1; }
             node --check "$archivo"
           done
+
+      - name: Pruebas de precios, promoción Black Days y PayPal
+        run: |
+          grep -Fq 'clicktv-promo-black-days.js' index.html
+          grep -Fq 'clicktv-promo-black-days.css' index.html
+          npm run test:unit
+
+      - name: Pruebas en navegador (celular y escritorio)
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          node --test tests/smoke.test.mjs
 
       - name: Bloquear credenciales en el código publico
         run: |

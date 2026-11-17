@@ -46,6 +46,7 @@
       <button class="product-card__enlace" type="button" onclick="copiarEnlaceProducto('${escapar(producto.id)}', this)">🔗 Copiar enlace</button>
       <div class="product-card__head"><span class="product-card__icon">${producto.icono || "📺"}</span><div><h3>${escapar(producto.nombre)}</h3><div class="product-tags">${(producto.etiquetas||[]).map(e=>`<span>${escapar(e)}</span>`).join("")}</div></div></div>
       <p>${escapar(producto.descripcion || "")}</p>
+      ${typeof window.PromoBlackDays?.htmlSelector === "function" ? window.PromoBlackDays.htmlSelector(producto) : ""}
       <details class="product-plans-wrap"${(window.productoEnfocado || window.matchMedia("(min-width: 681px)").matches) ? " open" : ""}>
         <summary>Ver ${(producto.planes || []).length} ${(producto.planes || []).length === 1 ? "plan" : "planes"} y precios</summary>
         <div class="product-plans">${planes}</div>

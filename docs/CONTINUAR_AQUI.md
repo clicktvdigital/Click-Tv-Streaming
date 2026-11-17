@@ -13,6 +13,13 @@
 - **Pendientes:** confirmar remotamente `origin` con el nombre nuevo, probar visualmente pagos/carrito/WhatsApp y auditar archivos antes de plantear limpiezas.
 - Las notas posteriores documentan etapas históricas y pueden mencionar tareas que desde entonces fueron completadas.
 
+## Black Days IPTV (17/11/2026, rama `feat/promociones-meses-gratis`)
+
+- Módulo `clicktv-promo-black-days.js` + `.css`: vigente del 15/11/2026 00:00 al 20/11/2026 23:59 (hora de Ecuador); fuera de esas fechas no se muestra y se retira del carrito al recargar.
+- 3 promociones para 1, 2 o 3 dispositivos en los 10 IPTV con planes por dispositivo: paga 2 + 1 gratis, paga 3 + 3 gratis, paga 6 + 6 gratis.
+- Precio (opción A aprobada): cobra el plan público de N meses (2 meses = 2 × mensual); ahorro = plan público de la duración activada − cobro. Sin cupón. Solo precios públicos.
+- Pruebas: `npm run test:unit` (cálculo y fechas) y `tests/smoke.test.mjs` (flujo en navegador, corre en GitHub Actions; en Termux no hay Chromium).
+
 ## Proyecto correcto
 
 - Repositorio actual: `clicktvdigital/Click-Tv-Streaming`.

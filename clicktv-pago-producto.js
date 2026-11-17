@@ -53,11 +53,17 @@
     `Producto: ${pedido.producto}`,
     `Plan: ${pedido.plan}`,
     `Importe mostrado: ${formato(pedido.precio)}`,
+    ...lineasPromo(),
     `Método elegido: ${pedido.metodoNombre || 'Por seleccionar'}`,
     'Estado: PAGO PENDIENTE DE VERIFICAR',
     'Adjuntaré el comprobante desde WhatsApp si ya realicé el pago.',
     'Por favor, confirmen recepción, disponibilidad y activación.'
   ].join('\n') : '';
+  // Desglose Black Days (meses pagados, gratis, ahorro) cuando el pedido viene de la promoción.
+  function lineasPromo(){
+    const lineas = pedido?.promo && window.PromoBlackDays ? window.PromoBlackDays.lineasPedido(pedido.promo) : [];
+    return lineas.map(l=>l.trim());
+  }
   function mensajeWhatsApp(soporte=false){
     const n=waNumero(soporte);
     if(!n){ $('ctv-pg-status').textContent='No hay WhatsApp configurado. Usa Telegram.';return; }
@@ -168,6 +174,7 @@
     dlg.innerHTML=`<form method="dialog" class="ctv-pg-close-form"><button type="submit" class="ctv-pg-close" aria-label="Cerrar opciones de pago">✕ Cerrar</button></form>
       <div class="ctv-pg-head"><h2 id="ctv-pg-title">💳 Pagar este plan</h2>
       <p class="ctv-pg-order" id="ctv-pg-resumen"></p>
+      <p class="ctv-pg-promo" id="ctv-pg-promo" hidden></p>
       <p id="ctv-pg-ref"></p>
       <p class="ctv-pg-note">Elige la forma de pago. Primero confirma disponibilidad. El pedido no se activa sin comprobar el pago.</p></div>
       <fieldset class="ctv-pg-operaciones"><legend>¿Qué necesitas?</legend>
@@ -242,6 +249,8 @@
     const referencia=refPedido();
     pedido={...order,ref:referencia,operacion:'nueva',metodoNombre:''};
     $('ctv-pg-resumen').textContent=`${order.producto} · ${order.plan} · ${formato(order.precio)}`;
+    const promoBox=$('ctv-pg-promo'), promo=lineasPromo();
+    if(promoBox){promoBox.textContent=promo.join('\n');promoBox.hidden=!promo.length;}
     $('ctv-pg-ref').textContent=`Referencia del pedido: ${referencia}`;
     document.querySelectorAll('input[name="ctv-pg-metodo"]').forEach(i=>i.checked=false);
     const n=document.querySelector('input[name="ctv-pg-operacion"][value="nueva"]');if(n)n.checked=true;
@@ -252,6 +261,8 @@
     else {dialog.setAttribute('open','');document.body.classList.add('ctv-pg-open');}
     dialog.querySelector('.ctv-pg-close').focus();
   }
+  // Permite abrir esta ventana desde otros módulos (por ejemplo, la promoción Black Days).
+  window.ctvAbrirPagoProducto = open;
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',iniciar,{once:true});
   else iniciar();
 })();
