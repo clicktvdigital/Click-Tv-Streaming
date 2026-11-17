@@ -165,3 +165,27 @@ body .brand,body .brand__logo,body .brand__logo img { box-shadow: none !importan
 
 /* Logos con fondo negro en el carrito: insignia negra, sin capa azul. */
 #panel-carrito .carrito-item__icono.ctv-brand-badge.ctv-brand-dark { background:#050607 !important; }
+
+/* Ranura fija del emblema (17/11/2026).
+   La columna de la cuadrícula y la insignia comparten un solo tamaño: antes la columna medía 42px
+   en celular y la insignia 56/48px, así que se montaba sobre el texto. */
+#panel-carrito .carrito-item { --ctv-cart-badge: 56px; grid-template-columns: var(--ctv-cart-badge) minmax(0,1fr) auto !important; }
+#panel-carrito .carrito-item__icono,
+#panel-carrito .carrito-item__icono.ctv-brand-badge {
+  width: var(--ctv-cart-badge) !important; min-width: var(--ctv-cart-badge) !important;
+  height: var(--ctv-cart-badge) !important; flex: 0 0 var(--ctv-cart-badge) !important;
+  align-self: start; justify-self: start;
+}
+@media (max-width: 720px) {
+  #panel-carrito .carrito-item { --ctv-cart-badge: 52px; grid-template-columns: var(--ctv-cart-badge) minmax(0,1fr) !important; }
+}
+@media (max-width: 420px) {
+  #panel-carrito .carrito-item { --ctv-cart-badge: 48px; }
+}
+/* Logos propios (IPTV, Tele Latino, Stella…): llenan la insignia como en el catálogo.
+   La regla general de arriba los volvía blancos con brightness(0) invert(1). */
+#panel-carrito .carrito-item__icono.ctv-cart-badge--local { padding: 0 !important; }
+#panel-carrito .ctv-cart-badge img.ctv-brand-local {
+  filter: none !important; object-fit: cover !important; border-radius: inherit;
+}
+#panel-carrito .ctv-cart-badge img.ctv-brand-local.ctv-brand-blend { filter: contrast(1.12) brightness(1.06) !important; }

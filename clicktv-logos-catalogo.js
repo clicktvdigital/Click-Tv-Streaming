@@ -170,7 +170,8 @@
           img.src='https://www.google.com/s2/favicons?domain='+encodeURIComponent(info.domain)+'&sz=128';
         } else fallback();
       });
-      if (local) { img.src = local.src; img.classList.add('ctv-brand-local'); if (local.blend) { img.classList.add('ctv-brand-blend'); icon.classList.add('ctv-brand-dark'); } }
+      // Mismo tratamiento que en la tarjeta del catálogo: el logo local llena la insignia, sin filtro blanco.
+      if (local) { img.src = local.src; img.classList.add('ctv-brand-local'); icon.classList.add('ctv-cart-badge--local'); if (local.blend) { img.classList.add('ctv-brand-blend'); icon.classList.add('ctv-brand-dark'); } }
       else img.src='https://cdn.jsdelivr.net/npm/simple-icons@v15/icons/'+info.slug+'.svg';
       icon.appendChild(img);
     }

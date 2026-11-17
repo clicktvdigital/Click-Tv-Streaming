@@ -39,7 +39,7 @@ after(async () => {
   await new Promise((ok) => servidor?.close(ok));
 });
 
-async function abrirPagina(vista, { fecha } = {}) {
+async function abrirPagina(vista, { fecha, consulta = '' } = {}) {
   const pagina = await navegador.newPage({ viewport: vista, isMobile: vista.width < 600, hasTouch: vista.width < 600 });
   if (fecha) await pagina.clock.setFixedTime(fecha);
   const errores = [];
@@ -47,7 +47,7 @@ async function abrirPagina(vista, { fecha } = {}) {
   // Las APIs externas no están disponibles en la prueba: se responden vacías.
   await pagina.route(/\/api\/(resenas|partidos)/, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: '{"resenas":[],"matches":[],"ligas":[]}' }));
   await pagina.route(/^https?:\/\/(?!127\.0\.0\.1)/, (r) => r.abort());
-  await pagina.goto(base, { waitUntil: 'load' });
+  await pagina.goto(base + consulta, { waitUntil: 'load' });
   await pagina.waitForTimeout(800);
   return { pagina, errores };
 }
@@ -133,3 +133,44 @@ test('Black Days: después del 20 de noviembre no aparece la promoción', async 
   assert.deepEqual(errores, []);
   await pagina.context().close();
 });
+
+test('enlaces: el nuevo y el antiguo abren IPTV Premium, y se comparte con television-por-internet', async () => {
+  for (const consulta of ['?producto=television-por-internet-premium', '?producto=iptv-premium']) {
+    const { pagina, errores } = await abrirPagina({ width: 390, height: 844 }, { consulta });
+    const tarjetas = await pagina.locator('#catalogo-grid .product-card').evaluateAll((els) => els.map((e) => e.dataset.producto));
+    assert.deepEqual(tarjetas, ['iptv-premium'], consulta);
+    const enlace = await pagina.evaluate(() => window.enlaceDeProducto('iptv-premium'));
+    assert.match(enlace, /\?producto=television-por-internet-premium$/);
+    assert.deepEqual(errores, []);
+    await pagina.context().close();
+  }
+});
+
+for (const [nombre, vista] of [['celular 390 px', { width: 390, height: 844 }], ['escritorio 1280 px', { width: 1280, height: 800 }]]) {
+  test(`carrito ${nombre}: el logo IPTV se ve, tiene ranura fija y no se monta sobre el texto`, async () => {
+    const { pagina, errores } = await abrirPagina(vista, { fecha: new Date('2026-11-17T15:00:00Z') });
+    await pagina.click('[data-bd-ver-iptv]');
+    await pagina.locator('[data-producto="iptv-premium"] .ctv-bd [data-bd-accion="carrito"]').click();
+    const medir = () => pagina.evaluate(() => {
+      const fila = document.querySelector('#carrito-items .carrito-item[data-producto="iptv-premium"]');
+      const icono = fila.querySelector('.carrito-item__icono');
+      const img = icono.querySelector('img');
+      const a = icono.getBoundingClientRect(), b = fila.querySelector('.carrito-item__info').getBoundingClientRect();
+      return { ancho: Math.round(a.width), alto: Math.round(a.height), separado: a.right <= b.left + 0.5,
+        filtro: img ? getComputedStyle(img).filter : 'sin imagen', animada: fila.classList.contains('is-new') };
+    });
+    const antes = await medir();
+    assert.notEqual(antes.filtro, 'sin imagen');
+    assert.doesNotMatch(antes.filtro, /invert/, 'el logo propio no debe volverse blanco');
+    assert.equal(antes.ancho, antes.alto);
+    assert.ok(antes.ancho >= 48 && antes.ancho <= 56, `ranura de ${antes.ancho}px`);
+    assert.ok(antes.separado, 'el emblema no debe montarse sobre el texto');
+    // Cambiar la cantidad vuelve a pintar el carrito: el logo sigue y la fila no se anima otra vez.
+    await pagina.locator('#carrito-items .carrito-item[data-producto="iptv-premium"] button[aria-label="Aumentar cantidad"]').dispatchEvent('click');
+    const despues = await medir();
+    assert.deepEqual({ ...despues, animada: false }, { ...antes, animada: false });
+    assert.equal(despues.animada, false);
+    assert.deepEqual(errores, []);
+    await pagina.context().close();
+  });
+}

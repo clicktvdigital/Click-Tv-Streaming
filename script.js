@@ -23,6 +23,8 @@ let indiceResena = 0;
 let metodoPagoActual = "transferencia";
 let usuariosConectados = 48;
 let cuponAhorroAplicado = null;
+// Fila recién agregada: es la única que se anima al volver a pintar el carrito.
+let itemCarritoNuevo = null;
 let ubicacionCliente = {
   ciudad: "",
   pais: "Ecuador",
@@ -1226,6 +1228,7 @@ function agregarAlCarrito(producto, plan) {
   const operacion = plan.operacion === "renovacion" ? "renovacion" : "compra";
   const itemId = `${producto.id}-${normalizarTexto(plan.tipo)}`;
   const existente = carrito.find((item) => item.itemId === itemId);
+  itemCarritoNuevo = existente ? null : itemId;
 
   if (existente) {
     existente.cantidad += 1;
@@ -1406,7 +1409,7 @@ function renderCarrito() {
     contenedor.querySelector(".btn")?.addEventListener("click", () => { if (typeof cerrarCarrito === "function") cerrarCarrito(); });
   } else {
     contenedor.innerHTML = carrito.map((item) => `
-      <div class="carrito-item" data-producto="${item.productoId}">
+      <div class="carrito-item${item.itemId === itemCarritoNuevo ? " is-new" : ""}" data-producto="${item.productoId}">
         <span class="carrito-item__icono">${item.icono}</span>
         <div class="carrito-item__info">
           <div class="carrito-item__title-row">
@@ -1441,6 +1444,7 @@ function renderCarrito() {
       </div>
     `).join("");
   }
+  itemCarritoNuevo = null;
 
   const totales = calcularTotales();
   actualizarTexto("carrito-subtotal", formatearPrecio(totales.subtotal));
