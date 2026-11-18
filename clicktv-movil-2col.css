@@ -479,13 +479,7 @@ html.pestana-oculta :is(.navidad-nieve span, .navidad-santa, .navidad-santa *, .
   #ayuda .faq-card h3 { font-size: .92rem; line-height: 1.25; }
   #ayuda .faq-card p { font-size: .8rem; line-height: 1.4; margin: .3rem 0 0; }
 
-  #mundial .match-card { padding: 10px 8px !important; min-width: 0; }
-  #mundial .mundial-duelo { gap: 4px !important; }
-  #mundial .mundial-team strong { font-size: .72rem !important; line-height: 1.2; overflow-wrap: anywhere; }
-  #mundial .mundial-escudo { width: 28px !important; height: 28px !important; }
-  #mundial .mundial-marcador strong { font-size: 1rem !important; }
-  #mundial .mundial-marcador span,
-  #mundial .match-card p { font-size: .72rem !important; line-height: 1.3; }
+  /* Partidos: el formato horizontal vive en la sección 11 y en clicktv-ajustes-finales-2026.css. */
 
   #clicktv-pagos-faciles .clicktv-payment-guide__links { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   #clicktv-pagos-faciles .clicktv-payment-guide__links > :first-child { grid-column: 1 / -1; }
@@ -513,24 +507,18 @@ html.pestana-oculta :is(.navidad-nieve span, .navidad-santa, .navidad-santa *, .
 .planes-toggle:active { background: rgba(29, 95, 191, .3); }
 .planes-toggle:focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
 
-/* 11. Partidos: bloques de 4 (2×2 en celular, 4 en fila en escritorio), alturas iguales y sin huecos:
-   la última fila incompleta se reparte a todo el ancho. */
+/* 11. Partidos en formato horizontal: cada tarjeta es más ancha que alta (equipos en fila).
+   1 columna en celular y 2 desde 720 px (bloques de 4 = 2×2); la última impar ocupa todo el ancho. */
 #mundial .mundial-cards {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-template-columns: minmax(0, 1fr) !important;
   gap: clamp(8px, 2vw, 16px);
   align-items: stretch;
 }
 #mundial .mundial-cards > .match-card { min-width: 0; height: 100%; box-sizing: border-box; }
-@media (max-width: 999px) {
+@media (min-width: 720px) {
+  #mundial .mundial-cards { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   #mundial .mundial-cards > .match-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
-}
-@media (min-width: 1000px) {
-  #mundial .mundial-cards { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
-  #mundial .mundial-cards > .match-card:last-child:nth-child(4n+1) { grid-column: 1 / -1; }
-  #mundial .mundial-cards > .match-card:nth-last-child(2):nth-child(4n+1),
-  #mundial .mundial-cards > .match-card:last-child:nth-child(4n+2),
-  #mundial .mundial-cards > .match-card:last-child:nth-child(4n+3) { grid-column: span 2; }
 }
 #mundial .mundial-mas { margin-top: clamp(8px, 2vw, 16px); }
 #mundial .mundial-mas > summary {

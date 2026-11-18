@@ -44,6 +44,11 @@
       if (enlace) abrirAcordeones(destinoDeHash(enlace.getAttribute('href')));
     }, true);
     window.addEventListener('hashchange', () => abrirPorHash(location.hash, true));
+    // Los marcados data-inicio="cerrado" (p. ej. «Deja tu reseña») cargan siempre plegados, también al volver
+    // con el botón Atrás; solo se abren por un clic del cliente o un enlace que apunte a su contenido.
+    const cerrarIniciales = () => document.querySelectorAll('details[data-inicio="cerrado"][open]').forEach((d) => { d.open = false; });
+    cerrarIniciales();
+    window.addEventListener('pageshow', (e) => { if (e.persisted) { cerrarIniciales(); abrirPorHash(location.hash, false); } });
     abrirPorHash(location.hash, true);
 
     // Si algo enfoca un campo dentro de un desplegable cerrado (p. ej. un error de validación), se abre.

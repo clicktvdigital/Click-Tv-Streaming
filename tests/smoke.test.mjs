@@ -476,6 +476,9 @@ test('mini TV: video oficial y tráilers en pestañas, CTA y ✕ fuera del video
   // Pestaña de cine: tráilers oficiales de YouTube.
   await pagina.click('#ctv-tv-tab-cine');
   assert.equal(await pagina.getAttribute('#ctv-tv-tab-cine', 'aria-selected'), 'true');
+  // El clic del cliente carga el tráiler con audio (mute=0).
+  const srcTrailer = await pagina.getAttribute('#ctv-tv-reproductor iframe', 'src');
+  assert.equal(new URL(srcTrailer).searchParams.get('mute'), '0', 'tráiler con sonido tras el clic');
   assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').paused), true, 'el video oficial se pausa');
   assert.ok(await pagina.locator('#ctv-tv-trailer option').count() >= 2);
   assert.equal(await sinSolape(), true, 'en Estrenos de Cine el CTA tampoco tapa el video');
@@ -529,7 +532,7 @@ test('precios en acordeón: Claro Paquetes Megas muestra 4 planes y despliega el
   await pagina.context().close();
 });
 
-test('partidos en celular: 4 por bloque, el resto plegado, sin huecos y lo abierto se conserva', async () => {
+test('partidos en celular: 4 por bloque en formato horizontal, el resto plegado y lo abierto se conserva', async () => {
   const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
   const pintar = () => pagina.evaluate(() => {
     const base = normalizarPartidosLocales(MUNDIAL_2026)[0];
@@ -544,11 +547,22 @@ test('partidos en celular: 4 por bloque, el resto plegado, sin huecos y lo abier
   const huecos = await pagina.evaluate(() => [...document.querySelectorAll('#mundial-grid .mundial-cards')].map((grid) => {
     const cards = [...grid.children];
     const ultima = cards[cards.length - 1];
-    return { columnas: getComputedStyle(grid).gridTemplateColumns.split(' ').length, impar: cards.length % 2 === 1, ultimaAncha: Math.abs(ultima.offsetWidth - grid.clientWidth) < 2 };
+    return {
+      columnas: getComputedStyle(grid).gridTemplateColumns.split(' ').length,
+      ultimaAncha: Math.abs(ultima.offsetWidth - grid.clientWidth) < 2,
+      horizontales: cards.every((c) => c.offsetWidth > c.offsetHeight),
+      duelosEnFila: cards.every((c) => {
+        const [local, , visitante] = c.querySelector('.mundial-duelo').children;
+        const centro = (el) => { const r = el.getBoundingClientRect(); return r.top + r.height / 2; };
+        return Math.abs(centro(local) - centro(visitante)) < 4;
+      })
+    };
   }));
   for (const g of huecos) {
-    assert.equal(g.columnas, 2);
-    if (g.impar) assert.equal(g.ultimaAncha, true, 'la última tarjeta impar ocupa todo el ancho');
+    assert.equal(g.columnas, 1, 'en celular, una tarjeta apaisada por fila');
+    assert.equal(g.ultimaAncha, true);
+    assert.equal(g.horizontales, true, 'cada tarjeta es más ancha que alta');
+    assert.equal(g.duelosEnFila, true, 'local y visitante en la misma fila');
   }
   await pintar();
   assert.equal(await pagina.evaluate(() => document.querySelector('#mundial-grid details.mundial-mas').open), true, 'sigue abierto tras refrescar');

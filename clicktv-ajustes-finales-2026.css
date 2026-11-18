@@ -28,7 +28,9 @@
   .ctv-bd-aviso__imagen { max-width: 360px; }
 }
 
-/* ---------------------------------------------------------------- 2. Mini TV: controles compactos */
+/* ---------------------------------------------------------------- 2. Mini TV: controles compactos
+   Misma paleta que el volumen de la radio (#279bff / #65c0ff / #cceaff): una píldora de 36 px
+   con reproducir, sonido y volumen. Botones de 30 px con área táctil de 44 px. */
 .ctv-tv__video { cursor: pointer; }
 .ctv-tv__audio {
   position: absolute;
@@ -37,22 +39,23 @@
   z-index: 2;
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  padding: 3px 8px 3px 3px;
+  gap: 4px;
+  height: 36px;
+  box-sizing: border-box;
+  padding: 3px 12px 3px 3px;
   border-radius: 999px;
-  background: rgba(2, 10, 24, .62);
-  border: 1px solid rgba(255, 255, 255, .14);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  opacity: .78;
-  transition: opacity .16s ease-out;
+  background: rgba(4, 18, 40, .72);
+  border: 1px solid rgba(101, 192, 255, .35);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .35);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
-.ctv-tv__audio:hover,
-.ctv-tv__audio:focus-within { opacity: 1; }
 .ctv-tv__video[hidden] + .ctv-tv__audio { display: none; }
 .ctv-tv__audio-btn {
+  position: relative;
   display: inline-grid;
   place-items: center;
+  flex: none;
   width: 30px;
   height: 30px;
   /* clicktv-accesible-azul.css da a todo button min-height 48px; el área táctil de 44 px la da ::before. */
@@ -61,95 +64,140 @@
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: transparent;
+  background: rgba(255, 255, 255, .08);
   color: #fff;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  transition: background-color .14s ease-out, transform .1s ease-out;
 }
-/* Área táctil de 44 px sin agrandar el icono. */
-.ctv-tv__audio-btn { position: relative; }
 .ctv-tv__audio-btn::before { content: ""; position: absolute; inset: -7px; }
 .ctv-tv__audio-btn svg { width: 17px; height: 17px; fill: currentColor; }
+@media (hover: hover) and (pointer: fine) { .ctv-tv__audio-btn:hover { background: rgba(101, 192, 255, .28); } }
 .ctv-tv__audio-btn:active { transform: scale(.92); }
+/* Con sonido, el botón se marca en azul como el reproductor de la radio. */
+#ctv-tv-sonido[aria-pressed="true"] { background: #279bff; }
 .ctv-tv__audio-btn[aria-pressed="true"] .ico-play,
 .ctv-tv__audio-btn[aria-pressed="false"] .ico-pausa,
 #ctv-tv-sonido[aria-pressed="true"] .ico-mudo,
 #ctv-tv-sonido[aria-pressed="false"] .ico-sonido { display: none; }
 .ctv-tv__volumen {
   --nivel: 70%;
-  width: 64px;
-  height: 18px;
+  flex: none;
+  width: 84px;
+  height: 24px;
   /* clicktv-accesible-azul.css da a todo input min-height 48px, borde y fondo: aquí no aplica. */
   min-height: 0;
   padding: 0;
   border: 0;
   border-radius: 0;
   box-shadow: none;
-  margin: 0 0 0 2px;
+  margin: 0 0 0 4px;
   background: transparent;
   cursor: pointer;
+  touch-action: none;
   -webkit-appearance: none;
   appearance: none;
 }
+.ctv-tv__volumen[hidden] { display: none; }
 .ctv-tv__volumen::-webkit-slider-runnable-track {
-  height: 3px;
-  border-radius: 3px;
-  background: linear-gradient(90deg, #7fd0ff var(--nivel), rgba(255, 255, 255, .28) var(--nivel));
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #279bff var(--nivel), rgba(255, 255, 255, .25) var(--nivel));
 }
-.ctv-tv__volumen::-moz-range-track { height: 3px; border-radius: 3px; background: rgba(255, 255, 255, .28); }
-.ctv-tv__volumen::-moz-range-progress { height: 3px; border-radius: 3px; background: #7fd0ff; }
+.ctv-tv__volumen::-moz-range-track { height: 4px; border-radius: 4px; background: rgba(255, 255, 255, .25); }
+.ctv-tv__volumen::-moz-range-progress { height: 4px; border-radius: 4px; background: #279bff; }
 .ctv-tv__volumen::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 11px;
-  height: 11px;
-  margin-top: -4px;
-  border: 0;
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+  border: 2px solid #cceaff;
   border-radius: 50%;
-  background: #fff;
+  background: #65c0ff;
+  box-shadow: 0 0 0 2px #092d5a;
+  transition: transform .12s ease-out;
 }
-.ctv-tv__volumen::-moz-range-thumb { width: 11px; height: 11px; border: 0; border-radius: 50%; background: #fff; }
+.ctv-tv__volumen::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border: 2px solid #cceaff;
+  border-radius: 50%;
+  background: #65c0ff;
+  box-shadow: 0 0 0 2px #092d5a;
+}
+.ctv-tv__volumen:active::-webkit-slider-thumb { transform: scale(1.2); }
 .ctv-tv :is(.ctv-tv__audio-btn, .ctv-tv__volumen):focus-visible { outline: 2px solid #ffe38b; outline-offset: 2px; }
 /* En la ventana pequeña solo queda el botón de sonido. */
 .ctv-tv--mini .ctv-tv__volumen,
 .ctv-tv--mini #ctv-tv-pausa { display: none; }
-.ctv-tv--mini .ctv-tv__audio { left: 6px; bottom: 6px; padding: 2px; }
-@media (max-width: 420px) { .ctv-tv__volumen { width: 52px; } }
+.ctv-tv--mini .ctv-tv__audio { left: 6px; bottom: 6px; height: 34px; padding: 2px; }
+@media (max-width: 420px) {
+  .ctv-tv__volumen { width: 68px; }
+  .ctv-tv__audio { left: 6px; bottom: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ctv-tv__audio-btn, .ctv-tv__volumen::-webkit-slider-thumb { transition: none; }
+}
 
-/* ---------------------------------------------------------------- 3. Partidos */
+/* ---------------------------------------------------------------- 3. Partidos: formato horizontal
+   Tarjeta apaisada: arriba estado y torneo en una línea; en el centro [bandera Local] marcador [Visitante bandera];
+   abajo Fecha · Hora · Estadio en una sola fila (2 o 3 celdas, nunca huecos). */
+#mundial .match-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr); /* estado y torneo comparten la primera línea */
+  align-content: start;
+  align-items: center;
+  gap: 10px;
+  padding: clamp(12px, 2.5vw, 18px) !important;
+}
+#mundial .match-card > .mundial-live-status,
+#mundial .match-card > .match-group { margin: 0; }
+#mundial .match-card > .mundial-live-status { justify-self: start; }
+#mundial .match-card > .match-group { justify-self: end; text-align: right; }
+#mundial .match-card > :is(.mundial-duelo, .match-datos) { grid-column: 1 / -1; }
+#mundial .match-group { font-size: .78rem; overflow-wrap: anywhere; }
+
 #mundial .mundial-duelo {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  gap: 8px;
-  margin: 10px 0 12px;
+  gap: clamp(8px, 2vw, 16px);
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
 }
 #mundial .mundial-team {
-  display: grid;
-  justify-items: center;
-  gap: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   min-width: 0;
-  text-align: center;
+  text-align: left;
 }
-#mundial .mundial-team strong { line-height: 1.2; overflow-wrap: anywhere; }
-#mundial .mundial-marcador { display: grid; justify-items: center; gap: 2px; text-align: center; }
+/* Visitante en espejo: nombre y luego bandera, pegado a la derecha. */
+#mundial .mundial-duelo > .mundial-team:last-child { flex-direction: row-reverse; text-align: right; }
+#mundial .mundial-team strong { min-width: 0; font-size: clamp(.92rem, 2.4vw, 1.08rem); line-height: 1.2; overflow-wrap: anywhere; }
+#mundial .mundial-marcador { display: grid; justify-items: center; gap: 2px; min-width: 64px; text-align: center; }
+#mundial .mundial-marcador strong { font-size: clamp(1.25rem, 4vw, 1.6rem); line-height: 1.1; }
+#mundial .mundial-marcador span { font-size: .74rem; color: #b9d8ff; }
 
 #mundial .team-flag--grande {
-  width: 64px;
-  height: 46px;
+  flex: none;
+  width: 56px;
+  height: 42px;
   min-width: 0;
   display: grid;
   place-items: center;
-  font-size: 2.9rem;
+  font-size: 2.6rem;
   line-height: 1;
   overflow: visible;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .35));
 }
 #mundial .team-flag--iniciales {
-  width: 52px;
-  height: 52px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  font-size: 1.05rem;
+  font-size: .95rem;
   font-weight: 900;
   color: #fff;
   background: #0b3a74;
@@ -157,39 +205,53 @@
   filter: none;
 }
 #mundial .mundial-escudo {
-  width: 64px;
-  height: 64px;
+  flex: none;
+  width: 52px !important;
+  height: 52px !important;
+  margin: 0;
   object-fit: contain;
-  image-rendering: auto;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .35));
 }
 
-/* Datos del encuentro: retícula de 2 columnas; con 3 datos, el estadio ocupa todo el ancho. */
+/* Datos del encuentro: una sola fila horizontal, 2 o 3 celdas iguales. */
 #mundial .match-datos {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
   margin: 0;
 }
-#mundial .match-datos--3 .match-dato:last-child { grid-column: 1 / -1; }
+#mundial .match-datos--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 #mundial .match-dato {
   min-width: 0;
-  padding: 8px 10px;
+  padding: 7px 9px;
   border-radius: 10px;
   background: rgba(255, 255, 255, .05);
   border: 1px solid rgba(127, 208, 255, .18);
 }
-#mundial .match-dato dt { font-size: .7rem; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: #9cc8f2; }
-#mundial .match-dato dd { margin: 2px 0 0; font-size: .92rem; font-weight: 800; color: #fff; overflow-wrap: anywhere; text-transform: capitalize; }
+#mundial .match-dato dt { font-size: .66rem; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: #9cc8f2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#mundial .match-dato dd { margin: 2px 0 0; font-size: .86rem; font-weight: 800; color: #fff; overflow-wrap: anywhere; text-transform: capitalize; }
 
-@media (max-width: 720px) {
-  #mundial .team-flag--grande { width: 48px; height: 36px; font-size: 2.2rem; }
-  #mundial .team-flag--iniciales { width: 42px; height: 42px; font-size: .9rem; }
-  #mundial .mundial-escudo { width: 48px !important; height: 48px !important; }
-  #mundial .mundial-duelo { gap: 4px; }
+/* Estados vacío y de carga: también en franja horizontal, a todo el ancho. */
+#mundial .mundial-grid > :is(.loading-card, .empty-state) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  text-align: left;
+}
+#mundial .mundial-empty :is(h3, p) { margin: 0; }
+
+@media (max-width: 420px) {
+  #mundial .mundial-team { gap: 6px; }
+  #mundial .team-flag--grande { width: 40px; height: 30px; font-size: 1.85rem; }
+  #mundial .team-flag--iniciales { width: 36px; height: 36px; font-size: .8rem; }
+  #mundial .mundial-escudo { width: 38px !important; height: 38px !important; }
+  #mundial .mundial-team strong { font-size: .84rem; }
+  #mundial .mundial-marcador { min-width: 52px; }
   #mundial .match-dato { padding: 6px 7px; }
-  #mundial .match-dato dt { font-size: .62rem; }
-  #mundial .match-dato dd { font-size: .8rem; }
+  #mundial .match-dato dt { font-size: .6rem; }
+  #mundial .match-dato dd { font-size: .78rem; }
 }
 
 /* ---------------------------------------------------------------- 4. Acordeones */
@@ -212,6 +274,8 @@
   transition: background-color .16s ease-out, border-color .16s ease-out;
 }
 .ctv-acordeon > summary::-webkit-details-marker { display: none; }
+/* Respaldo para navegadores que muestran el contenido de un <details> cerrado si la tarjeta usa grid/flex. */
+.ctv-acordeon:not([open]) > :not(summary) { display: none !important; }
 .ctv-acordeon > summary::after {
   content: "";
   flex: none;

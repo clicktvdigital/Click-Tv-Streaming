@@ -21,11 +21,12 @@ test('partidos: 4 por bloque, el resto plegado y el estado abierto se conserva a
   assert.doesNotMatch(js, /box\.innerHTML = renderizarRespaldoMundial\(\);/, 'el respaldo también conserva lo abierto');
 });
 
-test('partidos: retícula de 2 (celular) y 4 columnas (escritorio) sin huecos en la última fila', () => {
+test('partidos: tarjetas horizontales, 1 por fila en celular y 2 desde 720 px, sin huecos en la última fila', () => {
   const css = leer('clicktv-movil-2col.css');
+  assert.match(css, /#mundial \.mundial-cards \{[^}]*grid-template-columns: minmax\(0, 1fr\) !important;/);
+  assert.match(css, /@media \(min-width: 720px\) \{\s*#mundial \.mundial-cards \{ grid-template-columns: repeat\(2, minmax\(0, 1fr\)\) !important; \}/);
   assert.match(css, /#mundial \.mundial-cards > \.match-card:last-child:nth-child\(odd\) \{ grid-column: 1 \/ -1; \}/);
-  assert.match(css, /grid-template-columns: repeat\(4, minmax\(0, 1fr\)\) !important;/);
-  assert.match(css, /:last-child:nth-child\(4n\+1\) \{ grid-column: 1 \/ -1; \}/);
+  assert.doesNotMatch(css, /repeat\(4, minmax\(0, 1fr\)\) !important/, 'sin columnas estrechas que vuelven vertical la tarjeta');
 });
 
 test('Android: unidades flexibles (clamp/minmax) y medios limitados al ancho', () => {

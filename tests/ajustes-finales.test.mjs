@@ -60,8 +60,16 @@ test('partidos: sin mapa ni enlace de indicaciones, banderas grandes y datos en 
   const card = extraer('crearCardPartido');
   assert.doesNotMatch(card, /crearNombreEquipoConBandera/);
   const css = leer('clicktv-ajustes-finales-2026.css');
-  assert.match(css, /#mundial \.team-flag--grande \{[^}]*width: 64px;[^}]*font-size: 2\.9rem;/);
-  assert.match(css, /#mundial \.match-datos--3 \.match-dato:last-child \{ grid-column: 1 \/ -1; \}/);
+  assert.match(css, /#mundial \.team-flag--grande \{[^}]*width: 56px;[^}]*font-size: 2\.6rem;/);
+  // Formato horizontal: equipos en fila (visitante en espejo) y datos en una sola fila de 2 o 3 celdas.
+  assert.match(css, /#mundial \.mundial-duelo \{[^}]*grid-template-columns: minmax\(0, 1fr\) auto minmax\(0, 1fr\);/);
+  assert.match(css, /#mundial \.mundial-team \{[^}]*display: flex;/);
+  assert.match(css, /#mundial \.mundial-duelo > \.mundial-team:last-child \{ flex-direction: row-reverse;/);
+  assert.match(css, /#mundial \.match-datos--3 \{ grid-template-columns: repeat\(3, minmax\(0, 1fr\)\); \}/);
+  assert.doesNotMatch(css, /match-dato:last-child \{ grid-column/, 'sin celdas estiradas en vertical');
+  const movil = leer('clicktv-movil-2col.css');
+  assert.doesNotMatch(movil, /#mundial \.mundial-escudo \{ width: 28px/, 'sin la variante vertical diminuta');
+  assert.match(movil, /#mundial \.mundial-cards \{[^}]*grid-template-columns: minmax\(0, 1fr\) !important;/, '1 tarjeta apaisada por fila en celular');
 });
 
 test('acordeones: cada sección larga es un <details> con su contenido dentro', () => {
@@ -103,6 +111,26 @@ test('acordeones: cada sección larga es un <details> con su contenido dentro', 
   assert.match(html, /<link rel="stylesheet" href="clicktv-ajustes-finales-2026\.css\?v=[^"]+">\n<\/head>|clicktv-ajustes-finales-2026\.css\?v=[^"]+">\s*<\/head>/, 'estilos finales al último');
 });
 
+test('reseña: «Deja tu reseña» carga cerrada y solo se abre con un clic o un enlace', () => {
+  assert.match(html, /<details class="review-submit glass-card ctv-acordeon" id="acordeon-resena" data-inicio="cerrado">\s*<summary>/);
+  const js = leer('clicktv-acordeones.js');
+  assert.match(js, /querySelectorAll\('details\[data-inicio="cerrado"\]\[open\]'\)\.forEach\(\(d\) => \{ d\.open = false; \}\)/);
+  assert.ok(js.indexOf('cerrarIniciales();') < js.indexOf('abrirPorHash(location.hash, true);\n'), 'se cierra antes de mirar el enlace');
+  assert.match(js, /addEventListener\('pageshow'/, 'también al volver con Atrás');
+  assert.match(leer('clicktv-ajustes-finales-2026.css'), /\.ctv-acordeon:not\(\[open\]\) > :not\(summary\) \{ display: none !important; \}/);
+
+  // Simulación: aunque el navegador lo restaure abierto, al cargar queda cerrado.
+  const resena = { tagName: 'DETAILS', open: true };
+  const ctx = createContext({
+    document: { readyState: 'complete', body: { tagName: 'BODY' }, addEventListener() {}, getElementById: () => null,
+      querySelectorAll: (sel) => (sel.includes('data-inicio="cerrado"') && resena.open ? [resena] : []) },
+    matchMedia: () => ({ matches: true }), MutationObserver: class { observe() {} }
+  });
+  ctx.window = ctx; ctx.location = { hash: '' }; ctx.window.addEventListener = () => {};
+  runInContext(js, ctx);
+  assert.equal(resena.open, false);
+});
+
 test('acordeones: un enlace o el menú abren el desplegable que contiene su destino', () => {
   const js = leer('clicktv-acordeones.js');
   assert.match(js, /addEventListener\('click'[\s\S]*abrirAcordeones\(destinoDeHash\(enlace\.getAttribute\('href'\)\)\)[\s\S]*\}, true\);/);
@@ -111,7 +139,7 @@ test('acordeones: un enlace o el menú abren el desplegable que contiene su dest
   assert.match(leer('clicktv-navegacion-movil.js'), /window\.ctvAcordeones\?\.abrir\(destino\);/);
 
   // abrirAcordeones abre todos los <details> ancestros.
-  const ctx = createContext({ document: { readyState: 'complete', body: { tagName: 'BODY' }, addEventListener() {} }, matchMedia: () => ({ matches: true }) });
+  const ctx = createContext({ document: { readyState: 'complete', body: { tagName: 'BODY' }, addEventListener() {}, querySelectorAll: () => [] }, matchMedia: () => ({ matches: true }) });
   ctx.window = ctx; ctx.location = { hash: '' }; ctx.window.addEventListener = () => {};
   ctx.document.getElementById = () => null;
   ctx.MutationObserver = class { observe() {} };

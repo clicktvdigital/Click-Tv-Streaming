@@ -81,6 +81,15 @@ test('mini TV: tráilers horizontales de estrenos 2026 y próximos, oficiales y 
   const url = new URL(urlInsercion('s_qpMMkvHYE', 'https://click-tv-streaming.vercel.app'));
   assert.equal(url.hostname, 'www.youtube-nocookie.com');
   for (const [k, v] of [['autoplay', '1'], ['mute', '1'], ['loop', '1'], ['playlist', 's_qpMMkvHYE'], ['playsinline', '1']]) assert.equal(url.searchParams.get(k), v, k);
+  // Si el cliente pidió el tráiler (clic, tecla o selector), arranca con audio.
+  const conSonido = new URL(urlInsercion('s_qpMMkvHYE', 'https://click-tv-streaming.vercel.app', true));
+  assert.equal(conSonido.searchParams.get('mute'), '0');
+  assert.equal(conSonido.searchParams.get('autoplay'), '1');
+  const mini = leer('clicktv-mini-tv.js');
+  assert.match(mini, /play\?\.addEventListener\('click', \(\) => \{ cerradoPorCliente = false; cargarCine\(true\); \}\);/);
+  assert.match(mini, /selector\?\.addEventListener\('change', \(\) => \{[\s\S]*?cargarCine\(true\);/);
+  assert.match(mini, /cambiarPestana\(clave, true\)/);
+  assert.match(mini, /else if \(!iframe && !sinAutoplay\(\)\) cargarCine\(\);/, 'la carga automática al llegar sigue en silencio');
   assert.equal(trailersValidos([{ id: 'corto', titulo: 'X' }, { id: 's_qpMMkvHYE', titulo: '' }, { id: 's_qpMMkvHYE', titulo: 'A' }, { id: 's_qpMMkvHYE', titulo: 'B' }]).length, 1);
   assert.doesNotMatch(leer('data.js'), /canalesMiniTV|\.m3u8/, 'sin restos del reproductor HLS');
 });
@@ -105,7 +114,15 @@ test('mini TV: pestaña «Click TV Oficial» con el video propio optimizado y CT
   assert.match(html, /<input id="ctv-tv-volumen"[^>]*type="range"[^>]*aria-label="Volumen del video"/);
   const css = leer('clicktv-ajustes-finales-2026.css');
   assert.match(css, /\.ctv-tv__audio-btn \{[^}]*width: 30px;[^}]*height: 30px;/, 'botones compactos');
-  assert.match(css, /\.ctv-tv__volumen \{[^}]*width: 64px;/, 'volumen corto');
+  assert.match(css, /\.ctv-tv__volumen \{[^}]*width: 84px;/, 'volumen compacto');
+  // Misma paleta que el volumen de la radio.
+  assert.match(css, /\.ctv-tv__volumen::-webkit-slider-thumb \{[^}]*border: 2px solid #cceaff;[^}]*background: #65c0ff;/);
+  assert.match(css, /#ctv-tv-sonido\[aria-pressed="true"\] \{ background: #279bff; \}/);
+  // El volumen se recuerda, al activar sonido vuelve al último nivel, y en iOS se oculta el deslizador.
+  const js = leer('clicktv-mini-tv.js');
+  assert.match(js, /const CLAVE_VOLUMEN = 'clicktv_minitv_volumen';/);
+  assert.match(js, /fijarVolumen\(video\.muted \|\| video\.volume === 0 \? nivel : 0\)/);
+  assert.match(js, /if \(volumen && video\.volume !== nivel\) volumen\.hidden = true;/);
   // Las reglas globales dan min-height 48px a button e input: los controles compactos la anulan.
   assert.match(css, /\.ctv-tv__audio-btn \{[^}]*min-height: 0;/, 'botón sin alto mínimo global');
   assert.match(css, /\.ctv-tv__volumen \{[^}]*min-height: 0;/, 'volumen sin alto mínimo global');

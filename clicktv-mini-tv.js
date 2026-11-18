@@ -19,9 +19,11 @@
     });
   }
 
-  function urlInsercion(id, origen = '') {
+  // conSonido: solo cuando el cliente pidió el tráiler (clic/tecla). Sin ese gesto los navegadores
+  // bloquean el autoplay con audio, así que la carga automática al llegar a la sección va en silencio.
+  function urlInsercion(id, origen = '', conSonido = false) {
     const p = new URLSearchParams({
-      autoplay: '1', mute: '1', loop: '1', playlist: id, playsinline: '1',
+      autoplay: '1', mute: conSonido ? '0' : '1', loop: '1', playlist: id, playsinline: '1',
       rel: '0', modestbranding: '1', controls: '1', enablejsapi: '1', iv_load_policy: '3', fs: '1'
     });
     if (origen) p.set('origin', origen);
@@ -59,6 +61,7 @@
     let iframe = null;
     let enPantalla = false;
     let cerradoPorCliente = false;
+    let quiereSonido = false; // el cliente ya pidió un tráiler con audio
     const avisar = (t) => { if (estado) estado.textContent = t; };
     const sinAutoplay = () => matchMedia('(prefers-reduced-motion: reduce)').matches || navigator.connection?.saveData === true;
     const promoVigente = () => typeof window.PromoBlackDays?.estaActiva === 'function' && window.PromoBlackDays.estaActiva();
@@ -86,10 +89,12 @@
       }));
       if (play) play.hidden = false;
     }
-    function cargarCine() {
+    function cargarCine(conSonido = false) {
       if (!trailer) return;
+      if (conSonido) quiereSonido = true;
+      const sonido = conSonido || (quiereSonido && navigator.userActivation?.hasBeenActive === true);
       iframe = Object.assign(document.createElement('iframe'), {
-        src: urlInsercion(trailer.id, location.origin),
+        src: urlInsercion(trailer.id, location.origin, sonido),
         title: `Tráiler oficial: ${trailer.titulo}${trailer.version ? ` (${trailer.version})` : ''}`,
         className: 'ctv-tv__iframe',
         allow: 'autoplay; encrypted-media; picture-in-picture; fullscreen',
@@ -98,7 +103,7 @@
       iframe.setAttribute('allowfullscreen', '');
       zonaCine.replaceChildren(iframe);
       if (play) play.hidden = true;
-      avisar(`🎬 ${trailer.titulo}${trailer.canal ? ` · ${trailer.canal}` : ''}. Sin sonido: actívalo en el video.`);
+      avisar(`🎬 ${trailer.titulo}${trailer.estreno ? ` · ${trailer.estreno}` : ''}. ${sonido ? '🔊 Con sonido.' : '🔇 Sin sonido: toca el video o ▶ para escucharlo.'}`);
       actualizarEstado();
     }
     function liberarCine() { iframe = null; miniaturaCine(); }
@@ -140,7 +145,7 @@
       if (!mini) tarjeta.style.minHeight = '';
     }
 
-    function cambiarPestana(nueva) {
+    function cambiarPestana(nueva, porCliente = false) {
       if (nueva === pestana || !tabs[nueva] || tabs[nueva].hidden) return;
       pestana = nueva;
       for (const [clave, tab] of Object.entries(tabs)) {
@@ -162,60 +167,71 @@
         avisar('📺 Video oficial de Click TV Streaming. Toca 🔈 para activar el sonido.');
       } else {
         video.pause();
-        if (enPantalla && !cerradoPorCliente && !sinAutoplay()) cargarCine(); else miniaturaCine();
+        if (porCliente && !sinAutoplay()) cargarCine(true);
+        else if (enPantalla && !cerradoPorCliente && !sinAutoplay()) cargarCine(); else miniaturaCine();
       }
       actualizarEstado();
     }
 
-    Object.entries(tabs).forEach(([clave, tab]) => tab?.addEventListener('click', () => { cerradoPorCliente = false; cambiarPestana(clave); }));
+    Object.entries(tabs).forEach(([clave, tab]) => tab?.addEventListener('click', () => { cerradoPorCliente = false; cambiarPestana(clave, true); }));
     document.querySelector('.ctv-tv__pestanas')?.addEventListener('keydown', (e) => {
       if (!['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
       e.preventDefault();
       const siguiente = pestana === 'oficial' ? 'cine' : 'oficial';
-      cambiarPestana(siguiente);
+      cambiarPestana(siguiente, true);
       tabs[siguiente]?.focus();
     });
 
-    play?.addEventListener('click', () => { cerradoPorCliente = false; cargarCine(); });
+    play?.addEventListener('click', () => { cerradoPorCliente = false; cargarCine(true); });
+    // Elegir un tráiler es un gesto del cliente: se reproduce de inmediato y con audio.
     selector?.addEventListener('change', () => {
       trailer = trailers.find((t) => t.id === selector.value) || trailers[0];
-      if (iframe) cargarCine(); else miniaturaCine();
+      cerradoPorCliente = false;
+      cargarCine(true);
     });
     ['play', 'pause'].forEach((tipo) => video.addEventListener(tipo, () => { if (tipo === 'play') cerradoPorCliente = false; actualizarEstado(); }));
 
-    // --- Controles compactos del video propio (sustituyen a los controles nativos, más grandes) ---
+    // --- Controles compactos del video propio: misma lógica y estética que el volumen de la radio ---
     const btnPausa = document.getElementById('ctv-tv-pausa');
     const btnSonido = document.getElementById('ctv-tv-sonido');
     const volumen = document.getElementById('ctv-tv-volumen');
+    const CLAVE_VOLUMEN = 'clicktv_minitv_volumen';
+    const leerVolumen = () => {
+      try { const v = Number(localStorage.getItem(CLAVE_VOLUMEN)); return v > 0 && v <= 1 ? v : 0.7; } catch { return 0.7; }
+    };
+    const guardarVolumen = (v) => { try { localStorage.setItem(CLAVE_VOLUMEN, String(v)); } catch { /* sin almacenamiento */ } };
+    let nivel = leerVolumen(); // último volumen audible elegido
+    video.volume = nivel;
+    // iOS no permite cambiar el volumen desde la página (se usan los botones del equipo): sin deslizador.
+    if (volumen && video.volume !== nivel) volumen.hidden = true;
+
     function pintarControles() {
       const reproduciendo = !!video.getAttribute('src') && !video.paused;
       const mudo = video.muted || video.volume === 0;
+      const actual = mudo ? 0 : video.volume;
       btnPausa?.setAttribute('aria-pressed', String(reproduciendo));
       btnPausa?.setAttribute('aria-label', reproduciendo ? 'Pausar video' : 'Reproducir video');
       btnSonido?.setAttribute('aria-pressed', String(!mudo));
       btnSonido?.setAttribute('aria-label', mudo ? 'Activar sonido' : 'Silenciar');
       if (volumen) {
-        volumen.value = String(mudo ? 0 : video.volume);
-        volumen.style.setProperty('--nivel', `${Math.round((mudo ? 0 : video.volume) * 100)}%`);
+        volumen.value = String(actual);
+        volumen.setAttribute('aria-valuetext', mudo ? 'Sin sonido' : `Volumen ${Math.round(actual * 100)} %`);
+        volumen.style.setProperty('--nivel', `${Math.round(actual * 100)}%`);
       }
+    }
+    function fijarVolumen(v) {
+      const valor = Math.min(1, Math.max(0, Number(v) || 0));
+      if (valor > 0) { nivel = valor; guardarVolumen(valor); video.volume = valor; }
+      video.muted = valor === 0;
+      pintarControles();
     }
     btnPausa?.addEventListener('click', () => {
       if (!video.getAttribute('src')) prepararPromo();
       if (video.paused) { cerradoPorCliente = false; video.play().catch(() => {}); } else video.pause();
     });
-    btnSonido?.addEventListener('click', () => {
-      if (video.muted || video.volume === 0) {
-        video.muted = false;
-        if (video.volume === 0) video.volume = 0.7;
-      } else video.muted = true;
-      pintarControles();
-    });
-    volumen?.addEventListener('input', () => {
-      const v = Number(volumen.value);
-      video.volume = v;
-      video.muted = v === 0;
-      pintarControles();
-    });
+    // Activar sonido vuelve al último volumen elegido (no salta al máximo).
+    btnSonido?.addEventListener('click', () => fijarVolumen(video.muted || video.volume === 0 ? nivel : 0));
+    volumen?.addEventListener('input', () => fijarVolumen(volumen.value));
     video.addEventListener('click', () => btnPausa?.click());
     ['play', 'pause', 'volumechange', 'emptied'].forEach((tipo) => video.addEventListener(tipo, pintarControles));
     pintarControles();
