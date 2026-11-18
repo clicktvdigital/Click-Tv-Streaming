@@ -2,14 +2,7 @@
 (() => {
   'use strict';
   function init() {
-    document.querySelectorAll('[data-ctv-category]').forEach(link => {
-      link.addEventListener('click', () => {
-        const category = link.getAttribute('data-ctv-category');
-        if (typeof window.seleccionarCategoriaCatalogo === 'function') {
-          window.seleccionarCategoriaCatalogo(category);
-        }
-      });
-    });
+    // Las tarjetas [data-ctv-category] las atiende clicktv-navegacion-movil.js (filtro + scroll).
     const cart = document.getElementById('panel-carrito');
     if (cart) {
       cart.setAttribute('aria-label','Carrito de compras: revisa tu pedido, formas de pago y canales de ayuda');

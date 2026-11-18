@@ -68,24 +68,20 @@ document.addEventListener("DOMContentLoaded", () => {
   iniciarSeguro("efecto premium", inicializarTiltPremium);
   iniciarSeguro("accesibilidad", inicializarAccesibilidadGlobal);
 
-  setInterval(() => iniciarSeguro("actividad periódica", renderActividadReciente), 4500);
-  setInterval(() => iniciarSeguro("rotación de reseñas", rotarResenas), 10000);
-  setInterval(() => iniciarSeguro("usuarios conectados", actualizarUsuariosConectados), 6500);
-  setInterval(() => iniciarSeguro("partidos periódicos", () => renderMundial(true)), 30000);
+  // Ahorro de batería: los temporizadores no trabajan con la pestaña oculta.
+  const siVisible = (fn) => () => { if (!document.hidden) fn(); };
+  setInterval(siVisible(() => iniciarSeguro("actividad periódica", renderActividadReciente)), 4500);
+  setInterval(siVisible(() => iniciarSeguro("rotación de reseñas", rotarResenas)), 10000);
+  setInterval(siVisible(() => iniciarSeguro("usuarios conectados", actualizarUsuariosConectados)), 6500);
+  setInterval(siVisible(() => iniciarSeguro("partidos periódicos", () => renderMundial(true))), 30000);
 });
 
 
 function inicializarFiltros() {
   // Los botones del catálogo se gestionan también desde catalogo.js.
   // Aquí se conectan los enlaces del menú que llevan a una categoría concreta.
-  document.querySelectorAll("[data-ir-categoria]").forEach((enlace) => {
-    enlace.addEventListener("click", () => {
-      const categoria = enlace.dataset.irCategoria || "todos";
-      if (typeof window.seleccionarCategoriaCatalogo === "function") {
-        window.seleccionarCategoriaCatalogo(categoria);
-      }
-    });
-  });
+  // Los enlaces con data-ir-categoria (menú y portada) los atiende clicktv-navegacion-movil.js:
+  // cierra el menú, filtra y desplaza cuando el catálogo ya está pintado.
 }
 
 let marcadorMenuMovil = null;
@@ -221,14 +217,6 @@ function inicializarUI() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
-  // Cerrar menú móvil al tocar una opción
-  document.querySelectorAll(".nav-link").forEach((link) => {
-    link.addEventListener("click", () => {
-      navMenu?.classList.remove("abierto");
-      btnMenu?.classList.remove("is-open");
-      btnMenu?.setAttribute("aria-expanded", "false");
-    });
-  });
 
   // Año dinámico en footer
   const anio = document.getElementById("anio-actual");
@@ -2861,7 +2849,7 @@ function obtenerNumeroScore(fuente, llaves) {
 function iniciarCronometroMundial() {
   if (window.__cronometroMundialActivo) return;
   window.__cronometroMundialActivo = true;
-  setInterval(actualizarTemporizadoresMundial, 1000);
+  setInterval(() => { if (!document.hidden) actualizarTemporizadoresMundial(); }, 1000);
 }
 
 

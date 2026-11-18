@@ -7,7 +7,7 @@
 .ctv-discovery__head p { color:#e7f4ff; margin:0; font-size:clamp(1rem,2vw,1.12rem); }
 .ctv-discovery__grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(.7rem,1.4vw,1.2rem); }
 .ctv-discovery__card { display:flex; flex-direction:column; gap:.75rem; min-width:0; text-decoration:none; background:linear-gradient(150deg,#102e59,#071b35); color:#fff; border:1.5px solid #397fb9; border-radius:20px; padding:clamp(.8rem,1.6vw,1.3rem); box-shadow:0 12px 25px rgba(0,4,17,.28); transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease; }
-.ctv-discovery__card:hover { transform:translateY(-4px); border-color:#7edaff; box-shadow:0 18px 32px rgba(5,103,215,.27); }
+@media (hover: hover) and (pointer: fine) { .ctv-discovery__card:hover { transform:translateY(-4px); border-color:#7edaff; box-shadow:0 18px 32px rgba(5,103,215,.27); } }
 .ctv-discovery__card:focus-visible { outline:3px solid #ffdc69; outline-offset:4px; }
 .ctv-discovery__visual { display:block; min-height:118px; width:100%; aspect-ratio:8/5; object-fit:cover; border-radius:13px; background:#0b2b59; }
 .ctv-discovery__card strong { display:block; color:#fff; font-size:clamp(1.07rem,1.6vw,1.25rem); line-height:1.2; }
@@ -21,7 +21,7 @@
 .hero__actions .btn { min-width:min(100%,190px); }
 .hero__panel { box-shadow:0 24px 60px rgba(0,0,0,.32); }
 .hero__panel, .product-card, .clicktv-journey__card { transition:transform .23s ease,box-shadow .23s ease,border-color .23s ease; }
-.product-card:hover, .clicktv-journey__card:hover { transform:translateY(-2px); border-color:#68b9fc !important; }
+@media (hover: hover) and (pointer: fine) { .product-card:hover, .clicktv-journey__card:hover { transform:translateY(-2px); border-color:#68b9fc !important; } }
 /* El carrito debe ser legible y desplazable, incluso en móviles pequeños. */
 #panel-carrito { box-sizing:border-box; max-height:100dvh; max-height:100svh; overflow-y:auto; overflow-x:hidden; overscroll-behavior:contain; scrollbar-gutter:stable; padding-bottom:max(2rem,env(safe-area-inset-bottom)); color:#f7fbff; }
 #panel-carrito :is(.cart-payment,.cart-contact-options,.cart-actions,.cart-payment__head,.cart-payment__methods,.cart-payment__detail,.cart-summary) { min-width:0; max-width:100%; box-sizing:border-box; }

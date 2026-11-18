@@ -7,7 +7,7 @@
     "playwright": "^1.65.1"
   },
   "scripts": {
-    "test": "node --test tests/smoke.test.mjs tests/paypal.test.mjs tests/promo-black-days.test.mjs tests/enlaces.test.mjs",
-    "test:unit": "node --test tests/paypal.test.mjs tests/promo-black-days.test.mjs tests/enlaces.test.mjs"
+    "test": "node --test tests/smoke.test.mjs tests/paypal.test.mjs tests/promo-black-days.test.mjs tests/enlaces.test.mjs tests/menu-busqueda.test.mjs",
+    "test:unit": "node --test tests/paypal.test.mjs tests/promo-black-days.test.mjs tests/enlaces.test.mjs tests/menu-busqueda.test.mjs"
   }
 }

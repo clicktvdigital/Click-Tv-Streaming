@@ -1,0 +1,10 @@
+.claude/
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.svg
+*.gif
+*.ico
+*.mp3
+node_modules/

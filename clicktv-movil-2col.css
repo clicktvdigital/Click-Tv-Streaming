@@ -1,0 +1,223 @@
+/* CLICK TV STREAMING · Celular 360–430 px: catálogo en 2 columnas, búsqueda en el menú y ahorro de batería · 18/11/2026
+   Paleta azul oficial, contraste alto, objetivos táctiles de 44 px o más y hover solo con ratón. */
+
+/* 1. Ahorro de batería: los adornos se detienen cuando la pestaña no se ve. */
+html.pestana-oculta :is(.navidad-nieve span, .navidad-santa, .navidad-santa *, .navidad-escena img, .tech-particles span, .ambient-orb) {
+  animation-play-state: paused !important;
+}
+
+/* 2. Búsqueda maestra dentro del menú sándwich (solo cuando el menú es desplegable). */
+.nav-busqueda { display: none; }
+@media (max-width: 920px) {
+  .nav-busqueda {
+    grid-column: 1 / -1;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0 0 8px;
+  }
+  .nav-busqueda__lupa {
+    position: absolute;
+    left: 14px;
+    top: 24px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+  }
+  .nav-busqueda__input {
+    flex: 1 1 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 0 48px 0 42px;
+    border-radius: 14px;
+    border: 1.5px solid #3d7fc0;
+    background: #0b2140;
+    color: #fff;
+    font: inherit;
+    font-size: 16px; /* evita el zoom de iOS al enfocar */
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .nav-busqueda__input::placeholder { color: #a9c8ea; opacity: 1; }
+  .nav-busqueda__input::-webkit-search-cancel-button { display: none; }
+  .nav-busqueda__input:focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; border-color: #7fd0ff; }
+  .nav-busqueda__limpiar {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .1);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1), background-color 120ms ease;
+  }
+  .nav-busqueda__limpiar[hidden] { display: none; }
+  .nav-busqueda__limpiar:active { transform: scale(0.94); background: rgba(255, 255, 255, .18); }
+  .nav-busqueda__resultados {
+    flex: 1 1 100%;
+    display: grid;
+    gap: 6px;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .nav-busqueda__resultados[hidden] { display: none; }
+  .nav-busqueda__item {
+    width: 100%;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(96, 165, 250, .45);
+    background: rgba(29, 95, 191, .22);
+    color: #eaf4ff;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1), background-color 120ms ease;
+  }
+  .nav-busqueda__item:active { transform: scale(0.98); background: rgba(29, 95, 191, .4); }
+  .nav-busqueda__item:focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
+  .nav-busqueda__item[data-tipo="producto"] { border-color: rgba(127, 208, 255, .6); }
+  .nav-busqueda__icono { flex: none; width: 28px; text-align: center; font-size: 20px; }
+  .nav-busqueda__textos { display: grid; gap: 2px; min-width: 0; }
+  .nav-busqueda__textos strong { font-size: .95rem; font-weight: 800; line-height: 1.25; overflow-wrap: anywhere; }
+  .nav-busqueda__textos small { font-size: .78rem; color: #b9d8ff; line-height: 1.3; overflow-wrap: anywhere; }
+  .nav-busqueda__vacio { padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, .06); color: #dbeaff; font-size: .9rem; line-height: 1.45; }
+  .nav-busqueda__vacio a { display: inline-block; margin-top: 4px; color: #8ff0b8; font-weight: 800; }
+  #nav-menu a.nav-link { touch-action: manipulation; }
+}
+@media (max-width: 920px) and (hover: hover) and (pointer: fine) {
+  .nav-busqueda__item:hover { background: rgba(29, 95, 191, .34); }
+}
+
+/* 3. Catálogo en 2 columnas para teléfonos (en lugar de tarjetas gigantes de una columna). */
+@media (max-width: 680px) and (min-width: 340px) {
+  #catalogo-grid.catalogo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    align-items: start;
+  }
+  #catalogo-grid .product-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    padding: 12px;
+    border-radius: 16px;
+  }
+  #catalogo-grid .product-card__head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  #catalogo-grid .product-card__icon.ctv-brand-badge,
+  #catalogo-grid .product-card__icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    font-size: 1.4rem;
+  }
+  #catalogo-grid .product-card__head h3 {
+    font-size: 1rem;
+    line-height: 1.25;
+    margin: 0 0 4px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  #catalogo-grid .product-tags { flex-wrap: nowrap; overflow: hidden; }
+  #catalogo-grid .product-tags span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: .7rem;
+    padding: 2px 8px;
+  }
+  #catalogo-grid .product-tags span + span { display: none; }
+  #catalogo-grid .product-card > p {
+    margin: 0;
+    font-size: .84rem;
+    line-height: 1.45;
+    color: #d6e8ff !important;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+  /* El enlace para compartir aparece cuando la tarjeta se abre. */
+  #catalogo-grid .product-card__enlace { display: none; }
+  #catalogo-grid .product-plans-wrap { margin-top: auto; }
+  #catalogo-grid .product-plans-wrap > summary {
+    min-height: 44px;
+    margin-top: 4px;
+    padding: 10px 8px;
+    font-size: .84rem;
+    line-height: 1.25;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1), background-color 120ms ease;
+  }
+  #catalogo-grid .product-plans-wrap > summary:active { transform: scale(0.97); background: rgba(29, 95, 191, .45); }
+
+  /* Tarjeta abierta, con Black Days o sola (enlace directo): ocupa las 2 columnas y se lee completa. */
+  #catalogo-grid .product-card:is(.product-card--abierta, .product-card--ancha, :only-child),
+  #catalogo-grid .product-card:has(> details[open]),
+  #catalogo-grid .product-card:has(.ctv-bd) {
+    grid-column: 1 / -1;
+    padding: 16px;
+  }
+  #catalogo-grid .product-card:is(.product-card--abierta, .product-card--ancha, :only-child) .product-card__head,
+  #catalogo-grid .product-card:has(> details[open]) .product-card__head,
+  #catalogo-grid .product-card:has(.ctv-bd) .product-card__head { flex-direction: row; align-items: center; gap: 12px; }
+  #catalogo-grid .product-card:is(.product-card--abierta, .product-card--ancha, :only-child) > p,
+  #catalogo-grid .product-card:has(> details[open]) > p,
+  #catalogo-grid .product-card:has(.ctv-bd) > p { -webkit-line-clamp: unset; display: block; font-size: .92rem; }
+  #catalogo-grid .product-card:is(.product-card--abierta, .product-card--ancha, :only-child) .product-tags span + span,
+  #catalogo-grid .product-card:has(> details[open]) .product-tags span + span,
+  #catalogo-grid .product-card:has(.ctv-bd) .product-tags span + span { display: inline-block; }
+  #catalogo-grid .product-card:is(.product-card--abierta, .product-card--ancha, :only-child) .product-tags,
+  #catalogo-grid .product-card:has(> details[open]) .product-tags,
+  #catalogo-grid .product-card:has(.ctv-bd) .product-tags { flex-wrap: wrap; }
+  #catalogo-grid .product-card:is(.product-card--abierta, .product-card--ancha, :only-child) .product-card__enlace,
+  #catalogo-grid .product-card:has(> details[open]) .product-card__enlace,
+  #catalogo-grid .product-card:has(.ctv-bd) .product-card__enlace { display: inline-block; align-self: flex-end; }
+}
+
+/* 4. Vitrina de categorías: 2 columnas también en teléfonos de 340–370 px. */
+@media (max-width: 370px) and (min-width: 340px) {
+  .ctv-discovery__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ctv-discovery__card { min-height: 240px; }
+}
+
+/* 5. Filtros del catálogo: objetivo táctil cómodo y sin destello gris al tocar. */
+@media (max-width: 680px) {
+  #streaming .filter-btn {
+    min-height: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #streaming .filter-btn:active { transform: scale(0.97); }
+  #streaming .filter-btn.activo { box-shadow: 0 0 0 2px #7fd0ff inset; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-busqueda__item, .nav-busqueda__limpiar, #catalogo-grid .product-plans-wrap > summary { transition: none; }
+}
