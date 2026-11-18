@@ -179,3 +179,59 @@ for (const [nombre, vista] of [['celular 390 px', { width: 390, height: 844 }], 
     await pagina.context().close();
   });
 }
+
+test('menú: IPTV cierra el menú, filtra IPTV y lleva al catálogo', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
+  await pagina.click('#btn-menu-movil');
+  await pagina.click('#nav-menu a[data-ir-categoria="iptv"]');
+  await pagina.waitForTimeout(900);
+  const estado = await pagina.evaluate(() => ({
+    abierto: document.getElementById('nav-menu').classList.contains('abierto'),
+    bloqueado: document.body.classList.contains('menu-movil-abierto'),
+    activo: document.querySelector('#streaming .filter-btn.activo')?.dataset.categoria,
+    categorias: [...new Set([...document.querySelectorAll('#catalogo-grid .product-card')].map((c) => PRODUCTOS.find((p) => p.id === c.dataset.producto)?.categoria))],
+    filtroVisible: (() => { const r = document.querySelector('#streaming .filter-tabs').getBoundingClientRect(); return r.top >= 0 && r.top < innerHeight; })()
+  }));
+  assert.deepEqual(estado, { abierto: false, bloqueado: false, activo: 'iptv', categorias: ['iptv'], filtroVisible: true });
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
+
+test('menú: búsqueda maestra filtra en tiempo real, se limpia y salta al producto', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
+  await pagina.click('#btn-menu-movil');
+  await pagina.fill('#nav-busqueda-input', 'spotify');
+  await pagina.waitForSelector('#nav-busqueda-resultados .nav-busqueda__item');
+  assert.match(await pagina.textContent('#nav-busqueda-resultados'), /Spotify/);
+  await pagina.click('#nav-busqueda-limpiar');
+  assert.equal(await pagina.inputValue('#nav-busqueda-input'), '');
+  assert.equal(await pagina.isHidden('#nav-busqueda-resultados'), true);
+  await pagina.fill('#nav-busqueda-input', 'spotify');
+  await pagina.locator('#nav-busqueda-resultados .nav-busqueda__item[data-tipo="producto"]').first().click();
+  await pagina.waitForTimeout(900);
+  const estado = await pagina.evaluate(() => {
+    const tarjeta = document.querySelector('#catalogo-grid [data-producto*="spotify"]');
+    const r = tarjeta?.getBoundingClientRect();
+    return { abierto: document.getElementById('nav-menu').classList.contains('abierto'), existe: !!tarjeta, visible: !!r && r.top < innerHeight && r.bottom > 0 };
+  });
+  assert.deepEqual(estado, { abierto: false, existe: true, visible: true });
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
+
+test('catálogo en celular: 2 columnas y la tarjeta abierta ocupa todo el ancho', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 375, height: 812 }, { fecha: new Date('2026-11-25T15:00:00Z') });
+  const columnas = await pagina.evaluate(() => getComputedStyle(document.getElementById('catalogo-grid')).gridTemplateColumns.split(' ').length);
+  assert.equal(columnas, 2);
+  const primera = pagina.locator('#catalogo-grid .product-card').first();
+  await primera.locator('.product-plans-wrap > summary').click();
+  const anchos = await pagina.evaluate(() => {
+    const grid = document.getElementById('catalogo-grid').getBoundingClientRect();
+    const card = document.querySelector('#catalogo-grid .product-card').getBoundingClientRect();
+    return { grid: Math.round(grid.width), card: Math.round(card.width) };
+  });
+  assert.equal(anchos.card, anchos.grid);
+  assert.equal(await pagina.evaluate(() => document.documentElement.scrollWidth), 375);
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
