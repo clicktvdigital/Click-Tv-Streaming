@@ -472,7 +472,8 @@ test('mini TV: video oficial y tráilers en pestañas, CTA y ✕ fuera del video
   // Auto-ocultar: reproduciendo, la píldora se esconde sola; el primer toque solo la muestra (no pausa).
   await pagina.waitForFunction(() => document.getElementById('ctv-tv-prueba').classList.contains('ctv-tv--controles-ocultos'), null, { timeout: 6000 });
   assert.equal(await pagina.evaluate(() => getComputedStyle(document.getElementById('ctv-tv-audio')).pointerEvents), 'none');
-  await pagina.click('#ctv-tv-promo');
+  // Toque real de celular (en escritorio, mover el ratón ya los muestra y el clic pausa, como en YouTube).
+  await pagina.tap('#ctv-tv-promo');
   assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-prueba').classList.contains('ctv-tv--controles-ocultos')), false);
   assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').paused), false, 'el toque que muestra los controles no pausa');
   // Al salir de la sección: ventana fija y flotante, sin solapes y dentro de la pantalla.
