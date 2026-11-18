@@ -493,3 +493,77 @@ test('portada en celular: estadísticas, atención, preguntas frecuentes y pagos
   assert.deepEqual(errores, []);
   await pagina.context().close();
 });
+
+test('precios en acordeón: Claro Paquetes Megas muestra 4 planes y despliega el resto', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 1280, height: 800 });
+  await pagina.evaluate(() => window.seleccionarCategoriaCatalogo('recargas'));
+  const lista = '[data-producto="claro-paquetes-megas"] .product-plans';
+  await pagina.waitForSelector(`${lista}.product-plans--plegada`);
+  const visibles = () => pagina.locator(`${lista} > .product-plan`).evaluateAll((filas) => filas.filter((f) => f.offsetHeight > 0).length);
+  const total = await pagina.locator(`${lista} > .product-plan`).count();
+  assert.equal(await visibles(), 4);
+  const boton = pagina.locator('[data-producto="claro-paquetes-megas"] .planes-toggle');
+  assert.equal(await boton.getAttribute('aria-expanded'), 'false');
+  assert.match(await boton.textContent(), new RegExp(`Ver ${total - 4} precios más`));
+  await boton.click();
+  assert.equal(await visibles(), total);
+  assert.equal(await boton.getAttribute('aria-expanded'), 'true');
+  // Las tarjetas IPTV ya filtran por dispositivos y meses: no se pliegan.
+  await pagina.evaluate(() => window.seleccionarCategoriaCatalogo('iptv'));
+  await pagina.waitForTimeout(200);
+  assert.equal(await pagina.locator('[data-producto="telelatino"] .planes-toggle').count(), 0);
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
+
+test('partidos en celular: 4 por bloque, el resto plegado, sin huecos y lo abierto se conserva', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
+  const pintar = () => pagina.evaluate(() => {
+    const base = normalizarPartidosLocales(MUNDIAL_2026)[0];
+    const partidos = Array.from({ length: 7 }, (_, i) => ({ ...base, fechaUTC: new Date(Date.parse(base.fechaUTC) + i * 86400000).toISOString() }));
+    pintarMundial(document.getElementById('mundial-grid'), crearBloquePartidos('Prueba', partidos));
+  });
+  await pintar();
+  const bloque = '#mundial-grid .mundial-bloque';
+  assert.equal(await pagina.locator(`${bloque} > .mundial-cards > .match-card`).count(), 4);
+  assert.match(await pagina.textContent(`${bloque} .mundial-mas > summary`), /Ver 3 partidos más/);
+  await pagina.click(`${bloque} .mundial-mas > summary`);
+  const huecos = await pagina.evaluate(() => [...document.querySelectorAll('#mundial-grid .mundial-cards')].map((grid) => {
+    const cards = [...grid.children];
+    const ultima = cards[cards.length - 1];
+    return { columnas: getComputedStyle(grid).gridTemplateColumns.split(' ').length, impar: cards.length % 2 === 1, ultimaAncha: Math.abs(ultima.offsetWidth - grid.clientWidth) < 2 };
+  }));
+  for (const g of huecos) {
+    assert.equal(g.columnas, 2);
+    if (g.impar) assert.equal(g.ultimaAncha, true, 'la última tarjeta impar ocupa todo el ancho');
+  }
+  await pintar();
+  assert.equal(await pagina.evaluate(() => document.querySelector('#mundial-grid details.mundial-mas').open), true, 'sigue abierto tras refrescar');
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
+
+for (const ancho of [360, 412]) {
+  test(`Android ${ancho} px: ningún contenido se sale de la pantalla`, async () => {
+    const { pagina, errores } = await abrirPagina({ width: ancho, height: 800 });
+    const fuera = await pagina.evaluate(() => {
+      const recorta = (el) => {
+        for (let a = el.parentElement; a && a !== document.body; a = a.parentElement) {
+          const cs = getComputedStyle(a);
+          if (cs.position === 'fixed' || a.getAttribute('aria-hidden') === 'true' || a.hidden) return true;
+          if (['auto', 'scroll', 'hidden', 'clip'].includes(cs.overflowX)) return true; // desplazable o recortado a propósito
+        }
+        return false;
+      };
+      return [...document.querySelectorAll('main *')].filter((el) => {
+        const r = el.getBoundingClientRect();
+        if (!r.width || !r.height || getComputedStyle(el).position === 'fixed' || recorta(el)) return false;
+        return r.right > innerWidth + 1 || r.left < -1;
+      }).slice(0, 8).map((el) => `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}.${[...el.classList].join('.')} (${Math.round(el.getBoundingClientRect().left)}→${Math.round(el.getBoundingClientRect().right)})`);
+    });
+    assert.deepEqual(fuera, [], `elementos fuera de ${ancho} px`);
+    assert.equal(await pagina.evaluate(() => document.documentElement.scrollWidth), ancho);
+    assert.deepEqual(errores, []);
+    await pagina.context().close();
+  });
+}

@@ -479,7 +479,6 @@ html.pestana-oculta :is(.navidad-nieve span, .navidad-santa, .navidad-santa *, .
   #ayuda .faq-card h3 { font-size: .92rem; line-height: 1.25; }
   #ayuda .faq-card p { font-size: .8rem; line-height: 1.4; margin: .3rem 0 0; }
 
-  #mundial .mundial-cards { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 8px; }
   #mundial .match-card { padding: 10px 8px !important; min-width: 0; }
   #mundial .mundial-duelo { gap: 4px !important; }
   #mundial .mundial-team strong { font-size: .72rem !important; line-height: 1.2; overflow-wrap: anywhere; }
@@ -491,4 +490,84 @@ html.pestana-oculta :is(.navidad-nieve span, .navidad-santa, .navidad-santa *, .
   #clicktv-pagos-faciles .clicktv-payment-guide__links { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   #clicktv-pagos-faciles .clicktv-payment-guide__links > :first-child { grid-column: 1 / -1; }
   #clicktv-pagos-faciles .clicktv-payment-guide__links .btn { width: 100%; min-height: 44px; white-space: normal; text-align: center; font-size: .86rem; }
+}
+
+/* 10. Acordeón de precios: en listas largas se ven 4 planes y el resto se despliega (todas las pantallas). */
+.product-plans--plegada > .product-plan:nth-child(n+5) { display: none !important; }
+.planes-toggle {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 8px;
+  border-radius: 12px;
+  border: 1px dashed rgba(150, 200, 255, .55);
+  background: rgba(29, 95, 191, .12);
+  color: #cfe6ff;
+  font: inherit;
+  font-size: .86rem;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.planes-toggle:active { background: rgba(29, 95, 191, .3); }
+.planes-toggle:focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
+
+/* 11. Partidos: bloques de 4 (2×2 en celular, 4 en fila en escritorio), alturas iguales y sin huecos:
+   la última fila incompleta se reparte a todo el ancho. */
+#mundial .mundial-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: clamp(8px, 2vw, 16px);
+  align-items: stretch;
+}
+#mundial .mundial-cards > .match-card { min-width: 0; height: 100%; box-sizing: border-box; }
+@media (max-width: 999px) {
+  #mundial .mundial-cards > .match-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+@media (min-width: 1000px) {
+  #mundial .mundial-cards { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+  #mundial .mundial-cards > .match-card:last-child:nth-child(4n+1) { grid-column: 1 / -1; }
+  #mundial .mundial-cards > .match-card:nth-last-child(2):nth-child(4n+1),
+  #mundial .mundial-cards > .match-card:last-child:nth-child(4n+2),
+  #mundial .mundial-cards > .match-card:last-child:nth-child(4n+3) { grid-column: span 2; }
+}
+#mundial .mundial-mas { margin-top: clamp(8px, 2vw, 16px); }
+#mundial .mundial-mas > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px dashed rgba(150, 200, 255, .55);
+  color: #cfe6ff;
+  font-weight: 800;
+  font-size: .9rem;
+  touch-action: manipulation;
+}
+#mundial .mundial-mas > summary::-webkit-details-marker { display: none; }
+#mundial .mundial-mas > summary:focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
+#mundial .mundial-mas[open] > summary { margin-bottom: clamp(8px, 2vw, 16px); }
+
+/* 12. Android (360–430 px y densidades altas): unidades flexibles y nada más ancho que la pantalla. */
+@media (max-width: 680px) {
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  main :is(img, video, iframe, svg, canvas, table, pre) { max-width: 100%; }
+  main :is([class*="grid"], [class*="-cards"], .form-grid) > * { min-width: 0; }
+  main :is(p, li, h2, h3, h4, strong, small, span, a) { overflow-wrap: break-word; }
+  main .btn { max-width: 100%; white-space: normal; }
+  main .section-head h2,
+  main .clicktv-journey__head h2 { font-size: clamp(1.3rem, 5.8vw, 1.7rem) !important; line-height: 1.2; }
+  main .section-head p { font-size: clamp(.9rem, 3.8vw, 1rem); }
+  main .section { padding-block: clamp(36px, 10vw, 56px); }
+  /* Filtros del catálogo a sangre exacta: el contenedor deja 11 px por lado y el margen fijo de -16 px
+     cortaba 5 px de la primera categoría. Con 50% - 50vw llega justo al borde, sea cual sea el margen. */
+  #streaming .filter-tabs {
+    margin-inline: calc(50% - 50vw) !important;
+    padding-inline: calc(50vw - 50%) !important;
+    scroll-padding-inline: calc(50vw - 50%);
+  }
 }
