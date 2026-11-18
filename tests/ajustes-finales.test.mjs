@@ -242,11 +242,10 @@ test('unslop: etiquetas de producto en tipo oración, sin emoji y con siglas/mar
   assert.match(leer('catalogo.js'), /<span>\$\{escapar\(etiquetaLegible\(e\)\)\}<\/span>/);
 });
 
-test('unslop: carrito vacío limpio, sin desbordes en catálogo y menos capas fijas en Android', () => {
+test('unslop: carrito vacío limpio y sin desbordes en el catálogo', () => {
   const css = leer('clicktv-ajustes-finales-2026.css');
   assert.match(css, /#panel-carrito:has\(\.carrito-vacio\) :is\(\.cupon-box, \.cart-summary, \.cart-contact-options\) \{ display: none !important; \}/);
   assert.match(css, /#panel-carrito:has\(\.carrito-vacio\) \.cart-actions > :not\(#btn-continuar-comprando\) \{ display: none !important; \}/);
   assert.match(css, /\.product-tags span \{[^}]*white-space: normal !important;/);
   assert.match(css, /\.catalogo-ayuda__duda \{[^}]*white-space: normal !important;/);
-  assert.match(css, /body\.ctv-bd-barra-visible \.ctv-asistente-btn__promo \{ display: none !important; \}/);
 });

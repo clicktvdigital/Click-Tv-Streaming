@@ -579,6 +579,3 @@
 #panel-carrito:has(.carrito-vacio) :is(.cupon-box, .cart-summary, .cart-contact-options) { display: none !important; }
 #panel-carrito:has(.carrito-vacio) .cart-actions > :not(#btn-continuar-comprando) { display: none !important; }
 
-/* Android: menos capas fijas sobre el contenido. La barra Black Days ya anuncia la promo:
-   el distintivo «Black Days» del asistente sobraba y tapaba texto. */
-body.ctv-bd-barra-visible .ctv-asistente-btn__promo { display: none !important; }
