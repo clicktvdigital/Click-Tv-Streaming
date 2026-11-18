@@ -2615,13 +2615,14 @@ function crearCardPartido(p) {
 }
 // Datos del encuentro en una sola fila horizontal: 2 o 3 celdas iguales según haya estadio.
 function crearDatosPartido(p, fecha, sede = "") {
+  // Rótulos cortos y sin emoji: la sección ya indica que las horas son de Ecuador.
   const datos = [
-    ["📅", "Fecha", formatearFechaPartidoCliente(fecha)],
-    ["⏰", "Hora Ecuador", formatearHoraPartidoCliente(fecha)]
+    ["Fecha", formatearFechaPartidoCliente(fecha)],
+    ["Hora", formatearHoraPartidoCliente(fecha)]
   ];
-  if (sede) datos.push(["🏟️", "Estadio", sede]);
-  return `<dl class="match-datos match-datos--${datos.length}">${datos.map(([icono, etiqueta, valor]) => `
-        <div class="match-dato"><dt><span aria-hidden="true">${icono}</span> ${etiqueta}</dt><dd>${escaparHTML(String(valor))}</dd></div>`).join("")}
+  if (sede) datos.push(["Estadio", sede]);
+  return `<dl class="match-datos match-datos--${datos.length}">${datos.map(([etiqueta, valor]) => `
+        <div class="match-dato"><dt>${etiqueta}</dt><dd>${escaparHTML(String(valor))}</dd></div>`).join("")}
       </dl>`;
 }
 

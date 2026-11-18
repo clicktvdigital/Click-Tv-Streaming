@@ -50,6 +50,7 @@ test('partidos: sin mapa ni enlace de indicaciones, banderas grandes y datos en 
   assert.equal((conSede.match(/class="match-dato"/g) || []).length, 3);
   assert.match(conSede, /Estadio Rodrigo Paz &lt;Casa Blanca&gt;/, 'escapa el nombre del estadio');
   assert.match(conSede, /20:00/, 'hora de Ecuador');
+  assert.match(conSede, /<dt>Fecha<\/dt>[\s\S]*<dt>Hora<\/dt>[\s\S]*<dt>Estadio<\/dt>/, 'rótulos cortos que caben a 360 px, sin emoji');
   const sinSede = ctx.crearDatosPartido({}, fecha, '');
   assert.match(sinSede, /match-datos--2/);
   assert.equal((sinSede.match(/class="match-dato"/g) || []).length, 2, 'sin estadio no queda una celda vacía');
