@@ -131,6 +131,18 @@ jobs:
             echo "footballDataApiToken no debe existir en el front"; exit 1
           fi
 
+      - name: Verificar SEO y Google Search Console
+        run: |
+          # El archivo de verificación debe publicarse tal cual en la raíz.
+          test "$(cat googlebd70cc265f0ecc3d.html)" = "google-site-verification: googlebd70cc265f0ecc3d.html"
+          grep -Fq 'Sitemap: https://click-tv-streaming.vercel.app/sitemap.xml' robots.txt
+          if grep -Eiq '^Disallow: */ *$' robots.txt; then echo 'robots.txt bloquea el sitio'; exit 1; fi
+          python3 -c "import xml.dom.minidom; xml.dom.minidom.parse('sitemap.xml')"
+          grep -Fq '<loc>https://click-tv-streaming.vercel.app/</loc>' sitemap.xml
+          grep -Fq 'rel="canonical" href="https://click-tv-streaming.vercel.app/"' index.html
+          grep -Fq 'Click TV Digital' index.html
+          node -e "const h=require('fs').readFileSync('index.html','utf8');const m=h.match(/<script type=\"application\/ld\+json\">([\\s\\S]*?)<\/script>/);JSON.parse(m[1]);"
+
       - name: Confirmar recursos conectados a la web
         run: |
           grep -Fq 'clicktv-accesible-azul.css' index.html

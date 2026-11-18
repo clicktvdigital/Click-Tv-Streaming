@@ -236,3 +236,14 @@ test('catálogo en celular: 2 columnas y la tarjeta abierta ocupa todo el ancho'
   assert.deepEqual(errores, []);
   await pagina.context().close();
 });
+
+test('sitemap: ?categoria=iptv abre el catálogo filtrado en IPTV', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 }, { consulta: '?categoria=iptv' });
+  const estado = await pagina.evaluate(() => ({
+    activo: document.querySelector('#streaming .filter-btn.activo')?.dataset.categoria,
+    categorias: [...new Set([...document.querySelectorAll('#catalogo-grid .product-card')].map((c) => PRODUCTOS.find((p) => p.id === c.dataset.producto)?.categoria))]
+  }));
+  assert.deepEqual(estado, { activo: 'iptv', categorias: ['iptv'] });
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
