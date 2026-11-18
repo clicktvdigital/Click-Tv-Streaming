@@ -114,6 +114,9 @@ test('Black Days: la promo de IPTV llega al carrito y al mensaje de WhatsApp con
   for (const id of ['flujo-tv', 'stella-tv', 'xc-tv']) {
     assert.equal(await pagina.locator(`[data-producto="${id}"] .ctv-bd`).count(), 0, `${id} sin Black Days`);
   }
+  await caja.scrollIntoViewIfNeeded();
+  await pagina.waitForFunction(() => document.body.classList.contains('ctv-bd-selector-visible'), null, { timeout: 3000 });
+  assert.equal(await pagina.isHidden('#ctv-bd-barra'), true, 'la barra se aparta con el selector de la promo a la vista');
   await caja.locator('input[value="2"]').check({ force: true });
   await caja.locator('input[value="bd-paga3"]').check({ force: true });
   assert.match(await caja.locator('[data-bd-desglose]').textContent(), /41[.,]50/);
@@ -184,7 +187,10 @@ test('menú: IPTV cierra el menú, filtra IPTV y lleva al catálogo', async () =
   const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
   await pagina.click('#btn-menu-movil');
   await pagina.click('#nav-menu a[data-ir-categoria="iptv"]');
-  await pagina.waitForTimeout(900);
+  await pagina.waitForFunction(() => {
+    const r = document.querySelector('#streaming .filter-tabs').getBoundingClientRect();
+    return r.top >= 0 && r.top < innerHeight;
+  }, null, { timeout: 4000 }).catch(() => {});
   const estado = await pagina.evaluate(() => ({
     abierto: document.getElementById('nav-menu').classList.contains('abierto'),
     bloqueado: document.body.classList.contains('menu-movil-abierto'),
@@ -208,7 +214,11 @@ test('menú: búsqueda maestra filtra en tiempo real, se limpia y salta al produ
   assert.equal(await pagina.isHidden('#nav-busqueda-resultados'), true);
   await pagina.fill('#nav-busqueda-input', 'spotify');
   await pagina.locator('#nav-busqueda-resultados .nav-busqueda__item[data-tipo="producto"]').first().click();
-  await pagina.waitForTimeout(900);
+  // El scroll suave tarda según la distancia y la máquina: se espera a que la tarjeta entre en pantalla.
+  await pagina.waitForFunction(() => {
+    const r = document.querySelector('#catalogo-grid [data-producto*="spotify"]')?.getBoundingClientRect();
+    return !!r && r.top < innerHeight && r.bottom > 0;
+  }, null, { timeout: 4000 }).catch(() => {});
   const estado = await pagina.evaluate(() => {
     const tarjeta = document.querySelector('#catalogo-grid [data-producto*="spotify"]');
     const r = tarjeta?.getBoundingClientRect();

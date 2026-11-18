@@ -213,6 +213,31 @@
       actualizar();
     });
     window.addEventListener('resize', () => { if (!barra.hidden) medir(); }, { passive: true });
+
+    // Si el selector de la promo ya está en pantalla, la barra sobra y taparía sus botones: se aparta.
+    if ('IntersectionObserver' in window) {
+      const aLaVista = new Set();
+      const observador = new IntersectionObserver((entradas) => {
+        for (const e of entradas) {
+          if (e.isIntersecting && e.target.offsetHeight > 80) aLaVista.add(e.target); else aLaVista.delete(e.target);
+        }
+        document.body.classList.toggle('ctv-bd-selector-visible', aLaVista.size > 0);
+      });
+      const observarSelectores = () => {
+        aLaVista.clear();
+        observador.disconnect();
+        document.querySelectorAll('#catalogo-grid .ctv-bd').forEach((caja) => observador.observe(caja));
+        document.body.classList.remove('ctv-bd-selector-visible');
+      };
+      const grid = document.getElementById('catalogo-grid');
+      if (grid && 'MutationObserver' in window) new MutationObserver(observarSelectores).observe(grid, { childList: true });
+      // Abrir o cerrar una tarjeta cambia la altura del selector: se vuelve a evaluar.
+      document.addEventListener('toggle', (e) => {
+        const caja = e.target.closest?.('.product-card')?.querySelector('.ctv-bd');
+        if (caja) { observador.unobserve(caja); observador.observe(caja); }
+      }, true);
+      observarSelectores();
+    }
     document.addEventListener('visibilitychange', () => { if (!document.hidden) actualizar(); });
     actualizar();
   }
