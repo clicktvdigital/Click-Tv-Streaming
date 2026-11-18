@@ -127,7 +127,8 @@
   .combo-builder__item .btn { grid-column: 2; grid-row: 1; }
 }
 
-/* 5. Mini TV con tráilers oficiales de YouTube. */
+/* 5. Mini TV de ventas: pestañas «Click TV Oficial» (video propio) y «Estrenos de Cine» (YouTube).
+   El CTA va en una barra debajo del video: nunca tapa la imagen ni los controles nativos. */
 .ctv-tv {
   margin-top: 1rem;
   padding: 14px;
@@ -137,10 +138,29 @@
   color: #eaf4ff;
 }
 .ctv-tv__cabecera { display: grid; gap: 4px; margin-bottom: 10px; }
-.ctv-tv__cabecera small { color: #b9d8ff; line-height: 1.4; }
-.ctv-tv__marco { position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #000; }
-.ctv-tv__reproductor, .ctv-tv__iframe, .ctv-tv__miniatura { display: block; width: 100%; height: 100%; border: 0; }
+.ctv-tv__pestanas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-bottom: 10px; }
+.ctv-tv__pestana {
+  min-height: 44px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(96, 165, 250, .45);
+  background: rgba(29, 95, 191, .18);
+  color: #dbeaff;
+  font: inherit;
+  font-size: .9rem;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+.ctv-tv__pestana[aria-selected="true"] { background: #1689ff; border-color: #7fd0ff; color: #fff; }
+.ctv-tv__pestana[hidden] { display: none; }
+.ctv-tv__ventana { border-radius: 14px; overflow: hidden; background: #000; }
+.ctv-tv__marco { position: relative; aspect-ratio: 16 / 9; background: #000; }
+.ctv-tv__video, .ctv-tv__reproductor, .ctv-tv__iframe, .ctv-tv__miniatura { display: block; width: 100%; height: 100%; border: 0; }
+.ctv-tv__video { object-fit: contain; background: #000; }
 .ctv-tv__miniatura { object-fit: cover; }
+.ctv-tv__video[hidden], .ctv-tv__reproductor[hidden] { display: none; }
 .ctv-tv__play {
   position: absolute;
   inset: 0;
@@ -161,41 +181,44 @@
 }
 .ctv-tv__play:active { transform: scale(0.97); }
 .ctv-tv__play[hidden] { display: none; }
-/* CTA de conversión: abajo a la izquierda, sin tapar los controles de YouTube del centro. */
+
+/* Barra inferior del widget: CTA a lo ancho y, si hace falta, volver y cerrar. */
+.ctv-tv__barra { display: flex; align-items: stretch; gap: 6px; padding: 8px; background: #061a33; }
 .ctv-tv__cta {
-  position: absolute;
-  left: 8px;
-  top: 8px;
-  min-height: 40px;
-  padding: 6px 12px;
-  border-radius: 999px;
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  padding: 8px 12px;
+  border-radius: 12px;
   border: 1.5px solid #ffd27a;
   background: linear-gradient(135deg, #ff7a18, #e5361b);
   color: #fff;
   font: inherit;
-  font-size: .86rem;
+  font-size: .95rem;
   font-weight: 900;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, .45);
+  line-height: 1.2;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .35);
   cursor: pointer;
   touch-action: manipulation;
   transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
 }
-.ctv-tv__cta:active { transform: scale(0.97); }
-.ctv-tv__mini-barra { display: none; position: absolute; top: 6px; right: 6px; gap: 4px; }
-.ctv-tv--activo .ctv-tv__mini-barra { display: flex; }
-.ctv-tv--activo:not(.ctv-tv--mini) #ctv-tv-volver { display: none; }
-.ctv-tv__mini-barra button {
-  width: 40px;
-  height: 40px;
-  border: 0;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, .7);
+.ctv-tv__cta:active { transform: scale(0.98); }
+.ctv-tv__icono {
+  flex: none;
+  width: 48px;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .08);
   color: #fff;
   font-size: 16px;
   cursor: pointer;
   touch-action: manipulation;
 }
-.ctv-tv__controles { margin-top: 8px; }
+.ctv-tv__icono:active { background: rgba(255, 255, 255, .18); }
+.ctv-tv:not(.ctv-tv--activo) #ctv-tv-cerrar,
+.ctv-tv:not(.ctv-tv--mini) #ctv-tv-volver { display: none; }
+.ctv-tv__controles { margin-bottom: 8px; }
+.ctv-tv__controles[hidden] { display: none; }
 .ctv-tv__controles select {
   width: 100%;
   min-height: 44px;
@@ -206,28 +229,29 @@
   font-size: 16px;
   padding: 0 10px;
 }
-.ctv-tv :is(.ctv-tv__play, .ctv-tv__cta, .ctv-tv__mini-barra button, select):focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
+.ctv-tv :is(.ctv-tv__pestana, .ctv-tv__play, .ctv-tv__cta, .ctv-tv__icono, select):focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
 .ctv-tv__estado { margin: 8px 0 0; font-size: .82rem; color: #b9d8ff; }
 
-/* Ventana pequeña persistente (encima de los accesos rápidos y de la barra de Black Days). */
-.ctv-tv--mini .ctv-tv__marco {
+/* Ventana pequeña persistente: se mueve el video junto con su barra (encima de los accesos y de Black Days). */
+.ctv-tv--mini .ctv-tv__ventana {
   position: fixed;
   z-index: 1385;
   left: max(10px, env(safe-area-inset-left));
   bottom: calc(var(--ctv-alto-accesos, 92px) + 10px);
-  width: min(56vw, 260px);
+  width: min(62vw, 280px);
   border: 1.5px solid #7fd0ff;
   box-shadow: 0 12px 30px rgba(0, 0, 0, .5);
 }
-body.ctv-bd-barra-visible .ctv-tv--mini .ctv-tv__marco { bottom: calc(var(--ctv-alto-accesos, 92px) + 76px); }
-.ctv-tv--mini .ctv-tv__cta { left: 4px; top: auto; bottom: 4px; min-height: 32px; padding: 4px 9px; font-size: .7rem; }
-.ctv-tv--mini .ctv-tv__mini-barra button { width: 32px; height: 32px; font-size: 14px; }
+body.ctv-bd-barra-visible .ctv-tv--mini .ctv-tv__ventana { bottom: calc(var(--ctv-alto-accesos, 92px) + 76px); }
+.ctv-tv--mini .ctv-tv__barra { padding: 4px; gap: 4px; }
+.ctv-tv--mini .ctv-tv__cta { min-height: 36px; padding: 4px 8px; font-size: .72rem; border-radius: 9px; }
+.ctv-tv--mini .ctv-tv__icono { width: 36px; border-radius: 9px; font-size: 14px; }
 @media (min-width: 921px) {
-  .ctv-tv--mini .ctv-tv__marco { left: 24px; bottom: 24px; width: 340px; }
-  .ctv-tv--mini .ctv-tv__cta { font-size: .8rem; min-height: 36px; }
+  .ctv-tv--mini .ctv-tv__ventana { left: 24px; bottom: 24px; width: 360px; }
+  .ctv-tv--mini .ctv-tv__cta { font-size: .82rem; }
 }
-body:is(.menu-movil-abierto, .cart-open) .ctv-tv--mini .ctv-tv__marco { visibility: hidden; }
+body:is(.menu-movil-abierto, .cart-open) .ctv-tv--mini .ctv-tv__ventana { visibility: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ctv-tv__play, .ctv-tv__cta { transition: none; }
+  .ctv-tv__play, .ctv-tv__cta, .ctv-tv__pestana { transition: none; }
 }

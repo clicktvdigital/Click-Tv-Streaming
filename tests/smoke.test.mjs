@@ -36,6 +36,8 @@ before(async () => {
 
 after(async () => {
   await navegador?.close();
+  // Un video en bucle puede dejar conexiones abiertas: se cierran para que el proceso termine.
+  servidor?.closeAllConnections?.();
   await new Promise((ok) => servidor?.close(ok));
 });
 
@@ -433,30 +435,51 @@ test('contacto: buscar país, región dinámica, prefijo automático y suscripci
   await pagina.context().close();
 });
 
-test('mini TV: tráilers con selector, carga silenciada al llegar, ventana pequeña, CTA y cierre', async () => {
+test('mini TV: video oficial y tráilers en pestañas, CTA y ✕ fuera del video, ventana flotante y cierre', async () => {
   const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
-  assert.ok(await pagina.locator('#ctv-tv-trailer option').count() >= 2);
-  assert.equal(await pagina.locator('#ctv-tv-reproductor iframe').count(), 0, 'nada se carga antes de llegar a la sección');
+  try {
+  assert.equal(await pagina.getAttribute('#ctv-tv-promo', 'src'), null, 'nada se descarga antes de llegar');
   await pagina.locator('#ctv-tv-prueba').scrollIntoViewIfNeeded();
-  await pagina.waitForSelector('#ctv-tv-reproductor iframe');
-  const src = await pagina.getAttribute('#ctv-tv-reproductor iframe', 'src');
-  assert.match(src, /^https:\/\/www\.youtube-nocookie\.com\/embed\/[A-Za-z0-9_-]{11}\?/);
-  assert.match(src, /mute=1/);
-  const segundo = await pagina.locator('#ctv-tv-trailer option').nth(1).getAttribute('value');
-  await pagina.selectOption('#ctv-tv-trailer', segundo);
-  assert.match(await pagina.getAttribute('#ctv-tv-reproductor iframe', 'src'), new RegExp(`/embed/${segundo}\\?`));
+  await pagina.waitForFunction(() => document.getElementById('ctv-tv-promo').getAttribute('src') === 'assets/promo.mp4');
+  await pagina.waitForFunction(() => !document.getElementById('ctv-tv-promo').paused, null, { timeout: 8000 });
+  const sinSolape = () => pagina.evaluate(() => {
+    const v = document.getElementById('ctv-tv-marco').getBoundingClientRect();
+    return ['ctv-tv-cta', 'ctv-tv-cerrar'].every((id) => {
+      const b = document.getElementById(id).getBoundingClientRect();
+      return b.height === 0 || b.top >= v.bottom - 0.5;
+    });
+  });
+  assert.equal(await sinSolape(), true, 'CTA y ✕ debajo del video en la tarjeta');
+  // Al salir de la sección: ventana fija y flotante, sin solapes y dentro de la pantalla.
   await pagina.evaluate(() => window.scrollTo(0, 0));
   await pagina.waitForFunction(() => document.getElementById('ctv-tv-prueba').classList.contains('ctv-tv--mini'));
+  const flotante = await pagina.evaluate(() => {
+    const ventana = document.querySelector('.ctv-tv__ventana');
+    const r = ventana.getBoundingClientRect();
+    return { fija: getComputedStyle(ventana).position === 'fixed', dentro: r.left >= 0 && r.top >= 0 && r.right <= innerWidth && r.bottom <= innerHeight, ancho: document.documentElement.scrollWidth, caja: [r.left, r.top, r.right, r.bottom].map(Math.round).join(',') };
+  });
+  assert.deepEqual({ ...flotante, caja: undefined }, { fija: true, dentro: true, ancho: 390, caja: undefined }, `ventana en ${flotante.caja}`);
+  assert.equal(await sinSolape(), true, 'CTA y ✕ debajo del video en la ventana flotante');
+  // Pestaña de cine: tráilers oficiales de YouTube.
+  await pagina.click('#ctv-tv-tab-cine');
+  assert.equal(await pagina.getAttribute('#ctv-tv-tab-cine', 'aria-selected'), 'true');
+  assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').paused), true, 'el video oficial se pausa');
+  assert.ok(await pagina.locator('#ctv-tv-trailer option').count() >= 2);
+  assert.equal(await sinSolape(), true, 'en Estrenos de Cine el CTA tampoco tapa el video');
+  await pagina.click('#ctv-tv-tab-oficial');
+  // CTA lleva a IPTV Premium; ✕ cierra y quita la ventana flotante.
   await pagina.click('#ctv-tv-cta');
   await pagina.waitForFunction(() => {
     const r = document.querySelector('#catalogo-grid [data-producto="iptv-premium"]')?.getBoundingClientRect();
     return !!r && r.top < innerHeight && r.bottom > 0;
   }, null, { timeout: 4000 });
   await pagina.click('#ctv-tv-cerrar');
-  assert.equal(await pagina.locator('#ctv-tv-reproductor iframe').count(), 0, 'cerrar libera el iframe');
+  assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').paused), true);
   assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-prueba').classList.contains('ctv-tv--mini')), false);
   assert.deepEqual(errores, []);
-  await pagina.context().close();
+  } finally {
+    await pagina.context().close();
+  }
 });
 
 test('portada en celular: estadísticas, atención, preguntas frecuentes y pagos en 2 columnas', async () => {
