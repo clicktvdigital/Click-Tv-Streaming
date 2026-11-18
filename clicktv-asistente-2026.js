@@ -16,6 +16,7 @@
     inicio: {
       texto: ['👋 Hola, soy el asistente de CLICK TV STREAMING.', '¿En qué te ayudo?'],
       opciones: [
+        ['📺 Planes de IPTV', 'iptv'],
         ['🛒 Quiero comprar', 'comprar'],
         ['💳 Formas de pago', 'pagos'],
         ['🔁 Renovar mi servicio', 'renovar'],
@@ -128,6 +129,22 @@
         ['⬅️ Volver', 'problema'],
       ],
     },
+    iptv: {
+      texto: [
+        '📺 Televisión por internet (IPTV):',
+        '🟦 Básico: canales en vivo y entretenimiento.',
+        '🟪 Premium: más canales, películas, series y deportes.',
+        '🟨 Ultra: la mejor estabilidad y experiencia.',
+        '📱 Para 1, 2 o 3 dispositivos.',
+      ],
+      opciones: [
+        ['📺 IPTV Básico', 'producto:iptv-basico'],
+        ['💎 IPTV Premium', 'producto:iptv-premium'],
+        ['🚀 IPTV Ultra', 'producto:iptv-ultra'],
+        ['🗂️ Ver todos los planes IPTV', 'categoria:iptv'],
+        ['⬅️ Volver', 'inicio'],
+      ],
+    },
     agente: {
       texto: [
         '👤 Elige cómo quieres hablar con nosotros:',
@@ -149,7 +166,37 @@
     renovar: '🔁 Hola Click TV Streaming.\n\nDeseo renovar mi servicio. ¿Me indican el vencimiento y el importe?',
     problema: '🛠️ Hola Click TV Streaming.\n\nTengo un problema con mi servicio: ',
     datos: '🔑 Hola Click TV Streaming.\n\nNo me llegan los datos de acceso de mi servicio.',
+    blackdays: '🖤 Hola Click TV Streaming.\n\nQuiero aprovechar la promoción *Black Days* de IPTV.\n\n📺 Plan: IPTV Básico / Premium / Ultra\n📱 Dispositivos: 1 / 2 / 3\n🎁 Promoción: \n\n✅ ¿Me ayudan a activarla?',
   };
+
+  // Black Days: el asistente lo anuncia solo mientras la promoción está vigente.
+  const promo = () => window.PromoBlackDays;
+  const promoVigente = () => typeof promo()?.estaActiva === 'function' && promo().estaActiva();
+
+  function nodoBlackDays() {
+    const lista = (promo()?.PROMOS || []).map((p) => `🎁 ${p.nombre}.`);
+    return {
+      texto: ['🖤 Black Days · del 15 al 20 de noviembre', 'Meses gratis en IPTV Básico, Premium y Ultra:', ...lista,
+        '✅ Elige el plan y los dispositivos; el ahorro ya está incluido en el precio.'],
+      opciones: [
+        ['📺 IPTV Básico', 'producto:iptv-basico'],
+        ['💎 IPTV Premium', 'producto:iptv-premium'],
+        ['🚀 IPTV Ultra', 'producto:iptv-ultra'],
+        ['🗂️ Ver los 3 planes con promo', 'categoria:iptv'],
+        ['📲 Pedir por WhatsApp', 'enlace:ventas:blackdays'],
+        ['⬅️ Volver', 'inicio'],
+      ],
+    };
+  }
+
+  function obtenerNodo(clave) {
+    if (clave === 'blackdays') return promoVigente() ? nodoBlackDays() : nodos.iptv;
+    const nodo = nodos[clave] || nodos.inicio;
+    if (nodo !== nodos.inicio || !promoVigente()) return nodo;
+    // Durante la promo, la portada del asistente la anuncia primero.
+    return { ...nodo, aviso: '🖤 Black Days: hasta 6 meses gratis en IPTV · hasta el 20 de noviembre',
+      opciones: [['🖤 Ver ofertas Black Days', 'blackdays'], ...nodo.opciones] };
+  }
 
   function crearDom() {
     const boton = document.createElement('button');
@@ -191,6 +238,8 @@
 
   // Preguntas comunes: se muestra la guía correspondiente sin usar la IA.
   const PALABRAS = [
+    [/black|promo|oferta|gratis|descuento/i, 'blackdays'],
+    [/iptv|television|tv en vivo|canales/i, 'iptv'],
     [/agente|humano|persona|asesor|hablar con/i, 'agente'],
     [/horario|hora|a qu[eé] hora|atienden/i, 'horario'],
     [/no abre|no funciona|falla|error|problema|no me llega|no llega|datos de acceso|no activ/i, 'problema'],
@@ -246,8 +295,17 @@
   }
 
   function render(cuerpo, clave) {
-    const nodo = nodos[clave] || nodos.inicio;
+    const nodo = obtenerNodo(clave);
     cuerpo.innerHTML = '';
+
+    if (nodo.aviso) {
+      const aviso = document.createElement('button');
+      aviso.type = 'button';
+      aviso.className = 'ctv-asistente__promo';
+      aviso.textContent = nodo.aviso;
+      aviso.addEventListener('click', () => render(cuerpo, 'blackdays'));
+      cuerpo.appendChild(aviso);
+    }
 
     nodo.texto.forEach((linea) => {
       const p = document.createElement('p');
@@ -274,6 +332,17 @@
       document.querySelector(sel)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       return;
     }
+    if (destino.startsWith('producto:') || destino.startsWith('categoria:')) {
+      const [tipo, valor] = destino.split(':');
+      cerrarPanel();
+      if (tipo === 'producto') {
+        const producto = (typeof PRODUCTOS !== 'undefined' ? PRODUCTOS : []).find((p) => p.id === valor);
+        if (window.ctvNavegacion) window.ctvNavegacion.irAProducto(valor, producto?.categoria);
+        else window.enfocarProducto?.(valor);
+      } else if (window.ctvNavegacion) window.ctvNavegacion.irACategoria(valor);
+      else window.seleccionarCategoriaCatalogo?.(valor);
+      return;
+    }
     if (destino.startsWith('enlace:')) {
       const [, tipo, clave] = destino.split(':');
       return abrirEnlace(tipo, clave);
@@ -285,6 +354,16 @@
     if (document.getElementById('ctv-asistente-btn')) return;
     const { boton, panel, cuerpo } = crearDom();
     render(cuerpo, 'inicio');
+    // Mientras dura la promo, el botón de ayuda lleva un distintivo visible.
+    if (promoVigente()) {
+      boton.classList.add('ctv-asistente-btn--promo');
+      boton.setAttribute('aria-label', 'Ayuda · ofertas Black Days');
+      const marca = document.createElement('span');
+      marca.className = 'ctv-asistente-btn__promo';
+      marca.setAttribute('aria-hidden', 'true');
+      marca.textContent = 'Black Days';
+      boton.appendChild(marca);
+    }
 
     // Preguntas libres: se responden con el servicio de IA a través de /api/asistente.
     const formulario = panel.querySelector('.ctv-asistente__pregunta');

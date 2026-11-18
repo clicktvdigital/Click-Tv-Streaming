@@ -76,8 +76,16 @@
     });
   }
 
+  // Productos retirados del catálogo: sus enlaces antiguos abren la categoría que los reemplaza.
+  // "Plataformas IPTV" (época del Mundial) lo cubren ahora IPTV Básico, Premium y Ultra.
+  const RETIRADOS = { 'plataformas-iptv': 'iptv' };
+
   function abrirProductoDesdeEnlace(id) {
     const producto = (typeof PRODUCTOS !== 'undefined' ? PRODUCTOS : []).find((p) => p.id === id);
+    if (!producto && RETIRADOS[id] && typeof window.seleccionarCategoriaCatalogo === 'function') {
+      window.seleccionarCategoriaCatalogo(RETIRADOS[id]);
+      return;
+    }
     if (!producto || typeof window.seleccionarCategoriaCatalogo !== 'function') return;
 
     // Muestra solo el producto del enlace, dentro de su categoría.

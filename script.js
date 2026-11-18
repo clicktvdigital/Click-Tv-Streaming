@@ -1388,35 +1388,53 @@ async function renovarItemTelegram(itemId) {
   abrirTelegramConMensaje(obtenerMensajeRenovacion(item));
 }
 
+// Detalles del carrito que el cliente dejó abiertos: se conservan al volver a pintar (cantidad, cupón, moneda).
+// Se leen del DOM justo antes de pintar: el evento "toggle" llega en una tarea posterior y podía perderse.
+const detallesCarritoAbiertos = new Set();
+
 function renderCarrito() {
   const contenedor = document.getElementById("carrito-items");
   if (!contenedor) return;
+  contenedor.querySelectorAll("details.carrito-item__detalle").forEach((detalle) => {
+    if (detalle.open) detallesCarritoAbiertos.add(detalle.dataset.itemId);
+    else detallesCarritoAbiertos.delete(detalle.dataset.itemId);
+  });
 
   if (carrito.length === 0) {
     contenedor.innerHTML = `<div class="carrito-vacio"><p>Tu carrito está vacío. Explora el catálogo y agrega tus servicios favoritos. 🛍️</p><a class="btn btn--primary" href="#streaming">🎬 Explorar catálogo</a></div>`;
     contenedor.querySelector(".btn")?.addEventListener("click", () => { if (typeof cerrarCarrito === "function") cerrarCarrito(); });
   } else {
+    // Vista compacta: nombre, plan, precio y cantidad a la vista; el detalle completo
+    // (promo Black Days, dispositivos, tipo de operación y canales de renovación) se despliega.
     contenedor.innerHTML = carrito.map((item) => `
       <div class="carrito-item${item.itemId === itemCarritoNuevo ? " is-new" : ""}" data-producto="${item.productoId}">
         <span class="carrito-item__icono">${item.icono}</span>
         <div class="carrito-item__info">
           <div class="carrito-item__title-row">
             <p class="carrito-item__nombre">${item.nombre}</p>
-            <span class="operation-badge ${item.operacion === "renovacion" ? "is-renewal" : ""}">${item.operacion === "renovacion" ? "Renovación" : "Compra nueva"}</span>
+            ${item.operacion === "renovacion" ? `<span class="operation-badge is-renewal">Renovación</span>` : ""}
           </div>
-          <p class="carrito-item__plan">${item.plan} · ${item.consultar ? "Precio por confirmar" : formatearPrecio(item.precio)}${item.bloquearDescuento ? " · Sin cupón" : ""}</p>
-          ${htmlPromoCarrito(item)}
-          ${item.promo ? "" : item.dispositivos ? `
-            <label class="mini-label">Dispositivos
-              <input type="number" min="1" max="10" value="${item.dispositivos}" onchange="modificarDispositivos('${item.itemId}', this.value)">
-            </label>
-          ` : ""}
+          <p class="carrito-item__plan" title="${escaparHTML(item.plan)}">${item.plan}</p>
+          ${item.promo ? `<p class="carrito-item__promo-chip">🖤 Black Days · ${item.promo.mesesActivados} meses · Ahorras ${formatearPrecio(item.promo.ahorro * Math.max(1, Number(item.cantidad) || 1))}</p>` : ""}
           <div class="carrito-item__quantity-row">
             <div class="carrito-item__cantidad">
               <button type="button" onclick="cambiarCantidad('${item.itemId}', -1)" aria-label="Reducir cantidad">−</button>
               <span>${item.cantidad}</span>
               <button type="button" onclick="cambiarCantidad('${item.itemId}', 1)" aria-label="Aumentar cantidad">+</button>
             </div>
+            <strong class="carrito-item__precio">${item.consultar ? "Por confirmar" : formatearPrecio(Number(item.precio) * Number(item.cantidad))}</strong>
+          </div>
+          <details class="carrito-item__detalle" data-item-id="${item.itemId}"${detallesCarritoAbiertos.has(item.itemId) ? " open" : ""}>
+            <summary>Ver detalle</summary>
+            <div class="carrito-item__detalle-cuerpo">
+              <p class="carrito-item__plan-completo">${item.plan} · ${item.consultar ? "Precio por confirmar" : `${formatearPrecio(item.precio)} c/u`}${item.bloquearDescuento ? " · Sin cupón" : ""}</p>
+              <span class="operation-badge ${item.operacion === "renovacion" ? "is-renewal" : ""}">${item.operacion === "renovacion" ? "Renovación" : "Compra nueva"}</span>
+              ${htmlPromoCarrito(item)}
+              ${item.promo ? "" : item.dispositivos ? `
+                <label class="mini-label">Dispositivos
+                  <input type="number" min="1" max="10" value="${item.dispositivos}" onchange="modificarDispositivos('${item.itemId}', this.value)">
+                </label>
+              ` : ""}
             <div class="carrito-item__renew-actions">
               <button type="button" class="cart-renew-toggle" onclick="marcarRenovacionCarrito('${item.itemId}')">${item.operacion === "renovacion" ? "Cambiar a compra" : "🔄 Marcar renovación"}</button>
               <div class="cart-renew-channels" aria-label="Renovar por canal de contacto">
@@ -1426,7 +1444,8 @@ function renderCarrito() {
                 <button type="button" class="cart-renew-channel cart-renew-channel--telegram" onclick="renovarItemTelegram('${item.itemId}')">✈️ Enviar por Telegram</button>
               </div>
             </div>
-          </div>
+            </div>
+          </details>
         </div>
         <button type="button" class="carrito-item__borrar" onclick="eliminarDelCarrito('${item.itemId}')" aria-label="Eliminar producto">🗑️</button>
       </div>
@@ -1435,6 +1454,10 @@ function renderCarrito() {
   itemCarritoNuevo = null;
 
   const totales = calcularTotales();
+  const unidades = carrito.reduce((acc, item) => acc + (Number(item.cantidad) || 0), 0);
+  actualizarTexto("carrito-resumen-corto", unidades
+    ? `${unidades} ${unidades === 1 ? "servicio" : "servicios"} · Total ${formatearPrecio(totales.total)}`
+    : "Aún no agregas servicios");
   actualizarTexto("carrito-subtotal", formatearPrecio(totales.subtotal));
   actualizarTexto("carrito-descuento", `- ${formatearPrecio(totales.descuento)}`);
   actualizarTexto("carrito-ahorro-promo", formatearPrecio(totales.ahorroPromo));

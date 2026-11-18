@@ -255,3 +255,199 @@ html.pestana-oculta :is(.navidad-nieve span, .navidad-santa, .navidad-santa *, .
 @media (prefers-reduced-motion: reduce) {
   .nav-busqueda__item, .nav-busqueda__limpiar, #catalogo-grid .product-plans-wrap > summary { transition: none; }
 }
+
+/* 6. Portada en celular: accesos en una cuadrícula de 2 columnas, por categorías claras. */
+@media (max-width: 680px) {
+  /* Acciones principales: la primera ocupa el ancho; el resto, de dos en dos. */
+  .hero .hero__actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .hero .hero__actions .btn {
+    width: 100%;
+    min-height: 48px;
+    padding: 10px 8px;
+    font-size: .9rem;
+    line-height: 1.2;
+    text-align: center;
+    white-space: normal;
+  }
+  .hero .hero__actions .btn--primary { grid-column: 1 / -1; min-height: 52px; font-size: 1.02rem; }
+
+  /* Categorías del catálogo: mosaicos de 2 columnas con el total de servicios. */
+  body .home-categorias {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 14px 0 0 !important;
+    padding: 0 !important;
+    overflow: visible;
+  }
+  body .home-categorias .home-categorias__btn {
+    flex: none;
+    min-width: 0;
+    min-height: 58px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 2px;
+    padding: 8px 12px;
+    border-radius: 14px;
+    border: 1.5px solid rgba(96, 165, 250, .55);
+    background: linear-gradient(150deg, #11335e, #0a2142);
+    font-size: .92rem;
+    line-height: 1.2;
+    white-space: normal;
+    text-align: left;
+    touch-action: manipulation;
+  }
+  .home-categorias__total { font-size: .74rem; font-weight: 700; color: #a9d4ff; }
+  body .home-categorias .home-categorias__btn[data-ir-categoria="todos"] { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center; }
+
+  /* Atención rápida: el pedido inmediato ocupa el ancho; los demás canales, de dos en dos. */
+  body .ctvc-utilities .quick-links {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px;
+  }
+  body .ctvc-utilities .quick-links > :first-child { grid-column: 1 / -1; }
+  body .ctvc-utilities .quick-links :is(a, button) {
+    min-height: 52px !important;
+    padding: .6rem .55rem !important;
+    font-size: .86rem !important;
+    line-height: 1.25;
+    white-space: normal;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* Pasos de compra y garantías: 2 columnas; el último paso se lee completo. */
+  #como-comprar .steps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  #como-comprar .steps-grid > :last-child { grid-column: 1 / -1; }
+  #como-comprar .step-card { padding: 14px; }
+  #como-comprar .step-card h3 { font-size: 1rem; }
+  #como-comprar .step-card p { font-size: .86rem; line-height: 1.45; }
+  #como-comprar .trust-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  #como-comprar .trust-strip span { font-size: .82rem; text-align: center; }
+}
+@media (max-width: 339px) {
+  body .home-categorias,
+  body .ctvc-utilities .quick-links,
+  .hero .hero__actions { grid-template-columns: minmax(0, 1fr) !important; }
+}
+
+/* 7. Carrito compacto: cada servicio se ve en una fila corta y el detalle completo se despliega. */
+.panel-carrito__titulo { min-width: 0; }
+.panel-carrito__titulo h2 { margin: 0; }
+.panel-carrito__resumen { margin: 2px 0 0; font-size: .86rem; font-weight: 700; color: #a9d4ff; }
+#panel-carrito .carrito-item__plan {
+  margin: 2px 0 0;
+  font-size: .86rem;
+  color: #d6e8ff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#panel-carrito .carrito-item__promo-chip {
+  display: inline-block;
+  margin: 6px 0 0;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid #7fd0ff;
+  background: #000;
+  color: #fff;
+  font-size: .76rem;
+  font-weight: 900;
+}
+#panel-carrito .carrito-item__quantity-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+}
+#panel-carrito .carrito-item__precio { font-size: 1rem; font-weight: 900; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
+#panel-carrito .carrito-item__detalle { margin-top: 8px; }
+#panel-carrito .carrito-item__detalle > summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(96, 165, 250, .5);
+  background: rgba(29, 95, 191, .2);
+  color: #e6f3ff;
+  font-size: .84rem;
+  font-weight: 800;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+#panel-carrito .carrito-item__detalle > summary::-webkit-details-marker { display: none; }
+#panel-carrito .carrito-item__detalle > summary::after { content: "▾"; transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
+#panel-carrito .carrito-item__detalle[open] > summary::after { transform: rotate(180deg); }
+#panel-carrito .carrito-item__detalle[open] > summary { font-size: 0; }
+#panel-carrito .carrito-item__detalle[open] > summary::before { content: "Ocultar detalle"; font-size: .84rem; }
+#panel-carrito .carrito-item__detalle > summary:active { background: rgba(29, 95, 191, .4); }
+#panel-carrito .carrito-item__detalle > summary:focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
+#panel-carrito .carrito-item__detalle-cuerpo { display: grid; gap: 8px; margin-top: 8px; }
+#panel-carrito .carrito-item__plan-completo { margin: 0; font-size: .86rem; color: #e0eeff; overflow-wrap: anywhere; }
+#panel-carrito .carrito-item__detalle-cuerpo .operation-badge { justify-self: start; }
+.cupon-ayuda-mas > summary { cursor: pointer; font-size: .82rem; font-weight: 700; color: #a9d4ff; min-height: 32px; display: flex; align-items: center; }
+.cupon-ayuda-mas[open] { display: grid; gap: 2px; }
+
+/* 8. Asistente: anuncio visible de Black Days y distintivo en el botón durante la promo. */
+.ctv-asistente__promo {
+  width: 100%;
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1.5px solid #7fd0ff;
+  background: #000;
+  color: #fff;
+  font: inherit;
+  font-size: .88rem;
+  font-weight: 900;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.ctv-asistente__promo:active { transform: scale(0.98); }
+.ctv-asistente__promo:focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
+#ctv-asistente-btn.ctv-asistente-btn--promo { border-color: #7fd0ff; }
+.ctv-asistente-btn__promo {
+  margin-left: 6px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #000;
+  border: 1px solid #7fd0ff;
+  color: #fff;
+  font-size: .68rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+@media (max-width: 680px) {
+  /* El botón es un círculo de 52 px: el distintivo va como etiqueta encima. */
+  #ctv-asistente-btn.ctv-asistente-btn--promo { overflow: visible; }
+  #ctv-asistente-btn .ctv-asistente-btn__promo {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 1px 6px;
+    font-size: .6rem;
+    line-height: 1.4;
+    pointer-events: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ctv-asistente__promo, #panel-carrito .carrito-item__detalle > summary::after { transition: none; }
+}

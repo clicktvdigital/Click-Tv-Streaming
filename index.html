@@ -134,9 +134,9 @@
   <link rel="stylesheet" href="clicktv-navidad-2026.css?v=20261111-4">
   <link rel="stylesheet" href="clicktv-asistente-2026.css?v=20261111-5">
   <link rel="stylesheet" href="clicktv-accesibilidad-tactil.css?v=20261113-1">
-  <link rel="stylesheet" href="clicktv-movil-mejoras-2026.css?v=20261113-2">
-  <link rel="stylesheet" href="clicktv-promo-black-days.css?v=20261118-2">
-  <link rel="stylesheet" href="clicktv-movil-2col.css?v=20261118-2">
+  <link rel="stylesheet" href="clicktv-movil-mejoras-2026.css?v=20261118-1">
+  <link rel="stylesheet" href="clicktv-promo-black-days.css?v=20261118-3">
+  <link rel="stylesheet" href="clicktv-movil-2col.css?v=20261118-4">
 </head>
 <body>
 <div id="top" tabindex="-1"></div>
@@ -880,7 +880,10 @@
   <div id="carrito-overlay" class="carrito-overlay" aria-hidden="true"></div>
   <aside id="panel-carrito" class="panel-carrito" aria-label="Carrito de compras" aria-hidden="true" tabindex="-1">
     <div class="panel-carrito__header">
-      <h2>🛒 Tu carrito</h2>
+      <div class="panel-carrito__titulo">
+        <h2>🛒 Tu carrito</h2>
+        <p id="carrito-resumen-corto" class="panel-carrito__resumen" aria-live="polite">Aún no agregas servicios</p>
+      </div>
       <button id="btn-cerrar-carrito" class="icon-btn" aria-label="Cerrar carrito">✕</button>
     </div>
 
@@ -904,10 +907,13 @@
         <input id="input-cupon" type="text" placeholder="Ingresa tu cupón">
         <button id="btn-aplicar-cupon" class="btn btn--primary">Aplicar</button>
       </div>
-      <small class="cupon-ayuda">🏷️ El descuento se aplica al escribir el cupón y presionar Aplicar.</small>
-      <small class="cupon-ayuda">🔤 Puedes escribirlo en mayúsculas o minúsculas.</small>
       <small class="cupon-ayuda">🎟️ Código: <strong>CLICK TV DIGITAL</strong> · 10% de descuento</small>
-      <small class="cupon-ayuda">🚫 No aplica a recargas ni combos oficiales.</small>
+      <details class="cupon-ayuda-mas">
+        <summary>¿Cómo funciona el cupón?</summary>
+        <small class="cupon-ayuda">🏷️ El descuento se aplica al escribir el cupón y presionar Aplicar.</small>
+        <small class="cupon-ayuda">🔤 Puedes escribirlo en mayúsculas o minúsculas.</small>
+        <small class="cupon-ayuda">🚫 No aplica a recargas ni combos oficiales ni a la promo Black Days.</small>
+      </details>
       <p id="cupon-info" class="cupon-info"></p>
     </div>
 
@@ -1109,7 +1115,7 @@
       </div>
     </div>
   </footer>
-  <script src="data.js" defer></script>
+  <script src="data.js?v=20261118-1" defer></script>
   <script src="clicktv-paypal-planes.js?v=20261115-1" defer></script>
   <script src="clicktv-villancicos.js?v=20261114-1" defer></script>
   <script src="clicktv-navidad-fx.js?v=20261114-1" defer></script>
@@ -1117,15 +1123,15 @@
   <script src="clicktv-precios-publico-2026.js?v=20261015-4" defer></script>
   <script src="clicktv-promo-black-days.js?v=20261118-3" defer></script>
   <script src="catalogo.js?v=20261117-1" defer></script>
-  <script src="clicktv-enlaces-2026.js?v=20261117-2" defer></script>
-  <script src="clicktv-asistente-2026.js?v=20261111-4" defer></script>
-  <script src="script.js?v=20261118-1" defer></script>
-  <script src="clicktv-navegacion-movil.js?v=20261118-2" defer></script>
+  <script src="clicktv-enlaces-2026.js?v=20261118-1" defer></script>
+  <script src="clicktv-asistente-2026.js?v=20261118-1" defer></script>
+  <script src="script.js?v=20261118-3" defer></script>
+  <script src="clicktv-navegacion-movil.js?v=20261118-3" defer></script>
   <script src="clicktv-accesible.js?v=20261015-4" defer></script>
   <script src="clicktv-atencion-pagos.js?v=20261015-2" defer></script>
   <script src="clicktv-pago-producto.js?v=20261117-1" defer></script>
   <script src="clicktv-final-visual.js?v=20261118-1" defer></script>
-  <script src="clicktv-logos-catalogo.js?v=20261117-2" defer></script>
+  <script src="clicktv-logos-catalogo.js?v=20261118-1" defer></script>
   <script src="clicktv-app-2026.js?v=20261111-4" defer></script>
 </body>
 </html>

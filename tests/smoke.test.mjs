@@ -304,3 +304,68 @@ test('escritorio: la barra de Black Days no aparece', async () => {
   assert.equal(await pagina.isVisible('#ctv-bd-barra'), false);
   await pagina.context().close();
 });
+
+test('Plataformas IPTV retirado: no aparece y su enlace antiguo abre IPTV', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 }, { consulta: '?producto=plataformas-iptv' });
+  assert.equal(await pagina.locator('[data-producto="plataformas-iptv"]').count(), 0);
+  assert.equal(await pagina.evaluate(() => document.querySelector('#streaming .filter-btn.activo')?.dataset.categoria), 'iptv');
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
+
+test('portada en celular: categorías en 2 columnas con su total de servicios', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
+  const datos = await pagina.evaluate(() => ({
+    columnas: getComputedStyle(document.querySelector('.home-categorias')).gridTemplateColumns.split(' ').length,
+    acciones: getComputedStyle(document.querySelector('.hero__actions')).gridTemplateColumns.split(' ').length,
+    totales: [...document.querySelectorAll('.home-categorias__total')].map((e) => e.textContent),
+    ancho: document.documentElement.scrollWidth
+  }));
+  assert.equal(datos.columnas, 2);
+  assert.equal(datos.acciones, 2);
+  assert.ok(datos.totales.length >= 7 && datos.totales.every((t) => /^\d+ servicios?$/.test(t)), datos.totales.join(', '));
+  assert.equal(datos.ancho, 390);
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
+
+test('carrito compacto: el detalle de Black Days se despliega y sigue abierto al cambiar la cantidad', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 }, { fecha: new Date('2026-11-17T15:00:00Z') });
+  await pagina.click('[data-bd-ver-iptv]');
+  await pagina.locator('[data-producto="iptv-premium"] .ctv-bd [data-bd-accion="carrito"]').click();
+  await pagina.evaluate(() => abrirCarrito());
+  const fila = '#carrito-items .carrito-item[data-producto="iptv-premium"]';
+  assert.match(await pagina.textContent(`${fila} .carrito-item__promo-chip`), /Black Days · \d+ meses · Ahorras/);
+  assert.equal(await pagina.isVisible(`${fila} .ctv-bd-item`), false, 'el desglose empieza plegado');
+  assert.match(await pagina.textContent('#carrito-resumen-corto'), /^1 servicio · Total /);
+  await pagina.click(`${fila} .carrito-item__detalle > summary`);
+  assert.equal(await pagina.isVisible(`${fila} .ctv-bd-item`), true);
+  await pagina.locator(`${fila} button[aria-label="Aumentar cantidad"]`).dispatchEvent('click');
+  assert.equal(await pagina.isVisible(`${fila} .ctv-bd-item`), true, 'el detalle sigue abierto tras volver a pintar');
+  assert.match(await pagina.textContent('#carrito-resumen-corto'), /^2 servicios · Total /);
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
+
+test('asistente: anuncia Black Days y lleva directo a IPTV Premium', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 }, { fecha: new Date('2026-11-17T15:00:00Z') });
+  assert.equal(await pagina.isVisible('#ctv-asistente-btn .ctv-asistente-btn__promo'), true);
+  await pagina.click('#ctv-asistente-btn');
+  await pagina.click('.ctv-asistente__promo');
+  const texto = await pagina.textContent('#ctv-asistente .ctv-asistente__cuerpo');
+  for (const promo of ['Paga 2 meses y recibe 1 mes gratis', 'Paga 3 meses y recibe 3 meses gratis', 'Paga 6 meses y recibe 6 meses gratis']) assert.ok(texto.includes(promo), promo);
+  await pagina.locator('#ctv-asistente .ctv-asistente__op', { hasText: 'IPTV Premium' }).click();
+  assert.equal(await pagina.isHidden('#ctv-asistente'), true);
+  await pagina.waitForFunction(() => {
+    const r = document.querySelector('#catalogo-grid [data-producto="iptv-premium"]')?.getBoundingClientRect();
+    return !!r && r.top < innerHeight && r.bottom > 0;
+  }, null, { timeout: 4000 });
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+  const despues = await abrirPagina({ width: 390, height: 844 }, { fecha: new Date('2026-11-21T06:00:00Z') });
+  assert.equal(await despues.pagina.locator('#ctv-asistente-btn .ctv-asistente-btn__promo').count(), 0);
+  await despues.pagina.click('#ctv-asistente-btn');
+  assert.equal(await despues.pagina.locator('.ctv-asistente__promo').count(), 0);
+  assert.ok(await despues.pagina.locator('#ctv-asistente .ctv-asistente__op', { hasText: 'Planes de IPTV' }).count());
+  await despues.pagina.context().close();
+});
