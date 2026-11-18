@@ -103,11 +103,39 @@
     }
     function liberarCine() { iframe = null; miniaturaCine(); }
 
+    // position: fixed queda atrapado si un ancestro tiene transform, filter, backdrop-filter, perspective,
+    // contain o will-change (aquí .hero__panel.glass-card). En modo ventana pequeña esos ancestros están
+    // fuera de pantalla: se neutralizan mientras dure y se restauran al volver, sin mover el iframe.
+    const PROPIEDADES_ATRAPAN = ['transform', 'filter', 'backdrop-filter', '-webkit-backdrop-filter', 'perspective', 'contain', 'will-change'];
+    let ancestrosLiberados = [];
+    function liberarAncestros(liberar) {
+      if (!liberar) {
+        ancestrosLiberados.forEach(({ el, previos }) => previos.forEach(([prop, valor, prioridad]) => {
+          if (valor) el.style.setProperty(prop, valor, prioridad); else el.style.removeProperty(prop);
+        }));
+        ancestrosLiberados = [];
+        return;
+      }
+      if (ancestrosLiberados.length) return;
+      for (let el = tarjeta.parentElement; el && el !== document.body; el = el.parentElement) {
+        const cs = getComputedStyle(el);
+        const atrapa = PROPIEDADES_ATRAPAN.filter((prop) => {
+          const v = cs.getPropertyValue(prop);
+          return v && !['none', 'auto', 'normal', ''].includes(v.trim());
+        });
+        if (!atrapa.length) continue;
+        const previos = atrapa.map((prop) => [prop, el.style.getPropertyValue(prop), el.style.getPropertyPriority(prop)]);
+        atrapa.forEach((prop) => el.style.setProperty(prop, prop === 'will-change' ? 'auto' : 'none', 'important'));
+        ancestrosLiberados.push({ el, previos });
+      }
+    }
+
     function actualizarEstado() {
       tarjeta.classList.toggle('ctv-tv--activo', activo());
       if (cta) cta.textContent = textoCta(promoVigente());
       const mini = activo() && !enPantalla;
       if (mini && !tarjeta.classList.contains('ctv-tv--mini')) tarjeta.style.minHeight = `${tarjeta.offsetHeight}px`;
+      liberarAncestros(mini);
       tarjeta.classList.toggle('ctv-tv--mini', mini);
       if (!mini) tarjeta.style.minHeight = '';
     }
@@ -165,6 +193,7 @@
       if (iframe) liberarCine();
       tarjeta.classList.remove('ctv-tv--mini');
       tarjeta.style.minHeight = '';
+      liberarAncestros(false);
       actualizarEstado();
       avisar('Mini TV cerrada. Pulsa ▶ para verla de nuevo.');
     });

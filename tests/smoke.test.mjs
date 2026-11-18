@@ -36,6 +36,8 @@ before(async () => {
 
 after(async () => {
   await navegador?.close();
+  // Un video en bucle puede dejar conexiones abiertas: se cierran para que el proceso termine.
+  servidor?.closeAllConnections?.();
   await new Promise((ok) => servidor?.close(ok));
 });
 
@@ -435,6 +437,7 @@ test('contacto: buscar país, región dinámica, prefijo automático y suscripci
 
 test('mini TV: video oficial y tráilers en pestañas, CTA y ✕ fuera del video, ventana flotante y cierre', async () => {
   const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
+  try {
   assert.equal(await pagina.getAttribute('#ctv-tv-promo', 'src'), null, 'nada se descarga antes de llegar');
   await pagina.locator('#ctv-tv-prueba').scrollIntoViewIfNeeded();
   await pagina.waitForFunction(() => document.getElementById('ctv-tv-promo').getAttribute('src') === 'assets/promo.mp4');
@@ -453,9 +456,9 @@ test('mini TV: video oficial y tráilers en pestañas, CTA y ✕ fuera del video
   const flotante = await pagina.evaluate(() => {
     const ventana = document.querySelector('.ctv-tv__ventana');
     const r = ventana.getBoundingClientRect();
-    return { fija: getComputedStyle(ventana).position === 'fixed', dentro: r.left >= 0 && r.right <= innerWidth && r.bottom <= innerHeight, ancho: document.documentElement.scrollWidth };
+    return { fija: getComputedStyle(ventana).position === 'fixed', dentro: r.left >= 0 && r.top >= 0 && r.right <= innerWidth && r.bottom <= innerHeight, ancho: document.documentElement.scrollWidth, caja: [r.left, r.top, r.right, r.bottom].map(Math.round).join(',') };
   });
-  assert.deepEqual(flotante, { fija: true, dentro: true, ancho: 390 });
+  assert.deepEqual({ ...flotante, caja: undefined }, { fija: true, dentro: true, ancho: 390, caja: undefined }, `ventana en ${flotante.caja}`);
   assert.equal(await sinSolape(), true, 'CTA y ✕ debajo del video en la ventana flotante');
   // Pestaña de cine: tráilers oficiales de YouTube.
   await pagina.click('#ctv-tv-tab-cine');
@@ -474,7 +477,9 @@ test('mini TV: video oficial y tráilers en pestañas, CTA y ✕ fuera del video
   assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').paused), true);
   assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-prueba').classList.contains('ctv-tv--mini')), false);
   assert.deepEqual(errores, []);
-  await pagina.context().close();
+  } finally {
+    await pagina.context().close();
+  }
 });
 
 test('portada en celular: estadísticas, atención, preguntas frecuentes y pagos en 2 columnas', async () => {
