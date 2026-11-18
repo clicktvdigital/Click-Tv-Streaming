@@ -127,6 +127,10 @@ jobs:
           if grep -RInE "[\"'][0-9a-f]{32}[\"']|X-Auth-Token[^;]*[\"'][A-Za-z0-9]{16,}" --exclude-dir=.git --exclude-dir=.github --exclude-dir=.claude .; then
             echo "Se encontro una posible credencial escrita en el codigo"; exit 1
           fi
+          # Listas IPTV con usuario y contraseña en la URL: nunca en archivos públicos del sitio.
+          if grep -RInE "get\.php\?username=|[?&](username|password)=[^&\"' ]+" --include='*.js' --include='*.html' --include='*.json' --exclude-dir=.git --exclude-dir=.github --exclude-dir=.claude --exclude-dir=node_modules --exclude-dir=tests .; then
+            echo "Se encontro una URL con credenciales (lista IPTV o similar) en el codigo publico"; exit 1
+          fi
           if grep -RIn "footballDataApiToken" --exclude-dir=.git --exclude-dir=docs --exclude-dir=.github .; then
             echo "footballDataApiToken no debe existir en el front"; exit 1
           fi

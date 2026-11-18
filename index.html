@@ -136,8 +136,8 @@
   <link rel="stylesheet" href="clicktv-accesibilidad-tactil.css?v=20261113-1">
   <link rel="stylesheet" href="clicktv-movil-mejoras-2026.css?v=20261118-1">
   <link rel="stylesheet" href="clicktv-promo-black-days.css?v=20261118-3">
-  <link rel="stylesheet" href="clicktv-movil-2col.css?v=20261118-4">
-  <link rel="stylesheet" href="clicktv-ux-tienda.css?v=20261118-2">
+  <link rel="stylesheet" href="clicktv-movil-2col.css?v=20261118-5">
+  <link rel="stylesheet" href="clicktv-ux-tienda.css?v=20261118-3">
 </head>
 <body>
 <div id="top" tabindex="-1"></div>
@@ -462,16 +462,24 @@
           <div id="ctv-tv-prueba" class="ctv-tv" aria-labelledby="ctv-tv-titulo">
             <div class="ctv-tv__cabecera">
               <span class="teleamazonas-card__label">EN VIVO</span>
-              <strong id="ctv-tv-titulo">📺 Prueba la TV por internet</strong>
-              <small>Sintoniza un canal de prueba y sigue navegando: el video se queda en una ventana pequeña.</small>
+              <strong id="ctv-tv-titulo">📺 Mini TV por internet</strong>
+              <small>Elige un canal y sigue navegando: la TV se queda en una ventana pequeña.</small>
             </div>
             <div class="ctv-tv__marco">
-              <video id="ctv-tv-video" class="ctv-tv__video" playsinline controls preload="none" aria-label="Canal de prueba en directo"></video>
-              <button id="ctv-tv-play" class="ctv-tv__play" type="button">▶ Ver canal de prueba</button>
+              <video id="ctv-tv-video" class="ctv-tv__video" playsinline controls preload="none" aria-label="Mini TV en vivo"></video>
+              <button id="ctv-tv-play" class="ctv-tv__play" type="button">▶ Ver</button>
               <div class="ctv-tv__mini-barra">
                 <button id="ctv-tv-volver" type="button" aria-label="Volver al reproductor">⤢</button>
                 <button id="ctv-tv-cerrar" type="button" aria-label="Cerrar el reproductor">✕</button>
               </div>
+            </div>
+            <div class="ctv-tv__controles" role="group" aria-label="Controles de la mini TV">
+              <label class="sr-only" for="ctv-tv-canal">Canal</label>
+              <select id="ctv-tv-canal" class="ctv-tv__canal"></select>
+              <button id="ctv-tv-pausa" type="button" aria-label="Reproducir">▶</button>
+              <button id="ctv-tv-silencio" type="button" aria-label="Silenciar">🔊</button>
+              <label class="sr-only" for="ctv-tv-volumen">Volumen</label>
+              <input id="ctv-tv-volumen" type="range" min="0" max="1" step="0.05" value="1">
             </div>
             <p id="ctv-tv-estado" class="ctv-tv__estado" role="status" aria-live="polite">Señal de demostración. El video solo se descarga si pulsas «Ver».</p>
           </div>
@@ -1145,7 +1153,7 @@
       </div>
     </div>
   </footer>
-  <script src="data.js?v=20261118-2" defer></script>
+  <script src="data.js?v=20261118-3" defer></script>
   <script src="clicktv-paypal-planes.js?v=20261115-1" defer></script>
   <script src="clicktv-villancicos.js?v=20261114-1" defer></script>
   <script src="clicktv-navidad-fx.js?v=20261114-1" defer></script>
@@ -1158,7 +1166,7 @@
   <script src="script.js?v=20261118-4" defer></script>
   <script src="clicktv-navegacion-movil.js?v=20261118-3" defer></script>
   <script src="clicktv-formulario-contacto.js?v=20261118-1" defer></script>
-  <script src="clicktv-tv-en-vivo.js?v=20261118-1" defer></script>
+  <script src="clicktv-tv-en-vivo.js?v=20261118-3" defer></script>
   <script src="clicktv-accesible.js?v=20261015-4" defer></script>
   <script src="clicktv-atencion-pagos.js?v=20261118-1" defer></script>
   <script src="clicktv-pago-producto.js?v=20261117-1" defer></script>
