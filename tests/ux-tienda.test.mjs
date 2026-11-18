@@ -128,7 +128,7 @@ test('mini TV: pestaña «Click TV Oficial» con el video propio optimizado y CT
   assert.match(js, /video\.addEventListener\('click', \(\) => \{\s*const soloMostrar = ocultosAlTocar;\s*ocultosAlTocar = false;\s*if \(!video\.paused && enSilencio\(\) && !silenciadoPorCliente\) activarSonido\(\);\s*else if \(!soloMostrar\) btnPausa\?\.click\(\);/);
   // Auto-ocultar como YouTube: 3 s sin actividad reproduciendo; en pausa, con foco o arrastrando, siguen visibles.
   assert.match(js, /const ESPERA_OCULTAR = 3000;/);
-  assert.match(js, /if \(video\.paused \|\| arrastrando \|\| pildora\?\.matches\(':focus-within'\)\) return;\s*tarjeta\.classList\.add\('ctv-tv--controles-ocultos'\);/);
+  assert.match(js, /if \(video\.paused \|\| arrastrando \|\| pildora\?\.querySelector\(':focus-visible'\)\) return;\s*tarjeta\.classList\.add\('ctv-tv--controles-ocultos'\);/);
   assert.match(js, /marco\.addEventListener\('pointerdown', \(\) => \{ ocultosAlTocar = ocultos\(\); mostrarControles\(\); \}\);/);
   assert.match(css, /\.ctv-tv--controles-ocultos \.ctv-tv__audio \{[^}]*opacity: 0;[^}]*visibility: hidden;[^}]*pointer-events: none;/);
   assert.match(js, /if \(enSilencio\(\) && !silenciadoPorCliente\) activarSonido\(\); else reproducir\(\);/);

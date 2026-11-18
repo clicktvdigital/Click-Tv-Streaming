@@ -271,7 +271,9 @@
     function programarOcultar() {
       clearTimeout(temporizadorOcultar);
       temporizadorOcultar = setTimeout(() => {
-        if (video.paused || arrastrando || pildora?.matches(':focus-within')) return;
+        // Solo el foco de teclado (:focus-visible) la mantiene: tras un toque o clic el botón queda enfocado
+        // pero eso no debe dejar los controles fijos.
+        if (video.paused || arrastrando || pildora?.querySelector(':focus-visible')) return;
         tarjeta.classList.add('ctv-tv--controles-ocultos');
       }, ESPERA_OCULTAR);
     }
