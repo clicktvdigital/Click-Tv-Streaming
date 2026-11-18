@@ -72,7 +72,7 @@
       { tipo: "Cuenta completa · 1 mes", precio: 7 }
     ] },
   { id: "paramount-plus", nombre: "Paramount+", categoria: "streaming", icono: "🔵", descripcion: "Películas, series, realities, contenido familiar y deportes seleccionados.", etiquetas: [
-      "⚽ IDEAL PARA EL MUNDIAL",
+      "🎄 IDEAL PARA FIN DE AÑO",
       "🔥 MÁS VENDIDO"
     ], planes: [
       { tipo: "1 mes", precio: 5 },
@@ -247,7 +247,7 @@
       { tipo: "Anual · 3 dispositivos", precio: 17, ivaIncluido: true }
     ] },
   { id: "iptv-basico", nombre: "IPTV Básico", categoria: "iptv", icono: "📺", descripcion: "Servicio IPTV básico para TV en vivo y entretenimiento.", etiquetas: [
-      "⚽ IDEAL PARA EL MUNDIAL"
+      "🎄 IDEAL PARA FIN DE AÑO"
     ], planes: [
       { tipo: "1 dispositivo · 1 mes", precio: 6, dispositivos: 1, ivaIncluido: true },
       { tipo: "1 dispositivo · 3 meses", precio: 17, dispositivos: 1, ivaIncluido: true },
@@ -264,7 +264,7 @@
     ] },
   { id: "iptv-premium", nombre: "IPTV Premium", categoria: "iptv", icono: "📺", descripcion: "Paquete IPTV premium con canales en vivo, VOD, películas y deportes.", etiquetas: [
       "🔥 MÁS VENDIDO",
-      "⚽ IDEAL PARA EL MUNDIAL"
+      "🎄 IDEAL PARA FIN DE AÑO"
     ], planes: [
       { tipo: "1 dispositivo · 1 mes", precio: 8, dispositivos: 1, ivaIncluido: true },
       { tipo: "1 dispositivo · 3 meses", precio: 23, dispositivos: 1, ivaIncluido: true },
@@ -281,7 +281,7 @@
     ] },
   { id: "iptv-ultra", nombre: "IPTV Ultra", categoria: "iptv", icono: "📺", descripcion: "Plan IPTV superior con más estabilidad y mejor experiencia.", etiquetas: [
       "💎 PREMIUM",
-      "⚽ IDEAL PARA EL MUNDIAL"
+      "🎄 IDEAL PARA FIN DE AÑO"
     ], planes: [
       { tipo: "1 dispositivo · 1 mes", precio: 10, dispositivos: 1, ivaIncluido: true },
       { tipo: "1 dispositivo · 3 meses", precio: 28.5, dispositivos: 1, ivaIncluido: true },
@@ -361,7 +361,7 @@
       { tipo: "12 meses", precio: 72, ivaIncluido: true }
     ] },
   { id: "dazn", nombre: "DAZN", categoria: "deportes", icono: "🔴", descripcion: "Servicio deportivo para ver eventos en vivo, fútbol internacional, boxeo y programación deportiva.", etiquetas: [
-      "⚽ IDEAL PARA EL MUNDIAL"
+      "🎄 IDEAL PARA FIN DE AÑO"
     ], planes: [
       { tipo: "1 mes", precio: 10 },
       { tipo: "3 meses", precio: 28.5 },
@@ -369,7 +369,7 @@
       { tipo: "12 meses", precio: 96 }
     ] },
   { id: "deportes-pack", nombre: "Pack Deportes", categoria: "deportes", icono: "⚽", descripcion: "Paquetes deportivos con DAZN, Disney+, Paramount+, NBA, UFC, ECDF y Zapping según disponibilidad.", etiquetas: [
-      "⚽ IDEAL PARA EL MUNDIAL",
+      "🎄 IDEAL PARA FIN DE AÑO",
       "🔥 MÁS VENDIDO"
     ], planes: [
       { tipo: "Consultar disponibilidad", precio: 0, consultar: true }

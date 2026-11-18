@@ -1,6 +1,6 @@
 /* CLICK TV STREAMING · Mini TV orientada a ventas · 18/11/2026
    Pestañas:
-   - «Click TV Oficial»: video promocional propio (CONFIG.videoPromo), en silencio, en bucle y con controles.
+   - «Click TV Streaming»: video promocional propio (CONFIG.videoPromo), en silencio, en bucle y con controles.
    - «Estrenos de Cine»: tráilers oficiales doblados de YouTube (CONFIG.trailersYouTube), vía youtube-nocookie.
    Sobre el video, un CTA lleva a los planes de IPTV Premium (con Black Days mientras esté vigente).
    Nada se descarga hasta llegar a la sección; al bajar por la tienda sigue en una ventana pequeña; ✕ la cierra
@@ -22,7 +22,7 @@
   function urlInsercion(id, origen = '') {
     const p = new URLSearchParams({
       autoplay: '1', mute: '1', loop: '1', playlist: id, playsinline: '1',
-      rel: '0', modestbranding: '1', controls: '1', enablejsapi: '1'
+      rel: '0', modestbranding: '1', controls: '1', enablejsapi: '1', iv_load_policy: '3', fs: '1'
     });
     if (origen) p.set('origin', origen);
     return `https://www.youtube-nocookie.com/embed/${id}?${p}`;
@@ -65,7 +65,7 @@
     const activo = () => (pestana === 'oficial' ? !!video.getAttribute('src') && !video.paused : !!iframe);
 
     selector?.replaceChildren(...trailers.map((t) => Object.assign(document.createElement('option'), {
-      value: t.id, textContent: `${t.titulo}${t.version ? ` · ${t.version}` : ''}`
+      value: t.id, textContent: `${t.titulo}${t.estreno ? ` · ${t.estreno}` : ''}${t.version ? ` · ${t.version}` : ''}`
     })));
 
     // --- Video promocional propio ---
@@ -159,7 +159,7 @@
         if (play) play.hidden = true;
         prepararPromo();
         if (video.getAttribute('src') && !cerradoPorCliente) video.play().catch(() => {});
-        avisar('📺 Video oficial de Click TV. Activa el sonido en los controles.');
+        avisar('📺 Video oficial de Click TV Streaming. Toca 🔈 para activar el sonido.');
       } else {
         video.pause();
         if (enPantalla && !cerradoPorCliente && !sinAutoplay()) cargarCine(); else miniaturaCine();
@@ -182,6 +182,43 @@
       if (iframe) cargarCine(); else miniaturaCine();
     });
     ['play', 'pause'].forEach((tipo) => video.addEventListener(tipo, () => { if (tipo === 'play') cerradoPorCliente = false; actualizarEstado(); }));
+
+    // --- Controles compactos del video propio (sustituyen a los controles nativos, más grandes) ---
+    const btnPausa = document.getElementById('ctv-tv-pausa');
+    const btnSonido = document.getElementById('ctv-tv-sonido');
+    const volumen = document.getElementById('ctv-tv-volumen');
+    function pintarControles() {
+      const reproduciendo = !!video.getAttribute('src') && !video.paused;
+      const mudo = video.muted || video.volume === 0;
+      btnPausa?.setAttribute('aria-pressed', String(reproduciendo));
+      btnPausa?.setAttribute('aria-label', reproduciendo ? 'Pausar video' : 'Reproducir video');
+      btnSonido?.setAttribute('aria-pressed', String(!mudo));
+      btnSonido?.setAttribute('aria-label', mudo ? 'Activar sonido' : 'Silenciar');
+      if (volumen) {
+        volumen.value = String(mudo ? 0 : video.volume);
+        volumen.style.setProperty('--nivel', `${Math.round((mudo ? 0 : video.volume) * 100)}%`);
+      }
+    }
+    btnPausa?.addEventListener('click', () => {
+      if (!video.getAttribute('src')) prepararPromo();
+      if (video.paused) { cerradoPorCliente = false; video.play().catch(() => {}); } else video.pause();
+    });
+    btnSonido?.addEventListener('click', () => {
+      if (video.muted || video.volume === 0) {
+        video.muted = false;
+        if (video.volume === 0) video.volume = 0.7;
+      } else video.muted = true;
+      pintarControles();
+    });
+    volumen?.addEventListener('input', () => {
+      const v = Number(volumen.value);
+      video.volume = v;
+      video.muted = v === 0;
+      pintarControles();
+    });
+    video.addEventListener('click', () => btnPausa?.click());
+    ['play', 'pause', 'volumechange', 'emptied'].forEach((tipo) => video.addEventListener(tipo, pintarControles));
+    pintarControles();
 
     cta?.addEventListener('click', () => {
       if (window.ctvNavegacion?.irAProducto) window.ctvNavegacion.irAProducto('iptv-premium', 'iptv');

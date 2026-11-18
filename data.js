@@ -1,5 +1,5 @@
 /* ========================================================================== 
-   CLICK TV STREAMING MUNDIAL 2026 — data.js
+   CLICK TV STREAMING 2026 — data.js
    Datos globales: configuración, catálogo, reseñas, actividad, mundial y tasas
    ========================================================================== */
 
@@ -58,12 +58,17 @@ const CONFIG = {
   teleamazonasUrl: "https://www.teleamazonas.com/teleamazonas-en-vivo/",
   // Mini TV: tráilers oficiales doblados al español latino, de los canales de YouTube de los estudios
   // (verificados con el oEmbed de YouTube: existen, canal oficial y se pueden insertar). 18/11/2026.
-  // Video promocional propio de la pestaña «Click TV Oficial» (854×480, H.264, ~3 MB, con faststart).
+  // Video promocional propio de la pestaña «Click TV Streaming» (854×480, H.264, ~3 MB, con faststart).
   videoPromo: { url: "assets/promo.mp4", poster: "assets/promo-poster.webp" },
+  // Solo tráilers horizontales (16:9) de canales oficiales, en español latino (doblados).
+  // Primero los próximos estrenos en cines y luego los estrenos 2026. Verificados con oEmbed de YouTube.
   trailersYouTube: [
-    { id: "s_qpMMkvHYE", titulo: "Toy Story 5", canal: "Disney Studios LA", version: "Doblado" },
-    { id: "po-V420c5uY", titulo: "Gatto", canal: "Disney Studios LA", version: "Doblado" },
-    { id: "4lFQCu8Q4S0", titulo: "Nunca olvides que te quiero", canal: "Warner Bros. Pictures Latinoamérica", version: "Doblado" }
+    { id: "Mk-IAUhX4IQ", titulo: "Los Juegos del Hambre: Amanecer en la Cosecha", canal: "Corazón Films", version: "Doblado", estreno: "20 nov 2026" },
+    { id: "lAr_uspgHm8", titulo: "Avengers: Doomsday", canal: "Marvel Latinoamérica Oficial", version: "Doblado", estreno: "18 dic 2026" },
+    { id: "HwgSQcszj6Y", titulo: "Duna: Parte Tres", canal: "Warner Bros. Pictures Latinoamérica", version: "Doblado", estreno: "18 dic 2026" },
+    { id: "pqLSLoDkZWE", titulo: "Spider-Man: Un Nuevo Día", canal: "Marvel Latinoamérica Oficial", version: "Doblado", estreno: "Estreno 2026" },
+    { id: "s_qpMMkvHYE", titulo: "Toy Story 5", canal: "Disney Studios LA", version: "Doblado", estreno: "Estreno 2026" },
+    { id: "po-V420c5uY", titulo: "Gatto", canal: "Disney Studios LA", version: "Doblado", estreno: "Próximamente" }
   ],
   teleamazonasSignatureUrl: "https://www.teleamazonas.com/mediastream/signature",
   teleamazonasPlayerId: "6945b9bca18f515cff51c75b",
@@ -132,7 +137,7 @@ const CUPONES = {
   SAVE10: { porcentaje: 10, descripcion: "10% de descuento general" },
   WELCOME: { porcentaje: 15, descripcion: "15% de descuento de bienvenida" },
   IPTV50: { porcentaje: 20, descripcion: "20% exclusivo en IPTV" },
-  CLICKTVMUNDIAL: { porcentaje: 15, descripcion: "15% de descuento especial Mundial 2026 cuando aplica" },
+  CLICKTVMUNDIAL: { porcentaje: 15, descripcion: "15% de descuento especial de fin de año cuando aplica" },
   CLICKTVDIGITAL: { porcentaje: 10, descripcion: "10% de descuento Click TV Digital" }
 };
 
@@ -143,7 +148,7 @@ const PRODUCTOS = [
     categoria: "streaming",
     icono: "🔵",
     descripcion: "Plataforma para ver películas, series, realities, contenido familiar y deportes seleccionados. Ideal para entretenimiento diario desde Smart TV, celular o navegador.",
-    etiquetas: ["⚽ IDEAL PARA EL MUNDIAL", "🔥 MÁS VENDIDO"],
+    etiquetas: ["🎄 IDEAL PARA FIN DE AÑO", "🔥 MÁS VENDIDO"],
     planes: [{ tipo: "1 mes", precio: 5 }]
   },
   {
@@ -170,7 +175,7 @@ const PRODUCTOS = [
     categoria: "deportes",
     icono: "🔴",
     descripcion: "Servicio deportivo para ver eventos en vivo, fútbol internacional, boxeo y programación deportiva según disponibilidad de la plataforma.",
-    etiquetas: ["⚽ IDEAL PARA EL MUNDIAL"],
+    etiquetas: ["🎄 IDEAL PARA FIN DE AÑO"],
     planes: [{ tipo: "1 mes", precio: 10, ivaIncluido: true }]
   },
   {
@@ -299,7 +304,7 @@ const PRODUCTOS = [
     categoria: "iptv",
     icono: "📺",
     descripcion: "Servicio IPTV básico para ver TV en vivo, películas, series y deportes desde apps compatibles en Android, TV Box o Smart TV.",
-    etiquetas: ["⚽ IDEAL PARA EL MUNDIAL"],
+    etiquetas: ["🎄 IDEAL PARA FIN DE AÑO"],
     planes: [
       { tipo: "1 dispositivo", precio: 3, dispositivos: 1, ivaIncluido: true },
       { tipo: "2 dispositivos", precio: 5, dispositivos: 2, ivaIncluido: true },
@@ -312,7 +317,7 @@ const PRODUCTOS = [
     categoria: "iptv",
     icono: "📺",
     descripcion: "Paquete IPTV premium con canales en vivo, contenido VOD, películas, series y deportes para una experiencia más completa.",
-    etiquetas: ["🔥 MÁS VENDIDO", "⚽ IDEAL PARA EL MUNDIAL"],
+    etiquetas: ["🔥 MÁS VENDIDO", "🎄 IDEAL PARA FIN DE AÑO"],
     planes: [
       { tipo: "1 dispositivo", precio: 5, dispositivos: 1, ivaIncluido: true },
       { tipo: "2 dispositivos", precio: 10, dispositivos: 2, ivaIncluido: true },
@@ -325,7 +330,7 @@ const PRODUCTOS = [
     categoria: "iptv",
     icono: "📺",
     descripcion: "Plan IPTV superior para usuarios que buscan más estabilidad, más contenido y mejor experiencia en deportes, películas y series.",
-    etiquetas: ["💎 PREMIUM", "⚽ IDEAL PARA EL MUNDIAL"],
+    etiquetas: ["💎 PREMIUM", "🎄 IDEAL PARA FIN DE AÑO"],
     planes: [
       { tipo: "1 dispositivo", precio: 7, dispositivos: 1, ivaIncluido: true },
       { tipo: "2 dispositivos", precio: 14, dispositivos: 2, ivaIncluido: true },
@@ -433,7 +438,7 @@ const PRODUCTOS = [
     categoria: "deportes",
     icono: "⚽",
     descripcion: "DAZN, Disney+ ESPN, Paramount+, NBA, UFC, ECDF y Zapping Pro. Consulta disponibilidad de paquetes combinados.",
-    etiquetas: ["⚽ IDEAL PARA EL MUNDIAL", "🔥 MÁS VENDIDO"],
+    etiquetas: ["🎄 IDEAL PARA FIN DE AÑO", "🔥 MÁS VENDIDO"],
     planes: [{ tipo: "Consultar disponibilidad", precio: 0, consultar: true }]
   },
   {

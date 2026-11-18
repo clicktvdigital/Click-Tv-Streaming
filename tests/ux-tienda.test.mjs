@@ -60,19 +60,24 @@ test('IPTV con promo: precios normales plegados y la promo reemplaza el plan nor
   assert.match(leer('script.js'), /Se reemplazó el plan normal por la promo Black Days/);
 });
 
-test('mini TV: tráilers oficiales doblados, válidos, sin repetidos, y un iframe silenciado en bucle', () => {
+test('mini TV: tráilers horizontales de estrenos 2026 y próximos, oficiales y doblados, en un iframe silenciado en bucle', () => {
   const datos = createContext({ console, URLSearchParams }); datos.window = datos;
   runInContext(leer('data.js'), datos);
   runInContext(leer('clicktv-mini-tv.js'), datos);
   const trailers = runInContext('CONFIG.trailersYouTube', datos);
   const { trailersValidos, urlInsercion } = datos.ctvMiniTV;
-  assert.ok(trailers.length >= 2 && trailers.length <= 3, 'entre 2 y 3 tráilers');
+  assert.ok(trailers.length >= 3 && trailers.length <= 6, 'entre 3 y 6 tráilers');
   assert.equal(trailersValidos(trailers).length, trailers.length);
-  const oficiales = ['Disney Studios LA', 'Warner Bros. Pictures Latinoamérica', 'Universal Pictures Latinoamérica', 'Sony Pictures Latinoamérica', 'Paramount Pictures Latinoamérica'];
+  const oficiales = ['Disney Studios LA', 'Warner Bros. Pictures Latinoamérica', 'Universal Pictures Latinoamérica', 'Sony Pictures Latinoamérica', 'Paramount Pictures Latinoamérica', 'Marvel Latinoamérica Oficial', 'Corazón Films'];
   for (const t of trailers) {
-    assert.ok(oficiales.includes(t.canal), `${t.titulo}: canal oficial del estudio`);
-    assert.match(t.version, /^(Doblado|Subtitulado)$/, `${t.titulo}: versión en español indicada`);
+    assert.ok(oficiales.includes(t.canal), `${t.titulo}: canal oficial del estudio o distribuidora`);
+    assert.equal(t.version, 'Doblado', `${t.titulo}: en español latino (doblado)`);
+    assert.match(t.estreno, /^(\d{1,2} (ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic) 202[6-9]|Estreno 2026|Próximamente)$/, `${t.titulo}: estreno 2026 o próximo`);
   }
+  assert.ok(trailers.some((t) => /2026/.test(t.estreno)), 'incluye estrenos 2026');
+  // Lo próximo primero: los que tienen fecha concreta van antes que «Estreno 2026» y «Próximamente».
+  const conFecha = trailers.map((t) => /^\d/.test(t.estreno));
+  assert.ok(conFecha.lastIndexOf(true) < Math.max(conFecha.indexOf(false), 0) || !conFecha.includes(false), 'próximos estrenos arriba');
   const url = new URL(urlInsercion('s_qpMMkvHYE', 'https://click-tv-streaming.vercel.app'));
   assert.equal(url.hostname, 'www.youtube-nocookie.com');
   for (const [k, v] of [['autoplay', '1'], ['mute', '1'], ['loop', '1'], ['playlist', 's_qpMMkvHYE'], ['playsinline', '1']]) assert.equal(url.searchParams.get(k), v, k);
@@ -93,8 +98,15 @@ test('mini TV: pestaña «Click TV Oficial» con el video propio optimizado y CT
   assert.equal(textoCta(true), '🔥 ¡Activa tu IPTV Premium con Black Days!');
   assert.equal(textoCta(false), '🔥 ¡Activa tu IPTV Premium!');
   const html = leer('index.html');
-  assert.match(html, /<video id="ctv-tv-promo"[^>]*\bmuted\b[^>]*\bloop\b[^>]*\bplaysinline\b[^>]*\bcontrols\b/);
-  assert.match(html, /role="tab"[^>]*>📺 Click TV Oficial</);
+  assert.match(html, /<video id="ctv-tv-promo"[^>]*\bmuted\b[^>]*\bloop\b[^>]*\bplaysinline\b/);
+  // Controles nativos fuera: audio y volumen compactos en una píldora discreta dentro del video.
+  assert.doesNotMatch(html.match(/<video id="ctv-tv-promo"[^>]*>/)[0], /\bcontrols\b/);
+  for (const id of ['ctv-tv-pausa', 'ctv-tv-sonido', 'ctv-tv-volumen']) assert.match(html, new RegExp(`id="${id}"`), id);
+  assert.match(html, /<input id="ctv-tv-volumen"[^>]*type="range"[^>]*aria-label="Volumen del video"/);
+  const css = leer('clicktv-ajustes-finales-2026.css');
+  assert.match(css, /\.ctv-tv__audio-btn \{[^}]*width: 30px;[^}]*height: 30px;/, 'botones compactos');
+  assert.match(css, /\.ctv-tv__volumen \{[^}]*width: 64px;/, 'volumen corto');
+  assert.match(html, /role="tab"[^>]*>📺 Click TV Streaming</);
   assert.match(html, /role="tab"[^>]*>🎬 Estrenos de Cine</);
   // El CTA y el cierre viven en la barra, fuera del recuadro del video.
   const marco = html.slice(html.indexOf('id="ctv-tv-marco"'), html.indexOf('class="ctv-tv__barra"'));

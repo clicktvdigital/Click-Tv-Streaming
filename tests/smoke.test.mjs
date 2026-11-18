@@ -87,6 +87,8 @@ test('menú: abre y se cierra con la X', async () => {
 test('combos: el combo empieza vacío, se busca un servicio y llega al carrito', async () => {
   const { pagina, errores } = await abrirPagina({ width: 1280, height: 800 });
   assert.equal(await pagina.locator('#ahorro-servicios .combo-builder__elegido').count(), 0);
+  assert.equal(await pagina.isVisible('#combo-buscar'), false, 'productos plegados al cargar');
+  await pagina.click('#acordeon-combo > summary');
   await pagina.fill('#combo-buscar', 'spotify');
   await pagina.waitForFunction(() => /Spotify/.test(document.getElementById('combo-resultados').textContent));
   await pagina.locator('#combo-resultados [data-combo-agregar]').first().click();
@@ -96,6 +98,7 @@ test('combos: el combo empieza vacío, se busca un servicio y llega al carrito',
   await pagina.waitForFunction(() => !/Spotify/.test(document.getElementById('combo-resultados').textContent));
   await pagina.locator('#combo-resultados [data-combo-agregar]').first().click();
   assert.equal(await pagina.locator('#ahorro-servicios .combo-builder__elegido').count(), 2);
+  assert.notEqual((await pagina.textContent('#ahorro-total-resumen')).trim(), '$0.00 USD', 'el total se ve en el resumen plegado');
   await pagina.click('#btn-ahorro-carrito');
   assert.equal((await pagina.textContent('#contador-carrito')).trim(), '1');
   assert.deepEqual(errores, []);
@@ -409,6 +412,7 @@ test('pagos: sin cuentas en la portada; el botón abre el carrito con la transfe
 
 test('contacto: buscar país, región dinámica, prefijo automático y suscripción por correo', async () => {
   const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
+  await pagina.click('#acordeon-contacto > summary');
   await pagina.fill('#contacto-pais-buscar', 'peru');
   assert.equal(await pagina.inputValue('#contacto-pais'), 'Perú');
   assert.equal((await pagina.textContent('#contacto-prefijo')).trim(), '+51');
@@ -450,6 +454,15 @@ test('mini TV: video oficial y tráilers en pestañas, CTA y ✕ fuera del video
     });
   });
   assert.equal(await sinSolape(), true, 'CTA y ✕ debajo del video en la tarjeta');
+  // Controles compactos: sin controles nativos; el botón de sonido activa y silencia.
+  assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').controls), false);
+  const pildora = await pagina.evaluate(() => document.getElementById('ctv-tv-audio').getBoundingClientRect().height);
+  assert.ok(pildora <= 40, `controles compactos (${pildora}px)`);
+  await pagina.click('#ctv-tv-sonido');
+  assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').muted), false);
+  assert.equal(await pagina.getAttribute('#ctv-tv-sonido', 'aria-pressed'), 'true');
+  await pagina.click('#ctv-tv-sonido');
+  assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').muted), true);
   // Al salir de la sección: ventana fija y flotante, sin solapes y dentro de la pantalla.
   await pagina.evaluate(() => window.scrollTo(0, 0));
   await pagina.waitForFunction(() => document.getElementById('ctv-tv-prueba').classList.contains('ctv-tv--mini'));

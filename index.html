@@ -12,7 +12,7 @@
   <meta name="color-scheme" content="dark">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Click TV">
+  <meta name="apple-mobile-web-app-title" content="Click TV Streaming">
   <link rel="canonical" href="https://click-tv-streaming.vercel.app/">
   <link rel="image_src" href="https://click-tv-streaming.vercel.app/clicktv-vista-previa-horizontal-2026.jpg">
   <meta itemprop="image" content="https://click-tv-streaming.vercel.app/clicktv-vista-previa-horizontal-2026.jpg">
@@ -138,6 +138,7 @@
   <link rel="stylesheet" href="clicktv-promo-black-days.css?v=20261118-3">
   <link rel="stylesheet" href="clicktv-movil-2col.css?v=20261118-8">
   <link rel="stylesheet" href="clicktv-ux-tienda.css?v=20261118-6">
+  <link rel="stylesheet" href="clicktv-ajustes-finales-2026.css?v=20261118-1">
 </head>
 <body>
 <div id="top" tabindex="-1"></div>
@@ -243,7 +244,7 @@
     </div>
 
     <nav class="navbar container">
-      <a class="brand" href="#inicio" aria-label="CLICK TV inicio">
+      <a class="brand" href="#inicio" aria-label="Click TV Streaming, inicio">
         <span class="brand__logo brand__logo--horizontal">
           <picture><source type="image/webp" srcset="click-tv-logo-horizontal-2026.webp"><img src="click-tv-logo-horizontal-2026.jpg" width="1000" height="454" alt="Click TV Streaming"></picture>
         </span>
@@ -375,6 +376,9 @@
             <a class="btn btn--ghost" href="https://chat.whatsapp.com/CNWqZ0AhHhKDb1VKp1LqNu?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer">👥 Grupo WhatsApp</a>
           </div>
 
+          <div class="ctvc-medios">
+          <details class="ctv-acordeon ctv-acordeon--medio" id="acordeon-radio">
+            <summary><span class="ctv-acordeon__titulo">📻 Radio en vivo</span><span class="ctv-acordeon__meta">La Red 102.1 · Mach Deportes 91.7</span></summary>
           <div id="radio-app" class="media-box radio-app premium-surface">
             <div class="radio-app__header">
               <div class="radio-now-playing">
@@ -437,6 +441,9 @@
               Tu navegador no permite reproducir esta radio.
             </audio>
           </div>
+          </details>
+          <details class="ctv-acordeon ctv-acordeon--medio" id="acordeon-tv-vivo">
+            <summary><span class="ctv-acordeon__titulo">📡 TV en vivo · Teleamazonas</span><span class="ctv-acordeon__meta">Señal oficial</span></summary>
           <div class="teleamazonas-player-card">
             <div class="teleamazonas-player-card__head">
               <span class="teleamazonas-card__icon">📡</span>
@@ -458,14 +465,15 @@
               Acceso directo a la fuente oficial de Teleamazonas.
             </p>
           </div>
+          </details>
 
           <div id="ctv-tv-prueba" class="ctv-tv" aria-labelledby="ctv-tv-titulo">
             <div class="ctv-tv__cabecera">
               <span class="teleamazonas-card__label">MINI TV</span>
-              <strong id="ctv-tv-titulo">📺 Mira lo que tendrás con Click TV</strong>
+              <strong id="ctv-tv-titulo">📺 Mira lo que tendrás con Click TV Streaming</strong>
             </div>
             <div class="ctv-tv__pestanas" role="tablist" aria-label="Contenido de la Mini TV">
-              <button id="ctv-tv-tab-oficial" class="ctv-tv__pestana" type="button" role="tab" aria-selected="true" aria-controls="ctv-tv-marco">📺 Click TV Oficial</button>
+              <button id="ctv-tv-tab-oficial" class="ctv-tv__pestana" type="button" role="tab" aria-selected="true" aria-controls="ctv-tv-marco">📺 Click TV Streaming</button>
               <button id="ctv-tv-tab-cine" class="ctv-tv__pestana" type="button" role="tab" aria-selected="false" aria-controls="ctv-tv-marco">🎬 Estrenos de Cine</button>
             </div>
             <div class="ctv-tv__controles" id="ctv-tv-controles-cine" hidden>
@@ -474,7 +482,19 @@
             </div>
             <div class="ctv-tv__ventana">
               <div id="ctv-tv-marco" class="ctv-tv__marco" role="tabpanel" aria-labelledby="ctv-tv-tab-oficial">
-                <video id="ctv-tv-promo" class="ctv-tv__video" muted loop playsinline controls preload="none" poster="assets/promo-poster.webp" aria-label="Video promocional de Click TV Streaming"></video>
+                <video id="ctv-tv-promo" class="ctv-tv__video" muted loop playsinline preload="none" poster="assets/promo-poster.webp" aria-label="Video promocional de Click TV Streaming"></video>
+                <!-- Controles compactos del video propio: reproducir, sonido y volumen en una píldora discreta. -->
+                <div id="ctv-tv-audio" class="ctv-tv__audio" role="group" aria-label="Controles del video">
+                  <button id="ctv-tv-pausa" class="ctv-tv__audio-btn" type="button" aria-label="Reproducir video" aria-pressed="false">
+                    <svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13L18.5 12 8 5.5Z"/></svg>
+                    <svg class="ico-pausa" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+                  </button>
+                  <button id="ctv-tv-sonido" class="ctv-tv__audio-btn" type="button" aria-label="Activar sonido" aria-pressed="false">
+                    <svg class="ico-mudo" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12.6 3 2.7-2.7-1.1-1.1-2.7 2.7-2.7-2.7-1.1 1.1 2.7 2.7-2.7 2.7 1.1 1.1 2.7-2.7 2.7 2.7 1.1-1.1-2.7-2.7Z"/></svg>
+                    <svg class="ico-sonido" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm11.5-.9v7.8a5 5 0 0 0 0-7.8Zm0-3v2.1a7 7 0 0 1 0 9.6v2.1a9 9 0 0 0 0-13.8Z"/></svg>
+                  </button>
+                  <input id="ctv-tv-volumen" class="ctv-tv__volumen" type="range" min="0" max="1" step="0.05" value="0.7" aria-label="Volumen del video">
+                </div>
                 <div id="ctv-tv-reproductor" class="ctv-tv__reproductor" hidden></div>
                 <button id="ctv-tv-play" class="ctv-tv__play" type="button" hidden>▶ Ver tráiler</button>
               </div>
@@ -486,6 +506,7 @@
               </div>
             </div>
             <p id="ctv-tv-estado" class="ctv-tv__estado" role="status" aria-live="polite"></p>
+          </div>
           </div>
         </div>
       </div>
@@ -579,8 +600,8 @@
         <div class="section-head">
           <span class="eyebrow">⚽ Fútbol en vivo</span>
           <h2>Partidos y calendario</h2>
-          <p>🏆 Primero mostramos los partidos del Mundial.</p>
-          <p>📅 Si no hay encuentros disponibles, mostramos Copa Libertadores, CONMEBOL y LigaPro Ecuabet de Ecuador.</p>
+          <p>🏆 Partidos de ayer, hoy y mañana con banderas y escudos nítidos.</p>
+          <p>📅 LigaPro Ecuabet, Copa Libertadores, CONMEBOL y selecciones en un solo lugar.</p>
           <div class="football-source-status" id="football-source-status" aria-live="polite">Actualizando calendario...</div>
         </div>
         <div id="mundial-grid" class="mundial-grid"></div>
@@ -589,7 +610,14 @@
 
     <section id="promos" class="section section--accent">
       <div id="black-days-aviso" class="container ctv-bd-aviso" hidden>
-        <div class="ctv-bd-aviso__caja">
+        <div class="ctv-bd-aviso__caja ctv-bd-aviso__caja--con-imagen">
+          <figure class="ctv-bd-aviso__imagen">
+            <picture>
+              <source type="image/webp" srcset="assets/images/black-days-540.webp 540w, assets/images/black-days-1080.webp 1080w" sizes="(min-width: 860px) 360px, min(100vw - 48px, 440px)">
+              <img src="assets/images/black-days.jpg" width="1296" height="1616" loading="lazy" decoding="async" alt="Black Days de Click TV Streaming, del 15 al 20 de noviembre: paga 2 meses y recibe 1 gratis, paga 3 y recibe 3 gratis, paga 6 y recibe 6 gratis en TV en vivo, películas, series, deportes y contenido infantil.">
+            </picture>
+          </figure>
+          <div class="ctv-bd-aviso__texto">
           <p class="ctv-bd__sello">🖤 Black Days · Del 15 al 20 de noviembre</p>
           <h2>Hasta 6 meses gratis en IPTV Básico, Premium y Ultra</h2>
           <ul class="ctv-bd-aviso__lista">
@@ -598,6 +626,7 @@
             <li><strong>Black Days:</strong> Paga 6 meses y recibe 6 meses gratis.</li>
           </ul>
           <a class="btn btn--primary" href="#streaming" data-bd-ver-iptv>📺 Ver IPTV Básico, Premium y Ultra</a>
+          </div>
         </div>
       </div>
       <div class="container stats-grid">
@@ -646,8 +675,8 @@
         <p class="clicktv-journey__hint">Soporte y renovaciones: WhatsApp de atención.</p>
       </article>
     </div>
-    <div class="clicktv-terms" id="clicktv-garantias" aria-labelledby="ctv-garantias-titulo">
-      <h3 id="ctv-garantias-titulo">🛡️ Condiciones de uso y atención</h3>
+    <details class="clicktv-terms ctv-acordeon" id="clicktv-garantias">
+      <summary><span class="ctv-acordeon__titulo" id="ctv-garantias-titulo">🛡️ Condiciones de uso y atención</span><span class="ctv-acordeon__meta">Garantía, activación y renovación</span></summary>
       <div class="clicktv-terms__grid">
         <div>
           <h3>✅ Qué puedes hacer</h3>
@@ -683,7 +712,7 @@
         <p>⚖️ <strong>Derechos del consumidor:</strong> estas recomendaciones no reemplazan los derechos que reconocen las leyes vigentes.</p>
         <p>📄 Revisa las condiciones de la plataforma antes de contratar.</p>
       </details>
-    </div>
+    </details>
   </div>
 </section>
 <section id="clicktv-pagos-faciles" class="section" aria-labelledby="ctv-pagos-titulo">
@@ -754,6 +783,8 @@
           <span class="eyebrow">💬 Contacto</span>
           <h2>Activa tu servicio hoy</h2>
           <p>Te orientamos sobre activaciones, renovaciones y soporte en nuestros canales de atención.</p>
+          <details class="ctv-acordeon" id="acordeon-contacto">
+            <summary><span class="ctv-acordeon__titulo">📝 Activa hoy tu servicio · formulario</span><span class="ctv-acordeon__meta">Respuesta por WhatsApp</span></summary>
           <form id="form-contacto-internacional" class="contact-form">
             <div class="form-grid">
               <label>Nombre y apellido
@@ -798,6 +829,7 @@
             </label>
             <button class="btn btn--primary btn--full" type="submit">📲 Enviar consulta por WhatsApp</button>
           </form>
+          </details>
           <div class="contact-actions">
             <a id="link-renovar-servicio" class="btn btn--primary" href="https://wa.me/593939166222" target="_blank" rel="noopener noreferrer">🔁 Renovar servicio</a>
             <button class="btn btn--outline" type="button" onclick="contactarTelegramGeneral()">💬 Enviar por Telegram</button>
@@ -820,7 +852,7 @@
     <section id="resenas" class="section reviews-section">
       <div class="container">
         <div class="section-head reviews-head">
-          <span class="eyebrow">⭐ Comunidad Click TV</span>
+          <span class="eyebrow">⭐ Comunidad Click TV Streaming</span>
           <h2>Reseñas de nuestros clientes</h2>
           <p>⭐ Las opiniones cambian automáticamente cada 10 segundos.</p>
           <p>✍️ También puedes compartir tu experiencia con el formulario.</p>
@@ -841,9 +873,8 @@
             <div class="review-progress" aria-hidden="true"><span id="resena-progreso"></span></div>
           </div>
 
-          <div class="review-submit glass-card">
-            <span class="eyebrow">✍️ Comparte tu experiencia</span>
-            <h3>Deja tu reseña</h3>
+          <details class="review-submit glass-card ctv-acordeon" id="acordeon-resena">
+            <summary><span class="ctv-acordeon__titulo">✍️ Deja tu reseña</span><span class="ctv-acordeon__meta">Se publica al instante</span></summary>
             <p>Tu reseña se publica al instante y aparece para todos los visitantes.</p>
             <form id="form-resena-publica" class="review-form" data-review-form>
               <div class="form-grid">
@@ -864,7 +895,7 @@
               <button class="btn btn--primary btn--full" type="submit">⭐ Publicar mi reseña</button>
               <small class="review-privacy">No publiques contraseñas, códigos ni datos bancarios.</small>
             </form>
-          </div>
+          </details>
         </div>
       </div>
     </section>
@@ -876,6 +907,8 @@
           <h2>Simula tus servicios favoritos</h2>
           <p>🔎 Busca cualquier servicio del catálogo, elige su plan y arma tu combo a medida.</p>
           <p>💬 El valor final se confirma por WhatsApp, Signal o Telegram, según disponibilidad.</p>
+          <details class="ctv-acordeon" id="acordeon-combo">
+            <summary><span class="ctv-acordeon__titulo">🧩 Elegir productos del combo</span><span class="ctv-acordeon__meta" id="combo-cuenta-resumen">0 servicios</span></summary>
           <div class="combo-builder" id="combo-builder">
             <div class="combo-builder__filtros" role="search">
               <div class="combo-builder__buscador">
@@ -894,10 +927,12 @@
               <div class="savings-quick"><button id="btn-ahorro-todos" class="btn btn--ghost" type="button">✨ Combo sugerido</button><button id="btn-ahorro-limpiar" class="btn btn--ghost" type="button">Vaciar combo</button></div>
             </div>
           </div>
+          </details>
         </div>
 
         <div class="savings-card glass-card">
-          <h3>Resumen estimado</h3>
+          <details class="ctv-acordeon ctv-acordeon--plano" id="acordeon-resumen">
+          <summary><span class="ctv-acordeon__titulo">🧾 Resumen estimado del pedido</span><span class="ctv-acordeon__meta" id="ahorro-total-resumen">$0.00 USD</span></summary>
           <div class="savings-coupon">
             <label for="input-cupon-ahorro">Cupón de descuento</label>
             <div class="input-row">
@@ -908,11 +943,12 @@
           </div>
           <div class="savings-summary">
             <p><span>Precio normal referencial</span><strong id="ahorro-normal">$0.00 USD</strong></p>
-            <p><span>Subtotal Click TV</span><strong id="ahorro-subtotal">$0.00 USD</strong></p>
+            <p><span>Subtotal Click TV Streaming</span><strong id="ahorro-subtotal">$0.00 USD</strong></p>
             <p><span>Cupón de descuento</span><strong id="ahorro-cupon">- $0.00 USD</strong></p>
             <p class="total"><span>Total estimado</span><strong id="ahorro-total">$0.00 USD</strong></p>
             <p class="saving-line"><span>Ahorro aproximado</span><strong id="ahorro-total-ahorrado">$0.00 USD</strong></p>
           </div>
+          </details>
           <div class="savings-acciones"><button id="btn-ahorro-whatsapp" class="btn btn--primary btn--full" type="button">📲 Pedir por WhatsApp · ventas</button><button id="btn-ahorro-whatsapp-atencion" class="btn btn--outline btn--full" type="button">📲 Pedir por WhatsApp · atención</button><button id="btn-ahorro-carrito" class="btn btn--outline btn--full" type="button">🛒 Añadir combo al carrito</button></div>
         </div>
       </div>
@@ -1131,8 +1167,8 @@
   <footer class="footer">
     <div class="container footer__content">
       <div>
-        <strong>Click TV Digital</strong>
-        <p>Desarrollo y catálogo comercial: Click Tv Streaming.</p>
+        <strong>Click TV Streaming</strong>
+        <p>Una marca de Click TV Digital.</p>
         <p>© <span id="anio-actual"></span> Click TV Digital. Todos los derechos reservados.</p>
       </div>
       <div class="footer-payments" aria-label="Métodos de pago">
@@ -1144,8 +1180,8 @@
         <button type="button" class="footer-pago" data-pago="Remitly">🌎 Remitly</button>
         <a class="footer-pago" href="https://www.paypal.com/myaccount/autopay/" target="_blank" rel="noopener noreferrer">🔁 Gestionar o cancelar suscripción PayPal</a>
       </div>
-      <div class="footer-share" aria-label="Recomendar Click TV">
-        <p><strong>💚 Recomienda Click TV</strong> · comparte con tus amigos y familia</p>
+      <div class="footer-share" aria-label="Recomendar Click TV Streaming">
+        <p><strong>💚 Recomienda Click TV Streaming</strong> · comparte con tus amigos y familia</p>
         <div class="footer-share__botones">
           <button type="button" class="footer-share__btn" data-compartir="nativo">📤 Compartir</button>
           <button type="button" class="footer-share__btn" data-compartir="whatsapp">🟢 WhatsApp</button>
@@ -1157,20 +1193,21 @@
       </div>
     </div>
   </footer>
-  <script src="data.js?v=20261118-5" defer></script>
+  <script src="data.js?v=20261118-6" defer></script>
   <script src="clicktv-paypal-planes.js?v=20261115-1" defer></script>
   <script src="clicktv-villancicos.js?v=20261114-1" defer></script>
   <script src="clicktv-navidad-fx.js?v=20261114-1" defer></script>
   <script src="clicktv-navidad-escena.js?v=20261114-1" defer></script>
-  <script src="clicktv-precios-publico-2026.js?v=20261015-4" defer></script>
+  <script src="clicktv-precios-publico-2026.js?v=20261118-1" defer></script>
   <script src="clicktv-promo-black-days.js?v=20261118-4" defer></script>
   <script src="catalogo.js?v=20261118-1" defer></script>
   <script src="clicktv-enlaces-2026.js?v=20261118-1" defer></script>
   <script src="clicktv-asistente-2026.js?v=20261118-1" defer></script>
-  <script src="script.js?v=20261118-5" defer></script>
-  <script src="clicktv-navegacion-movil.js?v=20261118-4" defer></script>
+  <script src="script.js?v=20261118-6" defer></script>
+  <script src="clicktv-navegacion-movil.js?v=20261118-5" defer></script>
   <script src="clicktv-formulario-contacto.js?v=20261118-1" defer></script>
-  <script src="clicktv-mini-tv.js?v=20261118-4" defer></script>
+  <script src="clicktv-mini-tv.js?v=20261118-5" defer></script>
+  <script src="clicktv-acordeones.js?v=20261118-1" defer></script>
   <script src="clicktv-accesible.js?v=20261015-4" defer></script>
   <script src="clicktv-atencion-pagos.js?v=20261118-1" defer></script>
   <script src="clicktv-pago-producto.js?v=20261117-1" defer></script>

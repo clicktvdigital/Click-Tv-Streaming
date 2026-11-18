@@ -1,0 +1,273 @@
+/* CLICK TV STREAMING · Ajustes finales 18/11/2026
+   1. Banner Black Days con la imagen oficial (sin recortes).
+   2. Mini TV: controles de audio y volumen compactos para el video propio.
+   3. Partidos: banderas/escudos grandes y datos del encuentro en una retícula sin huecos.
+   4. Acordeones (<details>) limpios para las secciones largas.
+   Se carga al final: solo ajusta lo nuevo, sin !important salvo para vencer reglas móviles previas. */
+
+/* ---------------------------------------------------------------- 1. Banner Black Days */
+.ctv-bd-aviso__caja--con-imagen {
+  display: grid;
+  gap: clamp(14px, 3vw, 28px);
+  align-items: center;
+}
+.ctv-bd-aviso__imagen { margin: 0; justify-self: center; width: 100%; max-width: 440px; }
+.ctv-bd-aviso__imagen img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1296 / 1616;
+  object-fit: contain;
+  border-radius: 14px;
+  background: #020b18;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
+}
+.ctv-bd-aviso__texto { min-width: 0; }
+@media (min-width: 860px) {
+  .ctv-bd-aviso__caja--con-imagen { grid-template-columns: 360px minmax(0, 1fr); }
+  .ctv-bd-aviso__imagen { max-width: 360px; }
+}
+
+/* ---------------------------------------------------------------- 2. Mini TV: controles compactos */
+.ctv-tv__video { cursor: pointer; }
+.ctv-tv__audio {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 8px 3px 3px;
+  border-radius: 999px;
+  background: rgba(2, 10, 24, .62);
+  border: 1px solid rgba(255, 255, 255, .14);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  opacity: .78;
+  transition: opacity .16s ease-out;
+}
+.ctv-tv__audio:hover,
+.ctv-tv__audio:focus-within { opacity: 1; }
+.ctv-tv__video[hidden] + .ctv-tv__audio { display: none; }
+.ctv-tv__audio-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+/* Área táctil de 44 px sin agrandar el icono. */
+.ctv-tv__audio-btn { position: relative; }
+.ctv-tv__audio-btn::before { content: ""; position: absolute; inset: -7px; }
+.ctv-tv__audio-btn svg { width: 17px; height: 17px; fill: currentColor; }
+.ctv-tv__audio-btn:active { transform: scale(.92); }
+.ctv-tv__audio-btn[aria-pressed="true"] .ico-play,
+.ctv-tv__audio-btn[aria-pressed="false"] .ico-pausa,
+#ctv-tv-sonido[aria-pressed="true"] .ico-mudo,
+#ctv-tv-sonido[aria-pressed="false"] .ico-sonido { display: none; }
+.ctv-tv__volumen {
+  --nivel: 70%;
+  width: 64px;
+  height: 18px;
+  margin: 0 0 0 2px;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.ctv-tv__volumen::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #7fd0ff var(--nivel), rgba(255, 255, 255, .28) var(--nivel));
+}
+.ctv-tv__volumen::-moz-range-track { height: 3px; border-radius: 3px; background: rgba(255, 255, 255, .28); }
+.ctv-tv__volumen::-moz-range-progress { height: 3px; border-radius: 3px; background: #7fd0ff; }
+.ctv-tv__volumen::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 11px;
+  height: 11px;
+  margin-top: -4px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+}
+.ctv-tv__volumen::-moz-range-thumb { width: 11px; height: 11px; border: 0; border-radius: 50%; background: #fff; }
+.ctv-tv :is(.ctv-tv__audio-btn, .ctv-tv__volumen):focus-visible { outline: 2px solid #ffe38b; outline-offset: 2px; }
+/* En la ventana pequeña solo queda el botón de sonido. */
+.ctv-tv--mini .ctv-tv__volumen,
+.ctv-tv--mini #ctv-tv-pausa { display: none; }
+.ctv-tv--mini .ctv-tv__audio { left: 6px; bottom: 6px; padding: 2px; }
+@media (max-width: 420px) { .ctv-tv__volumen { width: 52px; } }
+
+/* ---------------------------------------------------------------- 3. Partidos */
+#mundial .mundial-duelo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 12px;
+}
+#mundial .mundial-team {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  min-width: 0;
+  text-align: center;
+}
+#mundial .mundial-team strong { line-height: 1.2; overflow-wrap: anywhere; }
+#mundial .mundial-marcador { display: grid; justify-items: center; gap: 2px; text-align: center; }
+
+#mundial .team-flag--grande {
+  width: 64px;
+  height: 46px;
+  min-width: 0;
+  display: grid;
+  place-items: center;
+  font-size: 2.9rem;
+  line-height: 1;
+  overflow: visible;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .35));
+}
+#mundial .team-flag--iniciales {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #fff;
+  background: #0b3a74;
+  border: 2px solid #4a9de0;
+  filter: none;
+}
+#mundial .mundial-escudo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  image-rendering: auto;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .35));
+}
+
+/* Datos del encuentro: retícula de 2 columnas; con 3 datos, el estadio ocupa todo el ancho. */
+#mundial .match-datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+}
+#mundial .match-datos--3 .match-dato:last-child { grid-column: 1 / -1; }
+#mundial .match-dato {
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid rgba(127, 208, 255, .18);
+}
+#mundial .match-dato dt { font-size: .7rem; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: #9cc8f2; }
+#mundial .match-dato dd { margin: 2px 0 0; font-size: .92rem; font-weight: 800; color: #fff; overflow-wrap: anywhere; text-transform: capitalize; }
+
+@media (max-width: 720px) {
+  #mundial .team-flag--grande { width: 48px; height: 36px; font-size: 2.2rem; }
+  #mundial .team-flag--iniciales { width: 42px; height: 42px; font-size: .9rem; }
+  #mundial .mundial-escudo { width: 48px !important; height: 48px !important; }
+  #mundial .mundial-duelo { gap: 4px; }
+  #mundial .match-dato { padding: 6px 7px; }
+  #mundial .match-dato dt { font-size: .62rem; }
+  #mundial .match-dato dd { font-size: .8rem; }
+}
+
+/* ---------------------------------------------------------------- 4. Acordeones */
+.ctv-acordeon { margin: 12px 0 0; }
+.ctv-acordeon > summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid rgba(127, 208, 255, .28);
+  color: #fff;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color .16s ease-out, border-color .16s ease-out;
+}
+.ctv-acordeon > summary::-webkit-details-marker { display: none; }
+.ctv-acordeon > summary::after {
+  content: "";
+  flex: none;
+  width: 9px;
+  height: 9px;
+  margin: 0 4px 3px 0;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform .18s ease-out;
+}
+.ctv-acordeon[open] > summary::after { transform: translateY(3px) rotate(225deg); }
+@media (hover: hover) and (pointer: fine) {
+  .ctv-acordeon > summary:hover { background: rgba(127, 208, 255, .1); border-color: rgba(127, 208, 255, .5); }
+}
+.ctv-acordeon > summary:active { background: rgba(127, 208, 255, .14); }
+.ctv-acordeon > summary:focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
+.ctv-acordeon__titulo { flex: 1 1 auto; min-width: 0; font-weight: 800; font-size: 1.02rem; line-height: 1.25; }
+.ctv-acordeon__meta {
+  flex: none;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: .8rem;
+  font-weight: 700;
+  color: #b9d8ff;
+}
+.ctv-acordeon[open] > summary { margin-bottom: 12px; }
+
+/* Cuando el propio desplegable ya es una tarjeta, el encabezado no lleva caja propia. */
+.ctv-acordeon:is(.glass-card, .clicktv-terms) > summary,
+.ctv-acordeon--plano > summary {
+  min-height: 48px;
+  padding: 4px 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+.ctv-acordeon:is(.glass-card, .clicktv-terms) > summary .ctv-acordeon__titulo,
+.ctv-acordeon--plano > summary .ctv-acordeon__titulo { font-size: 1.12rem; }
+.ctv-acordeon--plano { margin: 0; }
+.clicktv-terms.ctv-acordeon > summary { font-weight: inherit; }
+#ahorro-total-resumen { color: #7fd0ff; font-size: .92rem; font-weight: 900; }
+
+/* Radio y TV en vivo dentro del panel de accesos.
+   Escritorio: a la izquierda los accesos; a la derecha radio, TV en vivo y la Mini TV, apilados. */
+.ctv-acordeon--medio > .radio-app,
+.ctv-acordeon--medio > .teleamazonas-player-card { margin-top: 0; }
+.ctvc-medios { display: grid; gap: 1rem; min-width: 0; align-content: start; }
+.ctvc-medios > * { margin: 0; }
+@media (min-width: 971px) {
+  /* Una sola columna derecha: abrir la radio o la TV no separa los accesos de la izquierda. */
+  .ctvc-utilities .hero__panel { grid-template-rows: auto auto 1fr; }
+  .ctvc-utilities .hero__panel > .ctvc-medios { grid-column: 2; grid-row: 1 / span 3; }
+}
+
+@media (max-width: 420px) {
+  .ctv-acordeon__meta { display: none; }
+  #acordeon-resumen .ctv-acordeon__meta,
+  #acordeon-combo .ctv-acordeon__meta { display: inline; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctv-acordeon > summary,
+  .ctv-acordeon > summary::after,
+  .ctv-tv__audio { transition: none; }
+}

@@ -1,6 +1,6 @@
 /* ========================================================================== 
-   CLICK TV STREAMING MUNDIAL 2026 — script.js
-   Lógica principal: carrito, pagos, moneda, API Mundial, UI y botones
+   CLICK TV STREAMING 2026 — script.js
+   Lógica principal: carrito, pagos, moneda, API de partidos, UI y botones
    ========================================================================== */
 
 const CLAVE_CARRITO = "clicktv_carrito";
@@ -1780,7 +1780,7 @@ function enviarAhorroWhatsApp(enlaceBase = CONFIG.whatsappLink) {
     .join("\n");
 
   const mensaje = encodeURIComponent(
-`🧮 Hola Click TV Streaming, deseo consultar este combo simulado.\n\n${servicios}\n\n🧾 Subtotal Click TV: $${totales.subtotal.toFixed(2)} USD\n🏷️ Cupón: ${cuponAhorroAplicado ? `${cuponAhorroAplicado.codigo} (-$${totales.descuento.toFixed(2)} USD)` : "Sin cupón"}\n✅ Total estimado: $${totales.total.toFixed(2)} USD\n💰 Ahorro aproximado: $${totales.ahorro.toFixed(2)} USD\n\n📲 Por favor, confirmen disponibilidad y precio final.`
+`🧮 Hola Click TV Streaming, deseo consultar este combo simulado.\n\n${servicios}\n\n🧾 Subtotal Click TV Streaming: $${totales.subtotal.toFixed(2)} USD\n🏷️ Cupón: ${cuponAhorroAplicado ? `${cuponAhorroAplicado.codigo} (-$${totales.descuento.toFixed(2)} USD)` : "Sin cupón"}\n✅ Total estimado: $${totales.total.toFixed(2)} USD\n💰 Ahorro aproximado: $${totales.ahorro.toFixed(2)} USD\n\n📲 Por favor, confirmen disponibilidad y precio final.`
   );
 
   window.open(`${enlaceBase}?text=${mensaje}`, "_blank", "noopener,noreferrer");
@@ -2202,7 +2202,7 @@ async function renderMundial(silencioso = false) {
   if (!box) return;
 
   if (!silencioso) {
-    box.innerHTML = `<div class="loading-card">⚽ Buscando partidos del Mundial, Libertadores y LigaPro Ecuador...</div>`;
+    box.innerHTML = `<div class="loading-card">⚽ Buscando partidos de LigaPro Ecuador, Libertadores y selecciones...</div>`;
   }
 
   try {
@@ -2601,7 +2601,7 @@ function crearCardPartido(p) {
       <p class="match-group">${p.grupo}</p>
       <div class="mundial-duelo">
         <div class="mundial-team">
-          ${p.escudoLocal ? `<img class="mundial-escudo" src="${p.escudoLocal}" alt="${p.local}">` : crearNombreEquipoConBandera(p.local,p.codigoLocal)}
+          ${crearEmblemaEquipo(p.local, p.codigoLocal, p.escudoLocal)}
           <strong>${p.local}</strong>
         </div>
         <div class="mundial-marcador">
@@ -2610,19 +2610,32 @@ function crearCardPartido(p) {
           <div class="mundial-cronometro" data-fecha="${p.fechaUTC}">⏱</div>
         </div>
         <div class="mundial-team">
-          ${p.escudoVisitante ? `<img class="mundial-escudo" src="${p.escudoVisitante}" alt="${p.visitante}">` : crearNombreEquipoConBandera(p.visitante,p.codigoVisitante)}
+          ${crearEmblemaEquipo(p.visitante, p.codigoVisitante, p.escudoVisitante)}
           <strong>${p.visitante}</strong>
         </div>
       </div>
-      <p>📅 ${formatearFechaPartidoCliente(fecha)}</p>
-      <p>⏰ ${formatearHoraPartidoCliente(fecha)} hora de Ecuador</p>
-      ${sede ? `<p class="match-venue">📍 ${escaparHTML(sede)}</p>
-      <a class="match-indicaciones" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(sede + ", Ecuador")}" target="_blank" rel="noopener noreferrer">🧭 Cómo llegar / indicaciones</a>` : ""}
+      ${crearDatosPartido(p, fecha, sede)}
     </article>`;
 }
-function crearNombreEquipoConBandera(nombre, codigo = "") {
+// Datos del encuentro en una retícula sin huecos: 2 o 3 celdas según haya estadio (la última ocupa el ancho).
+function crearDatosPartido(p, fecha, sede = "") {
+  const datos = [
+    ["📅", "Fecha", formatearFechaPartidoCliente(fecha)],
+    ["⏰", "Hora Ecuador", formatearHoraPartidoCliente(fecha)]
+  ];
+  if (sede) datos.push(["🏟️", "Estadio", sede]);
+  return `<dl class="match-datos match-datos--${datos.length}">${datos.map(([icono, etiqueta, valor]) => `
+        <div class="match-dato"><dt><span aria-hidden="true">${icono}</span> ${etiqueta}</dt><dd>${escaparHTML(String(valor))}</dd></div>`).join("")}
+      </dl>`;
+}
+
+// Escudo o bandera grande y nítida sobre el nombre (que va en <strong>, sin repetirlo).
+function crearEmblemaEquipo(nombre = "", codigo = "", escudo = "") {
+  if (escudo) return `<img class="mundial-escudo" src="${escaparHTML(escudo)}" alt="" width="64" height="64" loading="lazy" decoding="async">`;
   const bandera = obtenerBanderaEquipo(nombre, codigo);
-  return `<span class="team-name">${bandera ? `<span class="team-flag team-flag--uniforme ${normalizarTextoPais(nombre).includes("argentina") ? "bandera-argentina-ajuste" : ""}">${bandera}</span>` : ""}${nombre}</span>`;
+  if (bandera) return `<span class="team-flag team-flag--grande" role="img" aria-label="Bandera de ${escaparHTML(nombre)}">${bandera}</span>`;
+  const iniciales = String(nombre).trim().split(/\s+/).slice(0, 2).map((w) => w[0] || "").join("").toUpperCase();
+  return `<span class="team-flag team-flag--grande team-flag--iniciales" aria-hidden="true">${escaparHTML(iniciales || "⚽")}</span>`;
 }
 
 function obtenerBanderaEquipo(nombre = "", codigo = "") {

@@ -169,6 +169,7 @@
     const destino = document.querySelector(selector);
     cerrarMenu();
     if (!destino) return;
+    window.ctvAcordeones?.abrir(destino); // p. ej. la radio vive en un desplegable
     despuesDelPintado(() => { desplazarA(destino); enfocarSinScroll(destino); });
     try { history.replaceState(history.state, '', selector); } catch { /* sin history */ }
   }
