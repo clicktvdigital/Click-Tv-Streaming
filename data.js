@@ -56,20 +56,12 @@ const CONFIG = {
   },
   laredStreamingUrl: "https://www.lared.com.ec/streaming/",
   teleamazonasUrl: "https://www.teleamazonas.com/teleamazonas-en-vivo/",
-  // Mini TV multicanal. Solo señales con derechos de emisión: nunca listas IPTV de terceros ni URLs con
-  // usuario/contraseña (este archivo es público). Para un canal propio, agrega { id, nombre, url, respaldo? }.
-  canalesMiniTV: [
-    {
-      id: "prueba-directo",
-      nombre: "Prueba en directo",
-      url: "https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8",
-      respaldo: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-    },
-    {
-      id: "cine-prueba",
-      nombre: "Cine de prueba 24/7 (Big Buck Bunny, CC-BY)",
-      url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-    }
+  // Mini TV: tráilers oficiales doblados al español latino, de los canales de YouTube de los estudios
+  // (verificados con el oEmbed de YouTube: existen, canal oficial y se pueden insertar). 18/11/2026.
+  trailersYouTube: [
+    { id: "s_qpMMkvHYE", titulo: "Toy Story 5", canal: "Disney Studios LA", version: "Doblado" },
+    { id: "po-V420c5uY", titulo: "Gatto", canal: "Disney Studios LA", version: "Doblado" },
+    { id: "4lFQCu8Q4S0", titulo: "Nunca olvides que te quiero", canal: "Warner Bros. Pictures Latinoamérica", version: "Doblado" }
   ],
   teleamazonasSignatureUrl: "https://www.teleamazonas.com/mediastream/signature",
   teleamazonasPlayerId: "6945b9bca18f515cff51c75b",

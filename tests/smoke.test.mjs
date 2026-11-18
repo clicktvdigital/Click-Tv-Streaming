@@ -433,16 +433,28 @@ test('contacto: buscar país, región dinámica, prefijo automático y suscripci
   await pagina.context().close();
 });
 
-test('mini TV: selector con varios canales; sin red muestra un aviso claro y deja reintentar', async () => {
+test('mini TV: tráilers con selector, carga silenciada al llegar, ventana pequeña, CTA y cierre', async () => {
   const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
-  assert.ok(await pagina.locator('#ctv-tv-canal option').count() >= 2, 'al menos dos canales');
-  const segundo = await pagina.locator('#ctv-tv-canal option').nth(1).getAttribute('value');
-  await pagina.selectOption('#ctv-tv-canal', segundo);
-  await pagina.locator('#ctv-tv-play').scrollIntoViewIfNeeded();
-  await pagina.click('#ctv-tv-play');
-  await pagina.waitForFunction(() => /⚠️/.test(document.getElementById('ctv-tv-estado').textContent), null, { timeout: 8000 });
-  assert.equal(await pagina.isVisible('#ctv-tv-play'), true);
-  assert.equal(await pagina.isEnabled('#ctv-tv-play'), true);
+  assert.ok(await pagina.locator('#ctv-tv-trailer option').count() >= 2);
+  assert.equal(await pagina.locator('#ctv-tv-reproductor iframe').count(), 0, 'nada se carga antes de llegar a la sección');
+  await pagina.locator('#ctv-tv-prueba').scrollIntoViewIfNeeded();
+  await pagina.waitForSelector('#ctv-tv-reproductor iframe');
+  const src = await pagina.getAttribute('#ctv-tv-reproductor iframe', 'src');
+  assert.match(src, /^https:\/\/www\.youtube-nocookie\.com\/embed\/[A-Za-z0-9_-]{11}\?/);
+  assert.match(src, /mute=1/);
+  const segundo = await pagina.locator('#ctv-tv-trailer option').nth(1).getAttribute('value');
+  await pagina.selectOption('#ctv-tv-trailer', segundo);
+  assert.match(await pagina.getAttribute('#ctv-tv-reproductor iframe', 'src'), new RegExp(`/embed/${segundo}\\?`));
+  await pagina.evaluate(() => window.scrollTo(0, 0));
+  await pagina.waitForFunction(() => document.getElementById('ctv-tv-prueba').classList.contains('ctv-tv--mini'));
+  await pagina.click('#ctv-tv-cta');
+  await pagina.waitForFunction(() => {
+    const r = document.querySelector('#catalogo-grid [data-producto="iptv-premium"]')?.getBoundingClientRect();
+    return !!r && r.top < innerHeight && r.bottom > 0;
+  }, null, { timeout: 4000 });
+  await pagina.click('#ctv-tv-cerrar');
+  assert.equal(await pagina.locator('#ctv-tv-reproductor iframe').count(), 0, 'cerrar libera el iframe');
+  assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-prueba').classList.contains('ctv-tv--mini')), false);
   assert.deepEqual(errores, []);
   await pagina.context().close();
 });
