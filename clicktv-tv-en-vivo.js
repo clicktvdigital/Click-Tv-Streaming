@@ -61,6 +61,9 @@
     let conectando = false;
     let canal = canales[0];
     let usandoRespaldo = false;
+    // Un fallo puede llegar (evento error del <video> o de hls.js) antes de que termine ver():
+    // si ocurre, ese intento no se marca como conectado y el aviso de error se mantiene.
+    let fallido = false;
     const avisar = (texto) => { if (estado) estado.textContent = texto; };
 
     function liberar() {
@@ -104,6 +107,7 @@
     }
 
     function fallo(error) {
+      fallido = true;
       activo = false;
       conectando = false;
       liberar();
@@ -116,11 +120,13 @@
       if (selector) selector.value = canal.id;
       play.disabled = true;
       conectando = true;
+      fallido = false;
       usandoRespaldo = false;
       avisar(`⏳ Conectando con ${canal.nombre}…`);
       document.getElementById('radio-player')?.pause();
       try {
         await sintonizar(canal.url);
+        if (fallido) return;
         activo = true;
         play.hidden = true;
         tarjeta.classList.add('ctv-tv--activo');
