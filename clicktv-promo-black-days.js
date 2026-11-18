@@ -167,13 +167,66 @@
     if (typeof raiz.mostrarToast === 'function') raiz.mostrarToast(texto, tipo);
   }
 
+  function abrirTarjeta(dentro) {
+    const planes = dentro.closest('.product-card')?.querySelector('details.product-plans-wrap');
+    if (planes && !planes.open) planes.open = true;
+  }
+
+  const MENSAJE_WHATSAPP = [
+    '🖤 Hola Click TV Streaming.',
+    '',
+    'Quiero aprovechar la promoción *Black Days* de IPTV (meses gratis, del 15 al 20 de noviembre).',
+    '',
+    '📺 Plan: IPTV Básico / Premium / Ultra',
+    '📱 Dispositivos: 1 / 2 / 3',
+    '🎁 Promoción: ',
+    '',
+    '✅ ¿Me ayudan a activarla? Gracias.'
+  ].join('\n');
+
+  // Barra inferior de celular: WhatsApp directo con el pedido de Black Days ya escrito.
+  function iniciarBarraWhatsApp(vigente) {
+    const barra = document.getElementById('ctv-bd-barra');
+    if (!barra) return;
+    const enlace = document.getElementById('ctv-bd-barra-whatsapp');
+    const base = (typeof CONFIG !== 'undefined' && CONFIG.whatsappLink) || 'https://wa.me/593939166222';
+    if (enlace) enlace.href = `${base}?text=${encodeURIComponent(MENSAJE_WHATSAPP)}`;
+    const CLAVE = 'ctv-bd-barra-oculta';
+    let oculta = false;
+    try { oculta = sessionStorage.getItem(CLAVE) === '1'; } catch { /* sin almacenamiento */ }
+
+    const medir = () => {
+      const accesos = document.querySelector('.floating-actions');
+      const caja = accesos?.getBoundingClientRect();
+      const alto = caja && caja.height ? Math.max(0, Math.round(window.innerHeight - caja.top)) : 0;
+      document.documentElement.style.setProperty('--ctv-alto-accesos', `${alto}px`);
+    };
+    const actualizar = () => {
+      const mostrar = !oculta && (vigente = estaActiva());
+      barra.hidden = !mostrar;
+      document.body.classList.toggle('ctv-bd-barra-visible', mostrar);
+      if (mostrar) medir();
+    };
+    document.getElementById('ctv-bd-barra-cerrar')?.addEventListener('click', () => {
+      oculta = true;
+      try { sessionStorage.setItem(CLAVE, '1'); } catch { /* sin almacenamiento */ }
+      actualizar();
+    });
+    window.addEventListener('resize', () => { if (!barra.hidden) medir(); }, { passive: true });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) actualizar(); });
+    actualizar();
+  }
+
   function iniciarInterfaz() {
     const vigente = estaActiva();
     const aviso = document.getElementById('black-days-aviso');
     if (aviso) aviso.hidden = !vigente;
     document.querySelector('[data-bd-ver-iptv]')?.addEventListener('click', () => {
       if (typeof raiz.seleccionarCategoriaCatalogo === 'function') raiz.seleccionarCategoriaCatalogo('iptv');
+      // En celular las tarjetas con promo están compactas: desde el aviso se abren con su selector a la vista.
+      document.querySelectorAll('#catalogo-grid .ctv-bd').forEach(abrirTarjeta);
     });
+    iniciarBarraWhatsApp(vigente);
 
     const grid = document.getElementById('catalogo-grid');
     if (!grid) return;
@@ -185,6 +238,8 @@
       if (destino) destino.innerHTML = htmlDesglose(calcular(producto, d, promoId));
     });
     grid.addEventListener('click', (e) => {
+      const sello = e.target.closest('.ctv-bd__sello');
+      if (sello) abrirTarjeta(sello);
       const boton = e.target.closest('[data-bd-accion]');
       const caja = boton?.closest('.ctv-bd');
       if (!caja) return;

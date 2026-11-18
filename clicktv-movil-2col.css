@@ -177,28 +177,62 @@ html.pestana-oculta :is(.navidad-nieve span, .navidad-santa, .navidad-santa *, .
   }
   #catalogo-grid .product-plans-wrap > summary:active { transform: scale(0.97); background: rgba(29, 95, 191, .45); }
 
-  /* Tarjeta abierta, con Black Days o sola (enlace directo): ocupa las 2 columnas y se lee completa. */
-  #catalogo-grid .product-card:is(.product-card--abierta, .product-card--ancha, :only-child),
-  #catalogo-grid .product-card:has(> details[open]),
-  #catalogo-grid .product-card:has(.ctv-bd) {
+  /* Tarjeta abierta o sola (enlace directo): ocupa las 2 columnas y se lee completa. */
+  #catalogo-grid .product-card:is(.product-card--abierta, :only-child),
+  #catalogo-grid .product-card:has(> details[open]) {
     grid-column: 1 / -1;
     padding: 16px;
   }
-  #catalogo-grid .product-card:is(.product-card--abierta, .product-card--ancha, :only-child) .product-card__head,
-  #catalogo-grid .product-card:has(> details[open]) .product-card__head,
-  #catalogo-grid .product-card:has(.ctv-bd) .product-card__head { flex-direction: row; align-items: center; gap: 12px; }
-  #catalogo-grid .product-card:is(.product-card--abierta, .product-card--ancha, :only-child) > p,
-  #catalogo-grid .product-card:has(> details[open]) > p,
-  #catalogo-grid .product-card:has(.ctv-bd) > p { -webkit-line-clamp: unset; display: block; font-size: .92rem; }
-  #catalogo-grid .product-card:is(.product-card--abierta, .product-card--ancha, :only-child) .product-tags span + span,
-  #catalogo-grid .product-card:has(> details[open]) .product-tags span + span,
-  #catalogo-grid .product-card:has(.ctv-bd) .product-tags span + span { display: inline-block; }
-  #catalogo-grid .product-card:is(.product-card--abierta, .product-card--ancha, :only-child) .product-tags,
-  #catalogo-grid .product-card:has(> details[open]) .product-tags,
-  #catalogo-grid .product-card:has(.ctv-bd) .product-tags { flex-wrap: wrap; }
-  #catalogo-grid .product-card:is(.product-card--abierta, .product-card--ancha, :only-child) .product-card__enlace,
-  #catalogo-grid .product-card:has(> details[open]) .product-card__enlace,
-  #catalogo-grid .product-card:has(.ctv-bd) .product-card__enlace { display: inline-block; align-self: flex-end; }
+  #catalogo-grid .product-card:is(.product-card--abierta, :only-child) .product-card__head,
+  #catalogo-grid .product-card:has(> details[open]) .product-card__head { flex-direction: row; align-items: center; gap: 12px; }
+  #catalogo-grid .product-card:is(.product-card--abierta, :only-child) > p,
+  #catalogo-grid .product-card:has(> details[open]) > p { -webkit-line-clamp: unset; display: block; font-size: .92rem; }
+  #catalogo-grid .product-card:is(.product-card--abierta, :only-child) .product-tags span + span,
+  #catalogo-grid .product-card:has(> details[open]) .product-tags span + span { display: inline-block; }
+  #catalogo-grid .product-card:is(.product-card--abierta, :only-child) .product-tags,
+  #catalogo-grid .product-card:has(> details[open]) .product-tags { flex-wrap: wrap; }
+  #catalogo-grid .product-card:is(.product-card--abierta, :only-child) .product-card__enlace,
+  #catalogo-grid .product-card:has(> details[open]) .product-card__enlace { display: inline-block; align-self: flex-end; }
+}
+
+/* 3b. IPTV Básico, Premium y Ultra con Black Days: compactas en la cuadrícula y con el sello bien visible.
+   Al abrir los planes (o tocar "Ver IPTV" del aviso), la tarjeta ocupa el ancho y muestra el selector completo. */
+@media (max-width: 680px) and (min-width: 340px) {
+  #catalogo-grid .product-card--ancha {
+    --ctv-card-accent: #7fd0ff;
+    border-color: #4aa3ff !important;
+  }
+  #catalogo-grid .product-card--ancha:not(.product-card--abierta):not(:only-child) .ctv-bd {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  #catalogo-grid .product-card--ancha:not(.product-card--abierta):not(:only-child) .ctv-bd > :not(.ctv-bd__sello) { display: none; }
+  #catalogo-grid .product-card--ancha .ctv-bd__sello {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 6px 8px;
+    border-radius: 10px;
+    border: 1.5px solid #7fd0ff;
+    background: #000;
+    color: #fff;
+    font-size: .74rem;
+    font-weight: 900;
+    line-height: 1.3;
+    letter-spacing: .01em;
+    text-align: center;
+    cursor: pointer;
+  }
+  #catalogo-grid .product-card--ancha.product-card--abierta .ctv-bd {
+    margin: 4px 0;
+    padding: 12px;
+    border-radius: 14px;
+  }
+  #catalogo-grid .product-card--ancha.product-card--abierta .ctv-bd__sello { width: auto; display: inline-block; font-size: .8rem; }
+  #catalogo-grid .product-card--ancha.product-card--abierta .ctv-bd__titulo { font-size: 1rem; margin: 6px 0 8px; }
+  #catalogo-grid .product-card--ancha.product-card--abierta .ctv-bd__acciones .btn { min-height: 44px; }
 }
 
 /* 4. Vitrina de categorías: 2 columnas también en teléfonos de 340–370 px. */
