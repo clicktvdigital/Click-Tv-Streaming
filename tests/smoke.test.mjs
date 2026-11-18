@@ -247,3 +247,50 @@ test('sitemap: ?categoria=iptv abre el catálogo filtrado en IPTV', async () => 
   assert.deepEqual(errores, []);
   await pagina.context().close();
 });
+
+test('Black Days en celular: tarjetas IPTV compactas en 2 columnas y abiertas desde el aviso', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 }, { fecha: new Date('2026-11-17T15:00:00Z') });
+  await pagina.evaluate(() => window.seleccionarCategoriaCatalogo('iptv'));
+  const medir = () => pagina.evaluate(() => {
+    const grid = document.getElementById('catalogo-grid').clientWidth;
+    const card = document.querySelector('[data-producto="iptv-premium"]');
+    return { compacta: card.offsetWidth < grid * 0.6, selloVisible: !!card.querySelector('.ctv-bd__sello')?.offsetHeight,
+      selectorVisible: !!card.querySelector('[data-bd-accion="carrito"]')?.offsetHeight };
+  });
+  assert.deepEqual(await medir(), { compacta: true, selloVisible: true, selectorVisible: false });
+  await pagina.click('[data-bd-ver-iptv]');
+  assert.deepEqual(await medir(), { compacta: false, selloVisible: true, selectorVisible: true });
+  assert.equal(await pagina.evaluate(() => document.documentElement.scrollWidth), 390);
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
+
+test('Black Days en celular: barra de WhatsApp con mensaje listo, se puede ocultar y desaparece al terminar', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 }, { fecha: new Date('2026-11-17T15:00:00Z') });
+  assert.equal(await pagina.isVisible('#ctv-bd-barra'), true);
+  const href = await pagina.getAttribute('#ctv-bd-barra-whatsapp', 'href');
+  assert.match(href, /^https:\/\/wa\.me\/593939166222\?text=/);
+  assert.match(decodeURIComponent(href), /Black Days\* de IPTV/);
+  const solape = await pagina.evaluate(() => {
+    const a = document.getElementById('ctv-bd-barra').getBoundingClientRect();
+    const b = document.querySelector('.floating-actions').getBoundingClientRect();
+    return a.bottom > b.top + 0.5;
+  });
+  assert.equal(solape, false, 'la barra no se monta sobre los accesos rápidos');
+  await pagina.click('#btn-menu-movil');
+  assert.equal(await pagina.isVisible('#ctv-bd-barra'), false, 'se oculta con el menú abierto');
+  await pagina.click('#btn-cerrar-menu');
+  await pagina.click('#ctv-bd-barra-cerrar');
+  assert.equal(await pagina.isVisible('#ctv-bd-barra'), false);
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+  const despues = await abrirPagina({ width: 390, height: 844 }, { fecha: new Date('2026-11-21T06:00:00Z') });
+  assert.equal(await despues.pagina.isVisible('#ctv-bd-barra'), false);
+  await despues.pagina.context().close();
+});
+
+test('escritorio: la barra de Black Days no aparece', async () => {
+  const { pagina } = await abrirPagina({ width: 1280, height: 800 }, { fecha: new Date('2026-11-17T15:00:00Z') });
+  assert.equal(await pagina.isVisible('#ctv-bd-barra'), false);
+  await pagina.context().close();
+});
