@@ -260,10 +260,41 @@
       fijarVolumen(volumen.value);
       if (!silenciadoPorCliente && video.paused) reproducir();
     });
-    // Tocar el video: si está en silencio, primero da sonido (como YouTube); si ya suena, pausa o reanuda.
+    // --- Auto-ocultar controles (como YouTube): reproduciendo y sin actividad, la píldora se esconde a los
+    // 3 s; un toque, mover el puntero o el teclado la muestran. En pausa siempre está visible.
+    const ESPERA_OCULTAR = 3000;
+    const pildora = document.getElementById('ctv-tv-audio');
+    let temporizadorOcultar = 0;
+    let ocultosAlTocar = false;
+    let arrastrando = false;
+    const ocultos = () => tarjeta.classList.contains('ctv-tv--controles-ocultos');
+    function programarOcultar() {
+      clearTimeout(temporizadorOcultar);
+      temporizadorOcultar = setTimeout(() => {
+        if (video.paused || arrastrando || pildora?.matches(':focus-within')) return;
+        tarjeta.classList.add('ctv-tv--controles-ocultos');
+      }, ESPERA_OCULTAR);
+    }
+    function mostrarControles() {
+      tarjeta.classList.remove('ctv-tv--controles-ocultos');
+      if (!video.paused) programarOcultar(); else clearTimeout(temporizadorOcultar);
+    }
+    marco.addEventListener('pointerdown', () => { ocultosAlTocar = ocultos(); mostrarControles(); });
+    marco.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse') mostrarControles(); });
+    pildora?.addEventListener('focusin', mostrarControles);
+    pildora?.addEventListener('focusout', mostrarControles);
+    volumen?.addEventListener('pointerdown', () => { arrastrando = true; });
+    window.addEventListener('pointerup', () => { if (arrastrando) { arrastrando = false; mostrarControles(); } });
+    video.addEventListener('play', mostrarControles);
+    video.addEventListener('pause', mostrarControles);
+
+    // Tocar el video: si está en silencio, primero da sonido (como YouTube). Si los controles estaban
+    // ocultos, el toque solo los muestra; con los controles a la vista, pausa o reanuda.
     video.addEventListener('click', () => {
+      const soloMostrar = ocultosAlTocar;
+      ocultosAlTocar = false;
       if (!video.paused && enSilencio() && !silenciadoPorCliente) activarSonido();
-      else btnPausa?.click();
+      else if (!soloMostrar) btnPausa?.click();
     });
     ['play', 'pause', 'volumechange', 'emptied'].forEach((tipo) => video.addEventListener(tipo, pintarControles));
     pintarControles();

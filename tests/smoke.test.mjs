@@ -469,6 +469,12 @@ test('mini TV: video oficial y tráilers en pestañas, CTA y ✕ fuera del video
   assert.equal(await pagina.isVisible('#ctv-tv-escuchar'), false, 'si el cliente silencia, no se le insiste');
   await pagina.click('#ctv-tv-sonido');
   assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').muted), false);
+  // Auto-ocultar: reproduciendo, la píldora se esconde sola; el primer toque solo la muestra (no pausa).
+  await pagina.waitForFunction(() => document.getElementById('ctv-tv-prueba').classList.contains('ctv-tv--controles-ocultos'), null, { timeout: 6000 });
+  assert.equal(await pagina.evaluate(() => getComputedStyle(document.getElementById('ctv-tv-audio')).pointerEvents), 'none');
+  await pagina.click('#ctv-tv-promo');
+  assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-prueba').classList.contains('ctv-tv--controles-ocultos')), false);
+  assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').paused), false, 'el toque que muestra los controles no pausa');
   // Al salir de la sección: ventana fija y flotante, sin solapes y dentro de la pantalla.
   await pagina.evaluate(() => window.scrollTo(0, 0));
   await pagina.waitForFunction(() => document.getElementById('ctv-tv-prueba').classList.contains('ctv-tv--mini'));
@@ -561,8 +567,9 @@ test('partidos en Android de 360 px: 4 por bloque en formato horizontal, el rest
       duelosEnFila: cards.every((c) => [...c.querySelectorAll('.mundial-team')].every((t) => {
         const [emblema, nombre] = t.children;
         const centro = (el) => { const r = el.getBoundingClientRect(); return r.top + r.height / 2; };
-        const linea = parseFloat(getComputedStyle(nombre).lineHeight) || 24;
-        return Math.abs(centro(emblema) - centro(nombre)) < 4 && nombre.getBoundingClientRect().height <= linea + 2;
+        const estilo = getComputedStyle(nombre);
+        const completo = estilo.textOverflow !== 'ellipsis' && estilo.whiteSpace !== 'nowrap' && nombre.scrollWidth <= nombre.clientWidth + 1;
+        return Math.abs(centro(emblema) - centro(nombre)) < 4 && completo;
       })),
       sinDesborde: cards.every((c) => c.scrollWidth <= c.clientWidth + 1)
     };
@@ -571,7 +578,7 @@ test('partidos en Android de 360 px: 4 por bloque en formato horizontal, el rest
     assert.equal(g.columnas, 1, 'en celular, una tarjeta apaisada por fila');
     assert.equal(g.ultimaAncha, true);
     assert.equal(g.horizontales, true, 'cada tarjeta es más ancha que alta');
-    assert.equal(g.duelosEnFila, true, 'bandera y nombre en la misma fila, en una sola línea');
+    assert.equal(g.duelosEnFila, true, 'bandera y nombre en la misma fila, con el nombre completo');
     assert.equal(g.sinDesborde, true, 'nada se sale de la tarjeta');
   }
   await pintar();

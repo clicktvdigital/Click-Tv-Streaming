@@ -128,6 +128,21 @@
 }
 .ctv-tv__volumen:active::-webkit-slider-thumb { transform: scale(1.2); }
 .ctv-tv :is(.ctv-tv__audio-btn, .ctv-tv__volumen):focus-visible { outline: 2px solid #ffe38b; outline-offset: 2px; }
+/* Auto-ocultar (como YouTube): la píldora se desvanece y baja un poco; el puntero también se esconde.
+   visibility con retraso para que no reciba toques mientras está oculta. */
+.ctv-tv__audio { transition: opacity .25s ease-out, transform .25s ease-out, visibility 0s linear 0s; }
+.ctv-tv--controles-ocultos .ctv-tv__audio {
+  opacity: 0;
+  transform: translateY(6px);
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .35s ease-in, transform .35s ease-in, visibility 0s linear .35s;
+}
+.ctv-tv--controles-ocultos .ctv-tv__video { cursor: none; }
+@media (prefers-reduced-motion: reduce) {
+  .ctv-tv__audio,
+  .ctv-tv--controles-ocultos .ctv-tv__audio { transform: none; transition: visibility 0s, opacity 0s; }
+}
 /* Aviso «Toca para escuchar» (como el «Activar sonido» de YouTube en celular): arriba a la izquierda. */
 .ctv-tv__escuchar {
   position: absolute;
@@ -190,7 +205,7 @@
 #mundial .match-group { min-width: 0; max-width: 100%; font-size: .78rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 
 /* Marcador deportivo en filas: cada equipo ocupa una fila completa [bandera  Nombre] y el marcador queda a la
-   derecha abarcando ambas filas. Los nombres tienen todo el ancho, en una línea y sin cortes a media palabra;
+   derecha abarcando ambas filas. Los nombres tienen todo el ancho libre y se leen completos (en 2 líneas si hace falta);
    proporciones idénticas en 320-1440 px y sin desbordes en Android. */
 #mundial .mundial-duelo {
   display: grid;
@@ -212,18 +227,23 @@
   align-items: center;
   gap: 10px;
   min-width: 0;
-  height: 44px;
+  min-height: 44px;
   text-align: left !important;
 }
+/* El nombre ocupa todo el espacio libre de la fila y se lee completo: si no cabe, pasa a una segunda
+   línea entre palabras (nunca a media palabra ni con «…»). Solo una palabra más ancha que la fila se parte. */
 #mundial .mundial-team strong {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow-wrap: normal;
-  font-size: clamp(.95rem, 3.6vw, 1.08rem) !important;
-  line-height: 1.25;
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: manual;
+  text-wrap: balance;
+  font-size: clamp(.92rem, 3.4vw, 1.08rem) !important;
+  line-height: 1.22;
   color: #fff;
 }
 #mundial .mundial-marcador {
@@ -231,8 +251,8 @@
   justify-items: center;
   align-content: center;
   gap: 4px;
-  min-width: 76px;
-  max-width: 34vw;
+  min-width: 68px;
+  max-width: 30vw;
   height: 100%;
   box-sizing: border-box;
   padding: 8px 10px;
@@ -310,6 +330,13 @@
 #mundial .mundial-empty :is(h3, p) { margin: 0; }
 
 @media (max-width: 420px) {
+  /* Android estrecho: más ancho para el nombre (bandera y marcador más compactos). */
+  #mundial .mundial-duelo { column-gap: 8px; }
+  #mundial .mundial-team { gap: 8px; }
+  #mundial .team-flag--grande { width: 36px; height: 27px; font-size: 1.65rem; }
+  #mundial .mundial-escudo { width: 32px !important; height: 32px !important; margin: 0 2px; }
+  #mundial .team-flag--iniciales { width: 32px; height: 32px; margin-inline: 2px; font-size: .72rem; }
+  #mundial .mundial-marcador { min-width: 60px; padding: 6px 8px; }
   #mundial .match-dato { padding: 6px 7px; }
   #mundial .match-dato dt { font-size: .6rem; }
   #mundial .match-dato dd { font-size: .78rem; }

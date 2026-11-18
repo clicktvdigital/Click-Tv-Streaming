@@ -65,7 +65,10 @@ test('partidos: sin mapa ni enlace de indicaciones, banderas grandes y datos en 
   // Marcador deportivo en filas: [bandera Nombre] por equipo y el marcador a la derecha de ambas filas.
   assert.match(css, /#mundial \.mundial-duelo \{[^}]*grid-template-columns: minmax\(0, 1fr\) auto;[^}]*grid-template-areas: "local marcador" "visitante marcador";/);
   assert.match(css, /#mundial \.mundial-team \{[^}]*display: flex;[^}]*flex-direction: row !important;/);
-  assert.match(css, /#mundial \.mundial-team strong \{[^}]*min-width: 0;[^}]*white-space: nowrap;[^}]*text-overflow: ellipsis;/, 'nombre en una línea, sin desbordar');
+  // El nombre se lee completo: ocupa el espacio libre (flex-grow), salta de línea entre palabras y sin «…».
+  assert.match(css, /#mundial \.mundial-team strong \{[^}]*flex: 1 1 0;[^}]*min-width: 0;[^}]*white-space: normal;[^}]*overflow-wrap: break-word;[^}]*word-break: normal;/, 'nombre completo');
+  assert.doesNotMatch(css.slice(css.indexOf('#mundial .mundial-team strong {'), css.indexOf('#mundial .mundial-marcador {\n')), /ellipsis|nowrap/, 'sin recortes');
+  assert.match(css, /@media \(max-width: 420px\) \{[^@]*#mundial \.team-flag--grande \{ width: 36px;/, 'en Android estrecho la bandera cede espacio al nombre');
   assert.doesNotMatch(css, /row-reverse/, 'sin variantes en espejo');
   assert.doesNotMatch(css, /overflow-wrap: anywhere/, 'sin cortes a media palabra');
   // La tarjeta: clases por lado, nombres escapados con título y el contador solo antes del inicio.
