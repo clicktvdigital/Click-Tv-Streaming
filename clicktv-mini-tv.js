@@ -1,4 +1,4 @@
-/* CLICK TV STREAMING · Mini TV orientada a ventas · 18/11/2026
+/* CLICK TV STREAMING · Click TV Player (reproductor de ventas) · 18/11/2026
    Pestañas:
    - «Click TV Streaming»: video promocional propio (CONFIG.videoPromo), en bucle; arranca en silencio y un toque
      en el video, en ▶ o en «Toca para escuchar» activa el sonido al instante (como YouTube).
@@ -36,7 +36,33 @@
     return promoVigente ? '🔥 ¡Activa tu IPTV Premium con Black Days!' : '🔥 ¡Activa tu IPTV Premium!';
   }
 
-  window.ctvMiniTV = { trailersValidos, urlInsercion, textoCta };
+  // Compartir en WhatsApp: enlace directo a IPTV Premium (abre la categoría IPTV con sus planes y, en Black Days,
+  // el selector de la promo). Se usa el dominio público para que la vista previa del chat sea la correcta.
+  const SITIO = 'https://click-tv-streaming.vercel.app/';
+  function enlacePlanes(origen = SITIO) {
+    const url = new URL(origen);
+    url.search = '';
+    url.hash = '';
+    url.searchParams.set('producto', 'television-por-internet-premium');
+    url.searchParams.set('utm_source', 'whatsapp');
+    url.searchParams.set('utm_medium', 'compartir');
+    url.searchParams.set('utm_campaign', 'click-tv-player');
+    return url.toString();
+  }
+  function mensajeCompartir(promoVigente, origen = SITIO) {
+    const lineas = promoVigente
+      ? ['🎬 *Click TV Player* · Click TV Streaming',
+        '🖤 *BLACK DAYS:* hasta *6 meses GRATIS* en IPTV Básico, Premium y Ultra (solo hasta el 20 de noviembre).',
+        '📺 TV en vivo, deportes, películas y series en tu TV, celular o TV Box.',
+        '👉 Mira la promo y elige tu plan aquí:']
+      : ['🎬 *Click TV Player* · Click TV Streaming',
+        '📺 TV en vivo, deportes, películas y series con IPTV en tu TV, celular o TV Box.',
+        '👉 Mira los planes IPTV y elige el tuyo aquí:'];
+    return [...lineas, enlacePlanes(origen)].join('\n');
+  }
+  const urlCompartir = (promoVigente, origen) => `https://wa.me/?text=${encodeURIComponent(mensajeCompartir(promoVigente, origen))}`;
+
+  window.ctvMiniTV = { trailersValidos, urlInsercion, textoCta, enlacePlanes, mensajeCompartir, urlCompartir };
   if (typeof document === 'undefined' || !document.addEventListener) return;
 
   function iniciar() {
@@ -49,6 +75,7 @@
     const play = document.getElementById('ctv-tv-play');
     const cta = document.getElementById('ctv-tv-cta');
     const estado = document.getElementById('ctv-tv-estado');
+    const compartir = document.getElementById('ctv-tv-compartir');
     const tabs = { oficial: document.getElementById('ctv-tv-tab-oficial'), cine: document.getElementById('ctv-tv-tab-cine') };
     if (!tarjeta || !marco || !video || !zonaCine) return;
 
@@ -137,8 +164,11 @@
     }
 
     function actualizarEstado() {
+      const vigente = promoVigente();
       tarjeta.classList.toggle('ctv-tv--activo', activo());
-      if (cta) cta.textContent = textoCta(promoVigente());
+      tarjeta.classList.toggle('ctv-tv--promo-bd', vigente); // CTA con el estilo Pro de Black Days
+      if (cta) cta.textContent = textoCta(vigente);
+      if (compartir) compartir.href = urlCompartir(vigente);
       const mini = activo() && !enPantalla;
       if (mini && !tarjeta.classList.contains('ctv-tv--mini')) tarjeta.style.minHeight = `${tarjeta.offsetHeight}px`;
       liberarAncestros(mini);
@@ -301,6 +331,8 @@
     ['play', 'pause', 'volumechange', 'emptied'].forEach((tipo) => video.addEventListener(tipo, pintarControles));
     pintarControles();
 
+    // Al tocar «Compartir» se recalcula el mensaje (la promo puede haber terminado mientras la página estaba abierta).
+    compartir?.addEventListener('click', () => { compartir.href = urlCompartir(promoVigente()); });
     cta?.addEventListener('click', () => {
       if (window.ctvNavegacion?.irAProducto) window.ctvNavegacion.irAProducto('iptv-premium', 'iptv');
       else window.enfocarProducto?.('iptv-premium');
@@ -313,7 +345,7 @@
       tarjeta.style.minHeight = '';
       liberarAncestros(false);
       actualizarEstado();
-      avisar('Mini TV cerrada. Pulsa ▶ para verla de nuevo.');
+      avisar('Click TV Player cerrado. Pulsa ▶ para verlo de nuevo.');
     });
     document.getElementById('ctv-tv-volver')?.addEventListener('click', () => {
       tarjeta.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });

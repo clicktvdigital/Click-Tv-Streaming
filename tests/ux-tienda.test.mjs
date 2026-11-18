@@ -1,4 +1,4 @@
-// Precios IPTV con promo, pagos solo en el carrito, formulario internacional, combos y mini TV.
+// Precios IPTV con promo, pagos solo en el carrito, formulario internacional, combos y Click TV Player.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, statSync } from 'node:fs';
@@ -60,7 +60,7 @@ test('IPTV con promo: precios normales plegados y la promo reemplaza el plan nor
   assert.match(leer('script.js'), /Se reemplazó el plan normal por la promo Black Days/);
 });
 
-test('mini TV: tráilers horizontales de estrenos 2026 y próximos, oficiales y doblados, en un iframe silenciado en bucle', () => {
+test('Click TV Player: tráilers horizontales de estrenos 2026 y próximos, oficiales y doblados, en un iframe silenciado en bucle', () => {
   const datos = createContext({ console, URLSearchParams }); datos.window = datos;
   runInContext(leer('data.js'), datos);
   runInContext(leer('clicktv-mini-tv.js'), datos);
@@ -94,7 +94,7 @@ test('mini TV: tráilers horizontales de estrenos 2026 y próximos, oficiales y 
   assert.doesNotMatch(leer('data.js'), /canalesMiniTV|\.m3u8/, 'sin restos del reproductor HLS');
 });
 
-test('mini TV: pestaña «Click TV Oficial» con el video propio optimizado y CTA según Black Days', () => {
+test('Click TV Player: pestaña «Click TV Oficial» con el video propio optimizado y CTA según Black Days', () => {
   const datos = createContext({ console, URLSearchParams }); datos.window = datos;
   runInContext(leer('data.js'), datos);
   runInContext(leer('clicktv-mini-tv.js'), datos);

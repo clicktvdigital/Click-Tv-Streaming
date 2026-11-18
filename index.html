@@ -138,7 +138,7 @@
   <link rel="stylesheet" href="clicktv-promo-black-days.css?v=20261118-3">
   <link rel="stylesheet" href="clicktv-movil-2col.css?v=20261118-9">
   <link rel="stylesheet" href="clicktv-ux-tienda.css?v=20261118-6">
-  <link rel="stylesheet" href="clicktv-ajustes-finales-2026.css?v=20261118-6">
+  <link rel="stylesheet" href="clicktv-ajustes-finales-2026.css?v=20261118-7">
 </head>
 <body>
 <div id="top" tabindex="-1"></div>
@@ -469,10 +469,10 @@
 
           <div id="ctv-tv-prueba" class="ctv-tv" aria-labelledby="ctv-tv-titulo">
             <div class="ctv-tv__cabecera">
-              <span class="teleamazonas-card__label">MINI TV</span>
-              <strong id="ctv-tv-titulo">📺 Mira lo que tendrás con Click TV Streaming</strong>
+              <strong id="ctv-tv-titulo" class="ctv-tv__titulo">🎬 Click TV Player</strong>
+              <small class="ctv-tv__subtitulo">Mira lo que tendrás con Click TV Streaming</small>
             </div>
-            <div class="ctv-tv__pestanas" role="tablist" aria-label="Contenido de la Mini TV">
+            <div class="ctv-tv__pestanas" role="tablist" aria-label="Contenido de Click TV Player">
               <button id="ctv-tv-tab-oficial" class="ctv-tv__pestana" type="button" role="tab" aria-selected="true" aria-controls="ctv-tv-marco">📺 Click TV Streaming</button>
               <button id="ctv-tv-tab-cine" class="ctv-tv__pestana" type="button" role="tab" aria-selected="false" aria-controls="ctv-tv-marco">🎬 Estrenos de Cine</button>
             </div>
@@ -506,8 +506,12 @@
               <!-- Barra fuera del video: el CTA no tapa la imagen ni los controles nativos. -->
               <div class="ctv-tv__barra">
                 <button id="ctv-tv-cta" class="ctv-tv__cta" type="button">🔥 ¡Activa tu IPTV Premium!</button>
+                <a id="ctv-tv-compartir" class="ctv-tv__icono ctv-tv__compartir" href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="Compartir en WhatsApp" title="Compartir en WhatsApp">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+                  <span class="ctv-tv__compartir-texto">Compartir</span>
+                </a>
                 <button id="ctv-tv-volver" class="ctv-tv__icono" type="button" aria-label="Volver al reproductor">⤢</button>
-                <button id="ctv-tv-cerrar" class="ctv-tv__icono" type="button" aria-label="Cerrar la Mini TV">✕</button>
+                <button id="ctv-tv-cerrar" class="ctv-tv__icono" type="button" aria-label="Cerrar Click TV Player">✕</button>
               </div>
             </div>
             <p id="ctv-tv-estado" class="ctv-tv__estado" role="status" aria-live="polite"></p>
@@ -1211,7 +1215,7 @@
   <script src="script.js?v=20261118-7" defer></script>
   <script src="clicktv-navegacion-movil.js?v=20261118-5" defer></script>
   <script src="clicktv-formulario-contacto.js?v=20261118-1" defer></script>
-  <script src="clicktv-mini-tv.js?v=20261118-9" defer></script>
+  <script src="clicktv-mini-tv.js?v=20261118-10" defer></script>
   <script src="clicktv-acordeones.js?v=20261118-2" defer></script>
   <script src="clicktv-accesible.js?v=20261015-4" defer></script>
   <script src="clicktv-atencion-pagos.js?v=20261118-1" defer></script>

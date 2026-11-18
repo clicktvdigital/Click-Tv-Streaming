@@ -115,7 +115,7 @@ test('acordeones: cada sección larga es un <details> con su contenido dentro', 
   }
   // Los botones para pedir el combo siguen visibles fuera del resumen plegado.
   assert.ok(!seccion('acordeon-resumen').includes('btn-ahorro-carrito'));
-  // La Mini TV queda fuera de los acordeones para poder reproducirse sola.
+  // La Click TV Player queda fuera de los acordeones para poder reproducirse sola.
   for (const id of ['acordeon-radio', 'acordeon-tv-vivo']) assert.ok(!seccion(id).includes('ctv-tv-prueba'));
   assert.match(html, /<script src="clicktv-acordeones\.js\?v=[^"]+" defer><\/script>/);
   assert.match(html, /<link rel="stylesheet" href="clicktv-ajustes-finales-2026\.css\?v=[^"]+">\n<\/head>|clicktv-ajustes-finales-2026\.css\?v=[^"]+">\s*<\/head>/, 'estilos finales al último');
@@ -161,4 +161,52 @@ test('acordeones: un enlace o el menú abren el desplegable que contiene su dest
   assert.equal(ctx.ctvAcordeones.abrir(campo), true);
   assert.deepEqual([externo.open, interno.open], [true, true]);
   assert.equal(ctx.ctvAcordeones.abrir(campo), false, 'si ya estaban abiertos no hace nada');
+});
+
+test('Click TV Player: el reproductor se llama así en todo el sitio, sin «Mini TV»', () => {
+  assert.match(html, /<strong id="ctv-tv-titulo" class="ctv-tv__titulo">🎬 Click TV Player<\/strong>/);
+  assert.match(html, /aria-label="Contenido de Click TV Player"/);
+  assert.match(html, /aria-label="Cerrar Click TV Player"/);
+  for (const archivo of ['index.html', 'clicktv-mini-tv.js', 'data.js', 'script.js', 'clicktv-navegacion-movil.js']) {
+    // Solo texto visible o comentarios; identificadores internos (ctvMiniTV, clicktv-mini-tv.js) no cuentan.
+    assert.doesNotMatch(leer(archivo), /\bmini tv\b/i, archivo);
+  }
+});
+
+test('Click TV Player: compartir en WhatsApp con mensaje optimizado y enlace directo a los planes IPTV', () => {
+  const barra = html.slice(html.indexOf('class="ctv-tv__barra"'), html.indexOf('id="ctv-tv-estado"'));
+  assert.match(barra, /<a id="ctv-tv-compartir" class="ctv-tv__icono ctv-tv__compartir" href="https:\/\/wa\.me\/" target="_blank" rel="noopener noreferrer" aria-label="Compartir en WhatsApp"/);
+  const ctx = createContext({ console, URL, URLSearchParams }); ctx.window = ctx;
+  runInContext(leer('clicktv-mini-tv.js'), ctx);
+  const { enlacePlanes, mensajeCompartir, urlCompartir } = ctx.ctvMiniTV;
+
+  const enlace = new URL(enlacePlanes());
+  assert.equal(enlace.origin, 'https://click-tv-streaming.vercel.app');
+  // Slug público de IPTV Premium: clicktv-enlaces-2026.js lo abre en la categoría IPTV con sus planes.
+  assert.equal(enlace.searchParams.get('producto'), 'television-por-internet-premium');
+  assert.match(leer('clicktv-enlaces-2026.js'), /const PALABRA_PUBLICA = 'television-por-internet';/);
+  assert.equal(enlace.searchParams.get('utm_source'), 'whatsapp');
+
+  const conPromo = mensajeCompartir(true);
+  assert.match(conPromo, /^🎬 \*Click TV Player\* · Click TV Streaming\n/);
+  assert.match(conPromo, /\*BLACK DAYS:\* hasta \*6 meses GRATIS\* en IPTV Básico, Premium y Ultra/);
+  assert.ok(conPromo.endsWith(enlacePlanes()), 'el enlace va al final para que WhatsApp muestre la vista previa');
+  const sinPromo = mensajeCompartir(false);
+  assert.doesNotMatch(sinPromo, /BLACK DAYS/i, 'fuera de fechas no se anuncia la promo');
+  assert.match(sinPromo, /Mira los planes IPTV/);
+
+  const wa = new URL(urlCompartir(true));
+  assert.equal(`${wa.origin}${wa.pathname}`, 'https://wa.me/');
+  assert.equal(wa.searchParams.get('text'), conPromo);
+
+  const js = leer('clicktv-mini-tv.js');
+  assert.match(js, /if \(compartir\) compartir\.href = urlCompartir\(vigente\);/);
+  assert.match(js, /compartir\?\.addEventListener\('click', \(\) => \{ compartir\.href = urlCompartir\(promoVigente\(\)\); \}\);/);
+});
+
+test('Botón Pro Black Days: oscuro con borde dorado y brillo rojo en el player, el aviso y la barra', () => {
+  const css = leer('clicktv-ajustes-finales-2026.css');
+  assert.match(css, /--ctv-pro-oro: #e6b94a;/);
+  assert.match(css, /\.ctv-tv--promo-bd \.ctv-tv__cta,\n\.ctv-bd-aviso a\.btn\[data-bd-ver-iptv\],\n\.ctv-bd-barra \.ctv-bd-barra__boton \{[^}]*background: var\(--ctv-pro-fondo\) !important;[^}]*border: 1\.5px solid var\(--ctv-pro-oro\) !important;[^}]*color: #fff !important;/);
+  assert.match(leer('clicktv-mini-tv.js'), /tarjeta\.classList\.toggle\('ctv-tv--promo-bd', vigente\);/);
 });

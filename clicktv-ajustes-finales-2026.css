@@ -1,6 +1,6 @@
 /* CLICK TV STREAMING · Ajustes finales 18/11/2026
    1. Banner Black Days con la imagen oficial (sin recortes).
-   2. Mini TV: controles de audio y volumen compactos para el video propio.
+   2. Click TV Player: controles de audio y volumen compactos para el video propio.
    3. Partidos: banderas/escudos grandes y datos del encuentro en una retícula sin huecos.
    4. Acordeones (<details>) limpios para las secciones largas.
    Se carga al final: solo ajusta lo nuevo, sin !important salvo para vencer reglas móviles previas. */
@@ -28,7 +28,7 @@
   .ctv-bd-aviso__imagen { max-width: 360px; }
 }
 
-/* ---------------------------------------------------------------- 2. Mini TV: controles compactos
+/* ---------------------------------------------------------------- 2. Click TV Player: controles compactos
    Misma paleta que el volumen de la radio (#279bff / #65c0ff / #cceaff): una píldora de 36 px
    con reproducir, sonido y volumen. Botones de 30 px con área táctil de 44 px. */
 .ctv-tv__video { cursor: pointer; }
@@ -410,7 +410,7 @@
 #ahorro-total-resumen { color: #7fd0ff; font-size: .92rem; font-weight: 900; }
 
 /* Radio y TV en vivo dentro del panel de accesos.
-   Escritorio: a la izquierda los accesos; a la derecha radio, TV en vivo y la Mini TV, apilados. */
+   Escritorio: a la izquierda los accesos; a la derecha radio, TV en vivo y la Click TV Player, apilados. */
 .ctv-acordeon--medio > .radio-app,
 .ctv-acordeon--medio > .teleamazonas-player-card { margin-top: 0; }
 .ctvc-medios { display: grid; gap: 1rem; min-width: 0; align-content: start; }
@@ -431,4 +431,85 @@
   .ctv-acordeon > summary,
   .ctv-acordeon > summary::after,
   .ctv-tv__audio { transition: none; }
+}
+
+/* ---------------------------------------------------------------- 5. Click TV Player: título y compartir */
+.ctv-tv__titulo { font-size: clamp(1.08rem, 3.2vw, 1.3rem); font-weight: 900; line-height: 1.2; color: #fff; letter-spacing: .01em; }
+.ctv-tv__subtitulo { font-size: .82rem; line-height: 1.35; color: #b9d8ff; }
+
+/* Compartir en WhatsApp: verde de marca (#08783a, el mismo de los demás botones de WhatsApp del sitio). */
+.ctv-tv__compartir {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: auto;
+  min-width: 48px;
+  padding: 0 12px;
+  border-color: #48dc8b;
+  background: #08783a;
+  color: #fff;
+  font-size: .86rem;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color .14s ease-out, transform .1s ease-out;
+}
+.ctv-tv__compartir svg { flex: none; width: 20px; height: 20px; fill: currentColor; }
+@media (hover: hover) and (pointer: fine) { .ctv-tv__compartir:hover { background: #0a8f45; } }
+.ctv-tv__compartir:active { background: #066530; transform: scale(.96); }
+.ctv-tv__compartir:focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
+/* En pantallas estrechas y en la ventana flotante queda solo el icono (con su etiqueta accesible). */
+@media (max-width: 480px) {
+  .ctv-tv__compartir { padding: 0; width: 48px; }
+  .ctv-tv__compartir-texto { display: none; }
+}
+.ctv-tv--mini .ctv-tv__compartir { width: 36px; min-width: 36px; padding: 0; }
+.ctv-tv--mini .ctv-tv__compartir-texto { display: none; }
+.ctv-tv--mini .ctv-tv__compartir svg { width: 17px; height: 17px; }
+
+/* ---------------------------------------------------------------- 6. Botón Pro Black Days
+   Alta conversión: base casi negra con vino profundo, borde dorado y brillo rojo. Texto blanco (contraste > 15:1).
+   Se aplica al CTA del player mientras la promo está vigente, al botón del aviso y al de la barra móvil. */
+:root {
+  --ctv-pro-fondo: linear-gradient(135deg, #0b0b10 0%, #1d0a10 55%, #4c0c19 100%);
+  --ctv-pro-fondo-hover: linear-gradient(135deg, #12121a 0%, #2a0c15 50%, #6a0f22 100%);
+  --ctv-pro-oro: #e6b94a;
+  --ctv-pro-oro-vivo: #ffd77a;
+  --ctv-pro-rojo: rgba(214, 28, 52, .42);
+}
+.ctv-tv--promo-bd .ctv-tv__cta,
+.ctv-bd-aviso a.btn[data-bd-ver-iptv],
+.ctv-bd-barra .ctv-bd-barra__boton {
+  background: var(--ctv-pro-fondo) !important;
+  border: 1.5px solid var(--ctv-pro-oro) !important;
+  color: #fff !important;
+  font-weight: 900;
+  letter-spacing: .01em;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
+  box-shadow: inset 0 1px 0 rgba(255, 215, 122, .28), 0 6px 18px var(--ctv-pro-rojo);
+  transition: border-color .16s ease-out, box-shadow .16s ease-out, transform .12s ease-out;
+}
+@media (hover: hover) and (pointer: fine) {
+  .ctv-tv--promo-bd .ctv-tv__cta:hover,
+  .ctv-bd-aviso a.btn[data-bd-ver-iptv]:hover,
+  .ctv-bd-barra__cta:hover .ctv-bd-barra__boton {
+    background: var(--ctv-pro-fondo-hover) !important;
+    border-color: var(--ctv-pro-oro-vivo) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 215, 122, .4), 0 8px 24px rgba(214, 28, 52, .55);
+  }
+}
+.ctv-bd-aviso a.btn[data-bd-ver-iptv]:focus-visible { background: var(--ctv-pro-fondo-hover) !important; }
+.ctv-tv--promo-bd .ctv-tv__cta:active,
+.ctv-bd-aviso a.btn[data-bd-ver-iptv]:active { transform: scale(.97); }
+.ctv-tv--promo-bd .ctv-tv__cta:focus-visible,
+.ctv-bd-aviso a.btn[data-bd-ver-iptv]:focus-visible { outline: 3px solid var(--ctv-pro-oro-vivo); outline-offset: 2px; }
+/* La barra móvil de Black Days, en el mismo tono. */
+@media (max-width: 680px) { .ctv-bd-barra:not([hidden]) { border-color: var(--ctv-pro-oro); background: #0b0b10; } }
+@media (prefers-reduced-motion: reduce) {
+  .ctv-tv--promo-bd .ctv-tv__cta,
+  .ctv-bd-aviso a.btn[data-bd-ver-iptv],
+  .ctv-bd-barra .ctv-bd-barra__boton,
+  .ctv-tv__compartir { transition: none; }
 }

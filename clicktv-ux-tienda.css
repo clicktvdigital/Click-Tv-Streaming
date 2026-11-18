@@ -1,4 +1,4 @@
-/* CLICK TV STREAMING · Precios IPTV claros, pagos en el carrito, formulario, combos y mini TV · 18/11/2026
+/* CLICK TV STREAMING · Precios IPTV claros, pagos en el carrito, formulario, combos y Click TV Player · 18/11/2026
    Paleta azul oficial, contraste alto, controles de 44 px o más e inputs de 16 px (sin zoom en iOS). */
 
 /* 1. Con Black Days vigente, los precios normales quedan plegados bajo un enlace discreto. */
@@ -127,7 +127,7 @@
   .combo-builder__item .btn { grid-column: 2; grid-row: 1; }
 }
 
-/* 5. Mini TV de ventas: pestañas «Click TV Oficial» (video propio) y «Estrenos de Cine» (YouTube).
+/* 5. Click TV Player de ventas: pestañas «Click TV Oficial» (video propio) y «Estrenos de Cine» (YouTube).
    El CTA va en una barra debajo del video: nunca tapa la imagen ni los controles nativos. */
 .ctv-tv {
   margin-top: 1rem;

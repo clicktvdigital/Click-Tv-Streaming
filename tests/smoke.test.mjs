@@ -439,7 +439,7 @@ test('contacto: buscar país, región dinámica, prefijo automático y suscripci
   await pagina.context().close();
 });
 
-test('mini TV: video oficial y tráilers en pestañas, CTA y ✕ fuera del video, ventana flotante y cierre', async () => {
+test('Click TV Player: video oficial y tráilers en pestañas, CTA y ✕ fuera del video, ventana flotante y cierre', async () => {
   const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
   try {
   assert.equal(await pagina.getAttribute('#ctv-tv-promo', 'src'), null, 'nada se descarga antes de llegar');
@@ -454,6 +454,12 @@ test('mini TV: video oficial y tráilers en pestañas, CTA y ✕ fuera del video
     });
   });
   assert.equal(await sinSolape(), true, 'CTA y ✕ debajo del video en la tarjeta');
+  // Compartir en WhatsApp: listo en la barra del player, con mensaje y enlace a IPTV Premium.
+  const compartir = await pagina.getAttribute('#ctv-tv-compartir', 'href');
+  assert.match(compartir, /^https:\/\/wa\.me\/\?text=/);
+  assert.match(decodeURIComponent(compartir), /Click TV Player[\s\S]*producto=television-por-internet-premium/);
+  assert.equal(await pagina.isVisible('#ctv-tv-compartir'), true);
+  assert.equal((await pagina.textContent('#ctv-tv-titulo')).trim(), '🎬 Click TV Player');
   // Controles compactos: sin controles nativos; el botón de sonido activa y silencia.
   assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').controls), false);
   const pildora = await pagina.evaluate(() => document.getElementById('ctv-tv-audio').getBoundingClientRect().height);
