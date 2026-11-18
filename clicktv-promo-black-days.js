@@ -1,5 +1,7 @@
 /* CLICK TV STREAMING · Promoción Black Days (del 15 al 20 de noviembre de 2026, hora de Ecuador).
-   Meses gratis en IPTV para 1, 2 o 3 dispositivos, calculados solo con los precios públicos del catálogo.
+   Meses gratis para 1, 2 o 3 dispositivos, calculados solo con los precios públicos del catálogo.
+   Aplica EXCLUSIVAMENTE a IPTV Básico, IPTV Premium e IPTV Ultra. Flujo TV, Stella TV, GXTV y el resto
+   de servicios de TV/IPTV quedan fuera y mantienen solo sus planes normales.
    Regla de precio (opción A aprobada):
    - Cobro: precio público del plan de N meses pagados; si no existe ese plan (2 meses), N × precio de 1 mes.
    - Ahorro: precio público del plan de la duración activada (3, 6 o 12 meses) menos el cobro.
@@ -16,6 +18,8 @@
     { id: 'bd-paga3', corto: 'Más Beneficio', nombre: 'Más Beneficio: Paga 3 meses y recibe 3 meses gratis', pagados: 3, gratis: 3 },
     { id: 'bd-paga6', corto: 'Black Days', nombre: 'Black Days: Paga 6 meses y recibe 6 meses gratis', pagados: 6, gratis: 6 }
   ];
+  // Lista blanca: ningún otro producto muestra el selector ni puede llegar al carrito con la promo.
+  const PRODUCTOS_PROMO = Object.freeze(['iptv-basico', 'iptv-premium', 'iptv-ultra']);
   const PATRON_PLAN = /^([1-3]) dispositivos? · (\d+) mes(?:es)?$/;
 
   const redondear = (n) => Math.round(Number(n) * 100) / 100;
@@ -44,7 +48,7 @@
   }
 
   function esElegible(producto) {
-    if (producto?.categoria !== 'iptv') return false;
+    if (!PRODUCTOS_PROMO.includes(producto?.id) || producto?.categoria !== 'iptv') return false;
     const tabla = tablaPrecios(producto);
     return DISPOSITIVOS.every((d) => tabla[d]?.[1] > 0);
   }
@@ -204,7 +208,7 @@
   }
 
   raiz.PromoBlackDays = {
-    INICIO, FIN, PROMOS, DISPOSITIVOS,
+    INICIO, FIN, PROMOS, DISPOSITIVOS, PRODUCTOS_PROMO,
     estaActiva, tablaPrecios, esElegible, calcular, planParaCarrito, lineasPedido, htmlSelector
   };
 
