@@ -11,7 +11,7 @@ permissions:
 jobs:
   revisar-sitio:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
       - name: Obtener repositorio
         uses: actions/checkout@v4
@@ -118,6 +118,19 @@ jobs:
           npm ci
           npx playwright install --with-deps chromium
           node --test tests/smoke.test.mjs
+
+      - name: Capturas de revisión visual (Android 360 px y escritorio)
+        if: always()
+        run: node tests/capturas-visuales.mjs capturas
+
+      - name: Subir capturas visuales
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: capturas-visuales
+          path: capturas/
+          retention-days: 14
+          if-no-files-found: ignore
 
       - name: Bloquear credenciales en el código publico
         run: |
