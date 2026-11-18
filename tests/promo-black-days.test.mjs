@@ -49,17 +49,33 @@ test('IPTV Premium: cobro y ahorro con precios públicos para 1, 2 y 3 dispositi
   }
 });
 
-test('los 10 productos IPTV con planes por dispositivo aplican, y el ahorro siempre es positivo', () => {
+test('solo IPTV Básico, Premium y Ultra aplican, y el ahorro siempre es positivo', () => {
   const elegibles = plano(PRODUCTOS.filter((p) => promo.esElegible(p)).map((p) => p.id)).sort();
-  assert.deepEqual(elegibles, ['flujo-tv', 'iptv-basico', 'iptv-premium', 'iptv-ultra', 'megax-tv', 'oleada-tv', 'stella-tv', 'telelatino', 'vanna-tv', 'xc-tv']);
+  assert.deepEqual(elegibles, ['iptv-basico', 'iptv-premium', 'iptv-ultra']);
+  assert.deepEqual(plano(promo.PRODUCTOS_PROMO), ['iptv-basico', 'iptv-premium', 'iptv-ultra']);
   for (const id of elegibles) {
     for (const d of [1, 2, 3]) {
       for (const p of promo.PROMOS) {
         const c = promo.calcular(producto(id), d, p.id);
-        assert.ok(c && c.precio > 0 && c.ahorro > 0 && c.precio < c.precioReferencia, `${id} ${d} ${p.id}`);
+        assert.ok(c && c.precio > 0 && c.precio < c.precioReferencia, `${id} ${d} ${p.id}`);
+        assert.equal(c.mesesActivados, { 'bd-paga2': 3, 'bd-paga3': 6, 'bd-paga6': 12 }[p.id]);
       }
     }
   }
+});
+
+test('Flujo TV, Stella TV, GXTV y demás IPTV quedan fuera: sin selector, cálculo ni plan de carrito', () => {
+  for (const id of ['flujo-tv', 'stella-tv', 'xc-tv', 'megax-tv', 'oleada-tv', 'telelatino', 'vanna-tv', 'oratv']) {
+    const p = producto(id);
+    assert.ok(p, `existe ${id}`);
+    assert.equal(promo.esElegible(p), false, `${id} no es elegible`);
+    assert.equal(promo.htmlSelector(p, DURANTE), '', `${id} sin selector`);
+    for (const pr of promo.PROMOS) {
+      assert.equal(promo.calcular(p, 1, pr.id), null, `${id} sin cálculo`);
+      assert.equal(promo.planParaCarrito(p, 1, pr.id, DURANTE), null, `${id} sin plan`);
+    }
+  }
+  assert.equal(producto('xc-tv').nombre, 'GXTV');
 });
 
 test('no aplica a streaming, licencias anuales ni combinaciones inválidas', () => {

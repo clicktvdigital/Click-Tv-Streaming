@@ -109,6 +109,11 @@ test('Black Days: la promo de IPTV llega al carrito y al mensaje de WhatsApp con
   assert.equal(await pagina.isVisible('#black-days-aviso'), true);
   await pagina.click('[data-bd-ver-iptv]');
   const caja = pagina.locator('[data-producto="iptv-premium"] .ctv-bd');
+  const conPromo = await pagina.$$eval('[data-producto] .ctv-bd', (cajas) => cajas.map((c) => c.closest('[data-producto]').dataset.producto).sort());
+  assert.deepEqual(conPromo, ['iptv-basico', 'iptv-premium', 'iptv-ultra']);
+  for (const id of ['flujo-tv', 'stella-tv', 'xc-tv']) {
+    assert.equal(await pagina.locator(`[data-producto="${id}"] .ctv-bd`).count(), 0, `${id} sin Black Days`);
+  }
   await caja.locator('input[value="2"]').check({ force: true });
   await caja.locator('input[value="bd-paga3"]').check({ force: true });
   assert.match(await caja.locator('[data-bd-desglose]').textContent(), /41[.,]50/);
