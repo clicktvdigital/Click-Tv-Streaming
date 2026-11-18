@@ -203,6 +203,34 @@
       tarjeta.classList.toggle('product-card--ancha', !!tarjeta.querySelector('.ctv-bd'));
     });
   }
+  // Acordeón de precios: en listas de más de 5 planes se ven 4 y el resto se despliega con un botón.
+  // Las tarjetas con filtros de dispositivos/meses (IPTV) ya muestran un solo plan: no se pliegan.
+  const PLANES_VISIBLES = 4;
+  function plegarPlanes() {
+    document.querySelectorAll('#catalogo-grid .product-plans').forEach((lista) => {
+      if (lista.dataset.plegado) return;
+      const filas = lista.querySelectorAll(':scope > .product-plan');
+      const conFiltros = !!lista.parentElement?.querySelector(':scope > .clicktv-plan-filters');
+      if (conFiltros || filas.length <= PLANES_VISIBLES + 1) return;
+      lista.dataset.plegado = '1';
+      lista.classList.add('product-plans--plegada');
+      const ocultos = filas.length - PLANES_VISIBLES;
+      const boton = document.createElement('button');
+      boton.type = 'button';
+      boton.className = 'planes-toggle';
+      boton.setAttribute('aria-expanded', 'false');
+      const pintar = () => {
+        const abierto = !lista.classList.contains('product-plans--plegada');
+        boton.setAttribute('aria-expanded', String(abierto));
+        boton.textContent = abierto ? 'Ver menos precios ▴' : `Ver ${ocultos} ${ocultos === 1 ? 'precio más' : 'precios más'} ▾`;
+      };
+      boton.addEventListener('click', () => { lista.classList.toggle('product-plans--plegada'); pintar(); });
+      pintar();
+      lista.after(boton);
+    });
+  }
+  const plegarDespuesDeFiltros = () => requestAnimationFrame(() => requestAnimationFrame(plegarPlanes));
+
   document.addEventListener('toggle', (evento) => {
     const planes = evento.target;
     if (planes?.matches?.('details.product-plans-wrap')) {
@@ -330,7 +358,8 @@
     iniciarBusquedaMenu();
     marcarTarjetas();
     const grid = document.getElementById('catalogo-grid');
-    if (grid && 'MutationObserver' in window) new MutationObserver(marcarTarjetas).observe(grid, { childList: true });
+    if (grid && 'MutationObserver' in window) new MutationObserver(() => { marcarTarjetas(); plegarDespuesDeFiltros(); }).observe(grid, { childList: true });
+    plegarDespuesDeFiltros();
     aplicarHashInicial();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar, { once: true });

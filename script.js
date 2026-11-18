@@ -2214,14 +2214,14 @@ async function renderMundial(silencioso = false) {
     const partidos = combinarPartidosMundial(partidosApiNormalizados, partidosLocales);
     const html = renderizarBloquesMundial(partidos);
     iniciarCronometroMundial();
-    box.innerHTML = html || `
+    pintarMundial(box, html || `
       <div class="loading-card">
         ⚽ No hay partidos disponibles actualmente en las competiciones consultadas.
         <br>Volveremos a consultar automáticamente en 30 segundos.
-      </div>`;
+      </div>`);
   } catch (error) {
     console.warn("No se pudo cargar la API de fútbol; se usa el calendario local:", error);
-    box.innerHTML = renderizarRespaldoMundial();
+    pintarMundial(box, renderizarRespaldoMundial());
     iniciarCronometroMundial();
   }
 }
@@ -2561,16 +2561,33 @@ function renderizarBloquesMundial(partidos) {
   return html;
 }
 
+// Cada bloque muestra 4 partidos (2×2 en celular, 4 en escritorio); el resto queda plegado.
+const PARTIDOS_VISIBLES = 4;
+
 function crearBloquePartidos(titulo, partidos) {
   if (!partidos.length) return "";
+  const visibles = partidos.slice(0, PARTIDOS_VISIBLES);
+  const resto = partidos.slice(PARTIDOS_VISIBLES);
   return `
     <div class="mundial-bloque">
       <h3>${titulo}</h3>
       <div class="mundial-cards">
-        ${partidos.map(crearCardPartido).join("")}
+        ${visibles.map(crearCardPartido).join("")}
       </div>
+      ${resto.length ? `
+      <details class="mundial-mas" data-bloque="${escaparHTML(titulo)}">
+        <summary>Ver ${resto.length} ${resto.length === 1 ? "partido más" : "partidos más"}</summary>
+        <div class="mundial-cards">${resto.map(crearCardPartido).join("")}</div>
+      </details>` : ""}
     </div>
   `;
+}
+
+// Se vuelve a pintar cada 30 s: los bloques que el cliente desplegó siguen abiertos.
+function pintarMundial(box, html) {
+  const abiertos = new Set([...box.querySelectorAll("details.mundial-mas[open]")].map((d) => d.dataset.bloque));
+  box.innerHTML = html;
+  box.querySelectorAll("details.mundial-mas").forEach((d) => { if (abiertos.has(d.dataset.bloque)) d.open = true; });
 }
 
 function crearCardPartido(p) {
