@@ -55,6 +55,9 @@
   place-items: center;
   width: 30px;
   height: 30px;
+  /* clicktv-accesible-azul.css da a todo button min-height 48px; el área táctil de 44 px la da ::before. */
+  min-width: 0;
+  min-height: 0;
   padding: 0;
   border: 0;
   border-radius: 50%;

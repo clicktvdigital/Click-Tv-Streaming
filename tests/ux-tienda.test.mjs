@@ -106,6 +106,9 @@ test('mini TV: pestaña «Click TV Oficial» con el video propio optimizado y CT
   const css = leer('clicktv-ajustes-finales-2026.css');
   assert.match(css, /\.ctv-tv__audio-btn \{[^}]*width: 30px;[^}]*height: 30px;/, 'botones compactos');
   assert.match(css, /\.ctv-tv__volumen \{[^}]*width: 64px;/, 'volumen corto');
+  // Las reglas globales dan min-height 48px a button e input: los controles compactos la anulan.
+  assert.match(css, /\.ctv-tv__audio-btn \{[^}]*min-height: 0;/, 'botón sin alto mínimo global');
+  assert.match(css, /\.ctv-tv__volumen \{[^}]*min-height: 0;/, 'volumen sin alto mínimo global');
   assert.match(html, /role="tab"[^>]*>📺 Click TV Streaming</);
   assert.match(html, /role="tab"[^>]*>🎬 Estrenos de Cine</);
   // El CTA y el cierre viven en la barra, fuera del recuadro del video.
