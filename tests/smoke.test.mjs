@@ -226,9 +226,10 @@ test('catálogo en celular: 2 columnas y la tarjeta abierta ocupa todo el ancho'
   const primera = pagina.locator('#catalogo-grid .product-card').first();
   await primera.locator('.product-plans-wrap > summary').click();
   const anchos = await pagina.evaluate(() => {
-    const grid = document.getElementById('catalogo-grid').getBoundingClientRect();
-    const card = document.querySelector('#catalogo-grid .product-card').getBoundingClientRect();
-    return { grid: Math.round(grid.width), card: Math.round(card.width) };
+    // Ancho de maquetación (offsetWidth): la animación .reveal escala la tarjeta mientras entra.
+    const grid = document.getElementById('catalogo-grid');
+    const card = document.querySelector('#catalogo-grid .product-card');
+    return { grid: grid.clientWidth, card: card.offsetWidth };
   });
   assert.equal(anchos.card, anchos.grid);
   assert.equal(await pagina.evaluate(() => document.documentElement.scrollWidth), 375);
