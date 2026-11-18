@@ -137,7 +137,7 @@
   <link rel="stylesheet" href="clicktv-movil-mejoras-2026.css?v=20261118-1">
   <link rel="stylesheet" href="clicktv-promo-black-days.css?v=20261118-3">
   <link rel="stylesheet" href="clicktv-movil-2col.css?v=20261118-5">
-  <link rel="stylesheet" href="clicktv-ux-tienda.css?v=20261118-4">
+  <link rel="stylesheet" href="clicktv-ux-tienda.css?v=20261118-6">
 </head>
 <body>
 <div id="top" tabindex="-1"></div>
@@ -461,22 +461,29 @@
 
           <div id="ctv-tv-prueba" class="ctv-tv" aria-labelledby="ctv-tv-titulo">
             <div class="ctv-tv__cabecera">
-              <span class="teleamazonas-card__label">TRÁILERS</span>
-              <strong id="ctv-tv-titulo">🎬 Cine en tu pantalla</strong>
-              <small>Tráilers oficiales doblados al español latino. Sigue navegando: el video se queda en una ventana pequeña.</small>
+              <span class="teleamazonas-card__label">MINI TV</span>
+              <strong id="ctv-tv-titulo">📺 Mira lo que tendrás con Click TV</strong>
             </div>
-            <div class="ctv-tv__marco">
-              <div id="ctv-tv-reproductor" class="ctv-tv__reproductor"></div>
-              <button id="ctv-tv-play" class="ctv-tv__play" type="button">▶ Ver tráiler</button>
-              <button id="ctv-tv-cta" class="ctv-tv__cta" type="button">🔥 Activa tu IPTV Premium</button>
-              <div class="ctv-tv__mini-barra">
-                <button id="ctv-tv-volver" type="button" aria-label="Volver al reproductor">⤢</button>
-                <button id="ctv-tv-cerrar" type="button" aria-label="Cerrar el tráiler">✕</button>
-              </div>
+            <div class="ctv-tv__pestanas" role="tablist" aria-label="Contenido de la Mini TV">
+              <button id="ctv-tv-tab-oficial" class="ctv-tv__pestana" type="button" role="tab" aria-selected="true" aria-controls="ctv-tv-marco">📺 Click TV Oficial</button>
+              <button id="ctv-tv-tab-cine" class="ctv-tv__pestana" type="button" role="tab" aria-selected="false" aria-controls="ctv-tv-marco">🎬 Estrenos de Cine</button>
             </div>
-            <div class="ctv-tv__controles">
+            <div class="ctv-tv__controles" id="ctv-tv-controles-cine" hidden>
               <label class="sr-only" for="ctv-tv-trailer">Elegir tráiler</label>
               <select id="ctv-tv-trailer" class="ctv-tv__canal"></select>
+            </div>
+            <div class="ctv-tv__ventana">
+              <div id="ctv-tv-marco" class="ctv-tv__marco" role="tabpanel" aria-labelledby="ctv-tv-tab-oficial">
+                <video id="ctv-tv-promo" class="ctv-tv__video" muted loop playsinline controls preload="none" poster="assets/promo-poster.webp" aria-label="Video promocional de Click TV Streaming"></video>
+                <div id="ctv-tv-reproductor" class="ctv-tv__reproductor" hidden></div>
+                <button id="ctv-tv-play" class="ctv-tv__play" type="button" hidden>▶ Ver tráiler</button>
+              </div>
+              <!-- Barra fuera del video: el CTA no tapa la imagen ni los controles nativos. -->
+              <div class="ctv-tv__barra">
+                <button id="ctv-tv-cta" class="ctv-tv__cta" type="button">🔥 ¡Activa tu IPTV Premium!</button>
+                <button id="ctv-tv-volver" class="ctv-tv__icono" type="button" aria-label="Volver al reproductor">⤢</button>
+                <button id="ctv-tv-cerrar" class="ctv-tv__icono" type="button" aria-label="Cerrar la Mini TV">✕</button>
+              </div>
             </div>
             <p id="ctv-tv-estado" class="ctv-tv__estado" role="status" aria-live="polite"></p>
           </div>
@@ -1150,7 +1157,7 @@
       </div>
     </div>
   </footer>
-  <script src="data.js?v=20261118-4" defer></script>
+  <script src="data.js?v=20261118-5" defer></script>
   <script src="clicktv-paypal-planes.js?v=20261115-1" defer></script>
   <script src="clicktv-villancicos.js?v=20261114-1" defer></script>
   <script src="clicktv-navidad-fx.js?v=20261114-1" defer></script>
@@ -1163,7 +1170,7 @@
   <script src="script.js?v=20261118-4" defer></script>
   <script src="clicktv-navegacion-movil.js?v=20261118-3" defer></script>
   <script src="clicktv-formulario-contacto.js?v=20261118-1" defer></script>
-  <script src="clicktv-mini-tv.js?v=20261118-1" defer></script>
+  <script src="clicktv-mini-tv.js?v=20261118-3" defer></script>
   <script src="clicktv-accesible.js?v=20261015-4" defer></script>
   <script src="clicktv-atencion-pagos.js?v=20261118-1" defer></script>
   <script src="clicktv-pago-producto.js?v=20261117-1" defer></script>

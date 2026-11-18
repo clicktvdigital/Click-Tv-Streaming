@@ -58,6 +58,8 @@ const CONFIG = {
   teleamazonasUrl: "https://www.teleamazonas.com/teleamazonas-en-vivo/",
   // Mini TV: tráilers oficiales doblados al español latino, de los canales de YouTube de los estudios
   // (verificados con el oEmbed de YouTube: existen, canal oficial y se pueden insertar). 18/11/2026.
+  // Video promocional propio de la pestaña «Click TV Oficial» (854×480, H.264, ~3 MB, con faststart).
+  videoPromo: { url: "assets/promo.mp4", poster: "assets/promo-poster.webp" },
   trailersYouTube: [
     { id: "s_qpMMkvHYE", titulo: "Toy Story 5", canal: "Disney Studios LA", version: "Doblado" },
     { id: "po-V420c5uY", titulo: "Gatto", canal: "Disney Studios LA", version: "Doblado" },

@@ -1,7 +1,7 @@
 // Precios IPTV con promo, pagos solo en el carrito, formulario internacional, combos y mini TV.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 import { createContext, runInContext } from 'node:vm';
 
 const leer = (archivo) => readFileSync(new URL(`../${archivo}`, import.meta.url), 'utf8');
@@ -78,4 +78,27 @@ test('mini TV: tráilers oficiales doblados, válidos, sin repetidos, y un ifram
   for (const [k, v] of [['autoplay', '1'], ['mute', '1'], ['loop', '1'], ['playlist', 's_qpMMkvHYE'], ['playsinline', '1']]) assert.equal(url.searchParams.get(k), v, k);
   assert.equal(trailersValidos([{ id: 'corto', titulo: 'X' }, { id: 's_qpMMkvHYE', titulo: '' }, { id: 's_qpMMkvHYE', titulo: 'A' }, { id: 's_qpMMkvHYE', titulo: 'B' }]).length, 1);
   assert.doesNotMatch(leer('data.js'), /canalesMiniTV|\.m3u8/, 'sin restos del reproductor HLS');
+});
+
+test('mini TV: pestaña «Click TV Oficial» con el video propio optimizado y CTA según Black Days', () => {
+  const datos = createContext({ console, URLSearchParams }); datos.window = datos;
+  runInContext(leer('data.js'), datos);
+  runInContext(leer('clicktv-mini-tv.js'), datos);
+  const promo = runInContext('CONFIG.videoPromo', datos);
+  assert.equal(promo.url, 'assets/promo.mp4');
+  const peso = statSync(new URL(`../${promo.url}`, import.meta.url)).size;
+  assert.ok(peso > 100_000 && peso < 4_000_000, `video web liviano (${peso} bytes)`);
+  assert.ok(statSync(new URL(`../${promo.poster}`, import.meta.url)).size > 1000, 'póster presente');
+  const { textoCta } = datos.ctvMiniTV;
+  assert.equal(textoCta(true), '🔥 ¡Activa tu IPTV Premium con Black Days!');
+  assert.equal(textoCta(false), '🔥 ¡Activa tu IPTV Premium!');
+  const html = leer('index.html');
+  assert.match(html, /<video id="ctv-tv-promo"[^>]*\bmuted\b[^>]*\bloop\b[^>]*\bplaysinline\b[^>]*\bcontrols\b/);
+  assert.match(html, /role="tab"[^>]*>📺 Click TV Oficial</);
+  assert.match(html, /role="tab"[^>]*>🎬 Estrenos de Cine</);
+  // El CTA y el cierre viven en la barra, fuera del recuadro del video.
+  const marco = html.slice(html.indexOf('id="ctv-tv-marco"'), html.indexOf('class="ctv-tv__barra"'));
+  assert.doesNotMatch(marco, /ctv-tv-cta|ctv-tv-cerrar/);
+  assert.equal((html.match(/id="ctv-tv-cta"/g) || []).length, 1, 'un solo CTA, compartido por ambas pestañas');
+  assert.ok(html.indexOf('id="ctv-tv-controles-cine"') < html.indexOf('class="ctv-tv__ventana"'), 'selector arriba del video');
 });
