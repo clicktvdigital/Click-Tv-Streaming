@@ -2,6 +2,21 @@
 /* Catálogo multicanal Click TV Streaming */
 (function () {
   const escapar = (texto = "") => String(texto).replace(/[&<>'"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));
+  // Etiquetas en tipo oración y sin emoji decorativo: «🎄 IDEAL PARA FIN DE AÑO» → «Ideal para fin de año».
+  // Las siglas y marcas conservan su forma (CNT, IPTV, Claro, Tigo, LigaPro…). Los datos no cambian.
+  const FORMA_FIJA = {
+    cnt: "CNT", iptv: "IPTV", vpn: "VPN", gb: "GB", wifi: "WiFi", proneet: "PRONEET",
+    claro: "Claro", tigo: "Tigo", movistar: "Movistar", tuenti: "Tuenti", zapping: "Zapping",
+    liga: "Liga", pro: "Pro", ecuador: "Ecuador", aki: "Aki", maxi: "Maxi", plus: "Plus"
+  };
+  function etiquetaLegible(texto = "") {
+    const limpio = String(texto).replace(/^[^\p{L}\p{N}+]+/u, "").trim();
+    if (!limpio) return String(texto).trim();
+    const palabras = limpio.toLocaleLowerCase("es").split(/\s+/).map((p) => FORMA_FIJA[p] || p);
+    const frase = palabras.join(" ");
+    return frase.charAt(0).toLocaleUpperCase("es") + frase.slice(1);
+  }
+  window.ctvEtiquetaLegible = etiquetaLegible;
   let categoriaActual = "todos";
 
   window.seleccionarCategoriaCatalogo = function (categoria = "todos") {
@@ -50,7 +65,7 @@
       : `<div class="product-plans">${planes}</div>`;
     return `<article class="product-card reveal" data-producto="${escapar(producto.id)}">
       <button class="product-card__enlace" type="button" onclick="copiarEnlaceProducto('${escapar(producto.id)}', this)">🔗 Copiar enlace</button>
-      <div class="product-card__head"><span class="product-card__icon">${producto.icono || "📺"}</span><div><h3>${escapar(producto.nombre)}</h3><div class="product-tags">${(producto.etiquetas||[]).map(e=>`<span>${escapar(e)}</span>`).join("")}</div></div></div>
+      <div class="product-card__head"><span class="product-card__icon">${producto.icono || "📺"}</span><div><h3>${escapar(producto.nombre)}</h3><div class="product-tags">${(producto.etiquetas||[]).map(e=>`<span>${escapar(etiquetaLegible(e))}</span>`).join("")}</div></div></div>
       <p>${escapar(producto.descripcion || "")}</p>
       ${selectorPromo}
       <details class="product-plans-wrap"${(window.productoEnfocado || window.matchMedia("(min-width: 681px)").matches) ? " open" : ""}>

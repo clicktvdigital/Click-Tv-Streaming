@@ -210,3 +210,43 @@ test('Botón Pro Black Days: oscuro con borde dorado y brillo rojo en el player,
   assert.match(css, /\.ctv-tv--promo-bd \.ctv-tv__cta,\n\.ctv-bd-aviso a\.btn\[data-bd-ver-iptv\],\n\.ctv-bd-barra \.ctv-bd-barra__boton \{[^}]*background: var\(--ctv-pro-fondo\) !important;[^}]*border: 1\.5px solid var\(--ctv-pro-oro\) !important;[^}]*color: #fff !important;/);
   assert.match(leer('clicktv-mini-tv.js'), /tarjeta\.classList\.toggle\('ctv-tv--promo-bd', vigente\);/);
 });
+
+test('unslop: sin prueba social simulada ni partículas decorativas', () => {
+  const js = leer('script.js');
+  for (const nombre of ['renderActividadReciente', 'actualizarUsuariosConectados', 'inicializarFondoDinamico']) {
+    assert.doesNotMatch(js, new RegExp(`function ${nombre}\\(`), nombre);
+  }
+  assert.doesNotMatch(leer('data.js'), /ACTIVIDAD_RECIENTE/);
+  assert.doesNotMatch(html, /id="actividad-reciente"|id="usuarios-conectados"|id="tech-particles"/);
+});
+
+test('unslop: párrafos sin emoji decorativo al inicio y titular en tipo oración', () => {
+  const emoji = /<p>[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}]/u;
+  assert.doesNotMatch(html, emoji);
+  assert.match(html, /<h1>Netflix, DAZN, IPTV y recargas, <em>activados<\/em> tras verificar tu pago<\/h1>/);
+  const css = leer('clicktv-ajustes-finales-2026.css');
+  assert.match(css, /\.hero \.hero__content h1 \{\s*text-transform: none !important;\s*font-weight: 800 !important;/);
+  assert.match(css, /\.eyebrow,\n\.hero \.eyebrow,\n\.ctv-discovery__kicker,[\s\S]*?\{\s*text-transform: none !important;/);
+  assert.match(leer('clicktv-accesible.js'), /<ol class="clicktv-help__pasos"><li>Elige tu servicio<\/li>/);
+  assert.doesNotMatch(leer('clicktv-accesible.js'), /1️⃣|2️⃣|3️⃣/);
+});
+
+test('unslop: etiquetas de producto en tipo oración, sin emoji y con siglas/marcas intactas', () => {
+  const ctx = createContext({ document: { addEventListener() {} } }); ctx.window = ctx;
+  runInContext(leer('catalogo.js'), ctx);
+  const casos = {
+    '🎄 IDEAL PARA FIN DE AÑO': 'Ideal para fin de año', '🔥 MÁS VENDIDO': 'Más vendido', '🟣 CNT': 'CNT',
+    '⚽ LIGA PRO ECUADOR': 'Liga Pro Ecuador', '📺 +40 CANALES': '+40 canales', '📶 WIFI': 'WiFi', '💎 PREMIUM': 'Premium'
+  };
+  for (const [entrada, salida] of Object.entries(casos)) assert.equal(ctx.ctvEtiquetaLegible(entrada), salida, entrada);
+  assert.match(leer('catalogo.js'), /<span>\$\{escapar\(etiquetaLegible\(e\)\)\}<\/span>/);
+});
+
+test('unslop: carrito vacío limpio, sin desbordes en catálogo y menos capas fijas en Android', () => {
+  const css = leer('clicktv-ajustes-finales-2026.css');
+  assert.match(css, /#panel-carrito:has\(\.carrito-vacio\) :is\(\.cupon-box, \.cart-summary, \.cart-contact-options\) \{ display: none !important; \}/);
+  assert.match(css, /#panel-carrito:has\(\.carrito-vacio\) \.cart-actions > :not\(#btn-continuar-comprando\) \{ display: none !important; \}/);
+  assert.match(css, /\.product-tags span \{[^}]*white-space: normal !important;/);
+  assert.match(css, /\.catalogo-ayuda__duda \{[^}]*white-space: normal !important;/);
+  assert.match(css, /body\.ctv-bd-barra-visible \.ctv-asistente-btn__promo \{ display: none !important; \}/);
+});

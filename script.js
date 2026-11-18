@@ -18,10 +18,8 @@ let cuponAplicado = null;
 let paypalRenderizado = false;
 let paypalSdkPromise = null;
 let observadorReveal = null;
-let indiceActividad = 0;
 let indiceResena = 0;
 let metodoPagoActual = "transferencia";
-let usuariosConectados = 48;
 let cuponAhorroAplicado = null;
 // Fila recién agregada: es la única que se anima al volver a pintar el carrito.
 let itemCarritoNuevo = null;
@@ -53,7 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
   iniciarSeguro("catálogo", renderCatalogo);
   iniciarSeguro("carrito visual", renderCarrito);
   iniciarSeguro("reseñas", cargarResenas);
-  iniciarSeguro("actividad", renderActividadReciente);
+  // Sin «actividad en vivo» ni «usuarios conectados» simulados: eran una lista fija y números al azar
+  // presentados como reales. Solo se muestra lo que se puede comprobar.
   iniciarSeguro("partidos", renderMundial);
   iniciarSeguro("interfaz", inicializarUI);
   iniciarSeguro("pagos rápidos", inicializarPagosRapidos);
@@ -61,18 +60,14 @@ document.addEventListener("DOMContentLoaded", () => {
   iniciarSeguro("pie de página", inicializarPieFuncional);
   iniciarSeguro("ubicación", inicializarUbicacion);
   iniciarSeguro("tasas de cambio", actualizarTasasCambio);
-  iniciarSeguro("usuarios conectados", actualizarUsuariosConectados);
   iniciarSeguro("contador del carrito", actualizarContadorCarrito);
-  iniciarSeguro("fondo dinámico", inicializarFondoDinamico);
   iniciarSeguro("animaciones", inicializarAnimacionesScroll);
   iniciarSeguro("efecto premium", inicializarTiltPremium);
   iniciarSeguro("accesibilidad", inicializarAccesibilidadGlobal);
 
   // Ahorro de batería: los temporizadores no trabajan con la pestaña oculta.
   const siVisible = (fn) => () => { if (!document.hidden) fn(); };
-  setInterval(siVisible(() => iniciarSeguro("actividad periódica", renderActividadReciente)), 4500);
   setInterval(siVisible(() => iniciarSeguro("rotación de reseñas", rotarResenas)), 10000);
-  setInterval(siVisible(() => iniciarSeguro("usuarios conectados", actualizarUsuariosConectados)), 6500);
   setInterval(siVisible(() => iniciarSeguro("partidos periódicos", () => renderMundial(true))), 30000);
 });
 
@@ -3231,45 +3226,11 @@ function rotarResenas() {
   }, 280);
 }
 
-function renderActividadReciente() {
-  const box = document.getElementById("actividad-reciente");
-  if (!box || !ACTIVIDAD_RECIENTE?.length) return;
-  const texto = String(ACTIVIDAD_RECIENTE[indiceActividad % ACTIVIDAD_RECIENTE.length]).replace(/^🟢\s*/, "");
-  box.classList.remove("activity-pill--animate");
-  box.innerHTML = `<span class="activity-live"><i aria-hidden="true"></i>LIVE</span><span>${escaparHTML(texto)}</span>`;
-  requestAnimationFrame(() => box.classList.add("activity-pill--animate"));
-  indiceActividad++;
-}
 
-function actualizarUsuariosConectados() {
-  const usuarios = document.getElementById("usuarios-conectados");
-  if (!usuarios) return;
-
-  const variacion = Math.floor(Math.random() * 7) - 3;
-  usuariosConectados = Math.min(92, Math.max(38, usuariosConectados + variacion));
-  usuarios.textContent = usuariosConectados;
-}
 
 // ---------------------------------------------------------------------------
 // EXPERIENCIA PREMIUM, ANIMACIONES Y ACCESIBILIDAD
 // ---------------------------------------------------------------------------
-function inicializarFondoDinamico() {
-  const contenedor = document.getElementById("tech-particles");
-  if (!contenedor || contenedor.childElementCount) return;
-  const cantidad = window.matchMedia("(max-width: 720px)").matches ? 10 : 18;
-  const fragmento = document.createDocumentFragment();
-
-  for (let i = 0; i < cantidad; i += 1) {
-    const particula = document.createElement("span");
-    particula.style.setProperty("--x", `${Math.random() * 100}%`);
-    particula.style.setProperty("--y", `${Math.random() * 100}%`);
-    particula.style.setProperty("--size", `${2 + Math.random() * 4}px`);
-    particula.style.setProperty("--duration", `${12 + Math.random() * 18}s`);
-    particula.style.setProperty("--delay", `${-Math.random() * 20}s`);
-    fragmento.appendChild(particula);
-  }
-  contenedor.appendChild(fragmento);
-}
 
 function inicializarAnimacionesScroll() {
   if (!("IntersectionObserver" in window)) {

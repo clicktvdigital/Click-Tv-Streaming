@@ -600,20 +600,6 @@ const PRODUCTOS = [
 
 const RESENAS = [];
 
-const ACTIVIDAD_RECIENTE = [
-  "🟢 Cliente de Quito - Ecuador activó IPTV Premium",
-  "🟢 Cliente de Lima - Perú adquirió Disney+",
-  "🟢 Cliente de Bogotá - Colombia adquirió Paramount+",
-  "🟢 Cliente de Guayaquil - Ecuador activó IPTV Ultra",
-  "🟢 Cliente de Santiago - Chile adquirió DAZN",
-  "🟢 Cliente de México activó Netflix Perfil Extra",
-  "🟢 Cliente de Perú solicitó IBO Player",
-  "🟢 Cliente de Quito activó PRONEET VPN",
-  "🟢 Cliente de Guayaquil solicitó recarga móvil",
-  "🟢 Cliente de Cuenca activó paquete Claro Megas",
-  "🟢 Cliente de Ambato compró combo Movistar",
-  "🟢 Cliente de Manta compró combo Tuenti"
-];
 
 // Respaldo local del fixture oficial si la API no devuelve datos del Mundial.
 const MUNDIAL_2026 = [

@@ -618,3 +618,21 @@ for (const ancho of [360, 412]) {
     await pagina.context().close();
   });
 }
+
+test('Android 360 px: etiquetas y botones del catálogo dentro de su tarjeta; carrito vacío sin botones de pedido', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 360, height: 780 });
+  const fuera = await pagina.evaluate(() => [...document.querySelectorAll('#catalogo-grid .product-card')].slice(0, 12).flatMap((card) => {
+    const c = card.getBoundingClientRect();
+    return [...card.querySelectorAll('.product-tags span, h3, .btn, button')]
+      .filter((el) => el.offsetWidth && el.getBoundingClientRect().right > c.right + 1)
+      .map((el) => `${card.dataset.producto}: ${el.textContent.trim().slice(0, 30)}`);
+  }));
+  assert.deepEqual(fuera, []);
+  const duda = await pagina.evaluate(() => { const a = document.querySelector('.catalogo-ayuda__duda'); return !a || a.scrollWidth <= a.clientWidth + 1; });
+  assert.equal(duda, true, '«¿Tienes dudas?» se lee completo');
+  await pagina.click('#btn-abrir-carrito');
+  assert.equal(await pagina.isVisible('#btn-finalizar-compra'), false, 'sin «Finalizar compra» con el carrito vacío');
+  assert.equal(await pagina.isVisible('#btn-continuar-comprando'), true);
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});

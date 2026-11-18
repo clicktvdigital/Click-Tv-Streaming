@@ -16,7 +16,7 @@
     const ayudas=document.querySelector('#streaming .container');
     if(ayudas && !document.getElementById('clicktv-guia-compras')){
       const box=document.createElement('div'); box.id='clicktv-guia-compras'; box.className='clicktv-help';
-      box.innerHTML='<strong>🛒 Comprar es sencillo</strong><p>1️⃣ Elige tu servicio.</p><p>2️⃣ Selecciona cuántos meses y dispositivos necesitas.</p><p>3️⃣ Pulsa <strong>🛒 Añadir al carrito</strong> o <strong>🟢 Comprar por WhatsApp</strong>.</p><p>💬 ¿Necesitas ayuda? <a href="#contacto">Contacta con nuestro equipo</a>.</p>';
+      box.innerHTML='<strong>Comprar en 3 pasos</strong><ol class="clicktv-help__pasos"><li>Elige tu servicio</li><li>Selecciona meses y dispositivos</li><li>Pulsa <strong>Añadir al carrito</strong> o <strong>Comprar por WhatsApp</strong></li></ol><p>¿Dudas? <a href="#contacto">Escríbenos</a></p>';
       const filter=ayudas.querySelector('.filter-tabs'); if(filter) filter.insertAdjacentElement('beforebegin',box); else ayudas.prepend(box);
     }
     // Agrupar botones secundarios para dar prioridad a carrito y WhatsApp; mantiene alternativas.
