@@ -184,8 +184,11 @@
   });
 
   // Mantiene compatibles los enlaces antiguos compartidos: /#iptv, /#musica, /#apps.
+  // También abre la categoría desde ?categoria=iptv (URLs del sitemap), sin pisar ?producto=.
   function aplicarHashInicial() {
-    const categoria = ANCLAS_CATEGORIA[location.hash];
+    const params = new URLSearchParams(location.search);
+    const desdeParametro = params.has('producto') ? null : params.get('categoria');
+    const categoria = (desdeParametro && desdeParametro in CATEGORIAS ? desdeParametro : null) || ANCLAS_CATEGORIA[location.hash];
     if (categoria) irACategoria(categoria, { enfocar: false });
   }
 
