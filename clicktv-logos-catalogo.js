@@ -29,7 +29,6 @@
     'megax-tv': { src: 'assets/logos-catalogo/megax-tv.png', blend: true },
     'oleada-tv': { src: 'assets/logos-catalogo/oleada-tv.jpg' },
     'stella-tv': { src: 'assets/logos-catalogo/stella-tv.jpg' },
-    'plataformas-iptv': { src: 'assets/logos-catalogo/smartone-iptv.png' },
     'iptv-basico': { src: 'assets/logos-catalogo/iptv-xtream-pro.jpg', blend: true },
     'iptv-premium': { src: 'assets/logos-catalogo/iptv-xtream-pro.jpg', blend: true },
     'iptv-ultra': { src: 'assets/logos-catalogo/iptv-xtream-pro.jpg', blend: true }
@@ -80,7 +79,6 @@
     'iptv-basico':defined('', '', '#145e98','TV'),
     'iptv-premium':defined('', '', '#145e98','TV'),
     'iptv-ultra':defined('', '', '#145e98','TV'),
-    'plataformas-iptv':defined('', '', '#145e98','TV'),
     'disney-premium-deportes':defined('disneyplus','disneyplus.com','#1556bd','D+'),
     'deportes-pack':defined('', '', '#1569a6','⚽'),
     'aumento-gigas-proneet':defined('', '', '#1c66aa','VPN'),

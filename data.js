@@ -349,15 +349,6 @@ const PRODUCTOS = [
     ]
   },
   {
-    id: "plataformas-iptv",
-    nombre: "Plataformas IPTV",
-    categoria: "iptv",
-    icono: "📺",
-    descripcion: "MegaX TV, Flujo TV, Oleada TV, MA TV Digital, Stella TV, Telelatino, GXTV, NUBIA TV y TITAN TV. Incluyen Mundial 2026, TV en vivo, películas, series y deportes.",
-    etiquetas: ["⚽ IDEAL PARA EL MUNDIAL"],
-    planes: [{ tipo: "Consultar disponibilidad", precio: 0, consultar: true }]
-  },
-  {
     id: "spotify-premium",
     nombre: "Spotify Premium",
     categoria: "musica",

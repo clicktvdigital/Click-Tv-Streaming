@@ -173,6 +173,9 @@
     try { history.replaceState(history.state, '', selector); } catch { /* sin history */ }
   }
 
+  // Disponible para el asistente y otros accesos rápidos.
+  window.ctvNavegacion = { irACategoria, irAProducto, irASeccion };
+
   document.addEventListener('click', (evento) => {
     if (evento.defaultPrevented || evento.button !== 0 || evento.metaKey || evento.ctrlKey || evento.shiftKey || evento.altKey) return;
     const enlace = evento.target.closest?.('a[data-ir-categoria], a[data-ctv-category], #nav-menu a.nav-link[href^="#"]');
@@ -305,8 +308,25 @@
   }
   document.addEventListener('visibilitychange', marcarVisibilidad);
 
+  // Portada: cada acceso de categoría muestra cuántos servicios tiene (dato real del catálogo).
+  function contarCategorias() {
+    const catalogo = typeof PRODUCTOS !== 'undefined' && Array.isArray(PRODUCTOS) ? PRODUCTOS : [];
+    if (!catalogo.length) return;
+    document.querySelectorAll('.home-categorias__btn[data-ir-categoria]').forEach((enlace) => {
+      if (enlace.querySelector('.home-categorias__total')) return;
+      const categoria = enlace.dataset.irCategoria;
+      const total = categoria === 'todos' ? catalogo.length : catalogo.filter((p) => p.categoria === categoria).length;
+      if (!total) return;
+      const etiqueta = document.createElement('small');
+      etiqueta.className = 'home-categorias__total';
+      etiqueta.textContent = `${total} ${total === 1 ? 'servicio' : 'servicios'}`;
+      enlace.append(etiqueta);
+    });
+  }
+
   function iniciar() {
     marcarVisibilidad();
+    contarCategorias();
     iniciarBusquedaMenu();
     marcarTarjetas();
     const grid = document.getElementById('catalogo-grid');
