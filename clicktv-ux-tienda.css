@@ -127,7 +127,7 @@
   .combo-builder__item .btn { grid-column: 2; grid-row: 1; }
 }
 
-/* 5. Mini reproductor de TV en vivo. */
+/* 5. Mini TV con tráilers oficiales de YouTube. */
 .ctv-tv {
   margin-top: 1rem;
   padding: 14px;
@@ -139,7 +139,8 @@
 .ctv-tv__cabecera { display: grid; gap: 4px; margin-bottom: 10px; }
 .ctv-tv__cabecera small { color: #b9d8ff; line-height: 1.4; }
 .ctv-tv__marco { position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #000; }
-.ctv-tv__video { display: block; width: 100%; height: 100%; object-fit: contain; background: #000; }
+.ctv-tv__reproductor, .ctv-tv__iframe, .ctv-tv__miniatura { display: block; width: 100%; height: 100%; border: 0; }
+.ctv-tv__miniatura { object-fit: cover; }
 .ctv-tv__play {
   position: absolute;
   inset: 0;
@@ -160,96 +161,73 @@
 }
 .ctv-tv__play:active { transform: scale(0.97); }
 .ctv-tv__play[hidden] { display: none; }
-.ctv-tv__play:focus-visible, .ctv-tv__mini-barra button:focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
-.ctv-tv__estado { margin: 8px 0 0; font-size: .82rem; color: #b9d8ff; }
-.ctv-tv__mini-barra { display: none; }
-
-/* Ventana pequeña mientras se navega (encima de los accesos y de la barra de Black Days). */
-.ctv-tv--mini .ctv-tv__marco {
-  position: fixed;
-  z-index: 1385;
-  left: max(10px, env(safe-area-inset-left));
-  bottom: calc(var(--ctv-alto-accesos, 92px) + 10px);
-  width: min(48vw, 240px);
-  border: 1.5px solid #7fd0ff;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, .5);
+/* CTA de conversión: abajo a la izquierda, sin tapar los controles de YouTube del centro. */
+.ctv-tv__cta {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  min-height: 40px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1.5px solid #ffd27a;
+  background: linear-gradient(135deg, #ff7a18, #e5361b);
+  color: #fff;
+  font: inherit;
+  font-size: .86rem;
+  font-weight: 900;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .45);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
 }
-body.ctv-bd-barra-visible .ctv-tv--mini .ctv-tv__marco { bottom: calc(var(--ctv-alto-accesos, 92px) + 76px); }
-.ctv-tv--mini .ctv-tv__mini-barra { display: flex; position: absolute; top: 4px; right: 4px; gap: 4px; }
-.ctv-tv--mini .ctv-tv__mini-barra button {
-  width: 44px;
-  height: 44px;
+.ctv-tv__cta:active { transform: scale(0.97); }
+.ctv-tv__mini-barra { display: none; position: absolute; top: 6px; right: 6px; gap: 4px; }
+.ctv-tv--activo .ctv-tv__mini-barra { display: flex; }
+.ctv-tv--activo:not(.ctv-tv--mini) #ctv-tv-volver { display: none; }
+.ctv-tv__mini-barra button {
+  width: 40px;
+  height: 40px;
   border: 0;
   border-radius: 10px;
-  background: rgba(0, 0, 0, .65);
+  background: rgba(0, 0, 0, .7);
   color: #fff;
   font-size: 16px;
   cursor: pointer;
   touch-action: manipulation;
 }
-@media (min-width: 921px) {
-  .ctv-tv--mini .ctv-tv__marco { left: 24px; bottom: 24px; width: 320px; }
-}
-body:is(.menu-movil-abierto, .cart-open) .ctv-tv--mini .ctv-tv__marco { visibility: hidden; }
-
-@media (prefers-reduced-motion: reduce) {
-  .ctv-tv__play { transition: none; }
-}
-
-/* 5b. Controles propios de la mini TV: canal, reproducir/pausa, silencio y volumen.
-   En la tarjeta van debajo del video; en la ventana pequeña flotan bajo el video, siempre a mano. */
-.ctv-tv__controles { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+.ctv-tv__controles { margin-top: 8px; }
 .ctv-tv__controles select {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
   min-height: 44px;
   border-radius: 10px;
   border: 1.5px solid #3d7fc0;
   background: #0b2140;
   color: #fff;
   font-size: 16px;
-  padding: 0 8px;
+  padding: 0 10px;
 }
-.ctv-tv__controles button {
-  flex: none;
-  width: 44px;
-  height: 44px;
-  border: 1px solid rgba(96, 165, 250, .5);
-  border-radius: 10px;
-  background: rgba(29, 95, 191, .25);
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-.ctv-tv__controles button:active { background: rgba(29, 95, 191, .45); }
-.ctv-tv__controles :is(button, select, input):focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
-.ctv-tv__controles input[type="range"] { flex: 0 1 110px; min-width: 70px; accent-color: #1689ff; height: 44px; }
-.ctv-tv:not(.ctv-tv--activo) :is(#ctv-tv-pausa, #ctv-tv-silencio, #ctv-tv-volumen) { display: none; }
-.ctv-tv--mini .ctv-tv__controles {
+.ctv-tv :is(.ctv-tv__play, .ctv-tv__cta, .ctv-tv__mini-barra button, select):focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
+.ctv-tv__estado { margin: 8px 0 0; font-size: .82rem; color: #b9d8ff; }
+
+/* Ventana pequeña persistente (encima de los accesos rápidos y de la barra de Black Days). */
+.ctv-tv--mini .ctv-tv__marco {
   position: fixed;
-  z-index: 1386;
+  z-index: 1385;
   left: max(10px, env(safe-area-inset-left));
   bottom: calc(var(--ctv-alto-accesos, 92px) + 10px);
-  width: min(48vw, 240px);
-  margin: 0;
-  padding: 4px;
-  gap: 4px;
-  flex-wrap: wrap;
-  border-radius: 0 0 12px 12px;
-  background: rgba(3, 12, 28, .94);
+  width: min(56vw, 260px);
   border: 1.5px solid #7fd0ff;
-  border-top: 0;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .5);
 }
-.ctv-tv--mini .ctv-tv__controles select { flex: 1 1 100%; min-height: 36px; font-size: 14px; }
-.ctv-tv--mini .ctv-tv__controles input[type="range"] { flex: 1; min-width: 0; height: 36px; }
-.ctv-tv--mini .ctv-tv__controles button { width: 36px; height: 36px; }
-/* La ventana sube para dejar los controles debajo del video. */
-.ctv-tv--mini .ctv-tv__marco { bottom: calc(var(--ctv-alto-accesos, 92px) + 92px); border-radius: 12px 12px 0 0; }
-body.ctv-bd-barra-visible .ctv-tv--mini .ctv-tv__marco { bottom: calc(var(--ctv-alto-accesos, 92px) + 158px); }
-body.ctv-bd-barra-visible .ctv-tv--mini .ctv-tv__controles { bottom: calc(var(--ctv-alto-accesos, 92px) + 76px); }
+body.ctv-bd-barra-visible .ctv-tv--mini .ctv-tv__marco { bottom: calc(var(--ctv-alto-accesos, 92px) + 76px); }
+.ctv-tv--mini .ctv-tv__cta { left: 4px; top: auto; bottom: 4px; min-height: 32px; padding: 4px 9px; font-size: .7rem; }
+.ctv-tv--mini .ctv-tv__mini-barra button { width: 32px; height: 32px; font-size: 14px; }
 @media (min-width: 921px) {
-  .ctv-tv--mini .ctv-tv__marco { left: 24px; bottom: 106px; width: 320px; }
-  .ctv-tv--mini .ctv-tv__controles { left: 24px; bottom: 24px; width: 320px; }
+  .ctv-tv--mini .ctv-tv__marco { left: 24px; bottom: 24px; width: 340px; }
+  .ctv-tv--mini .ctv-tv__cta { font-size: .8rem; min-height: 36px; }
 }
-body:is(.menu-movil-abierto, .cart-open) .ctv-tv--mini .ctv-tv__controles { visibility: hidden; }
+body:is(.menu-movil-abierto, .cart-open) .ctv-tv--mini .ctv-tv__marco { visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ctv-tv__play, .ctv-tv__cta { transition: none; }
+}

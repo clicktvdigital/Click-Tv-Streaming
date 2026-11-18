@@ -60,20 +60,22 @@ test('IPTV con promo: precios normales plegados y la promo reemplaza el plan nor
   assert.match(leer('script.js'), /Se reemplazó el plan normal por la promo Black Days/);
 });
 
-test('mini TV: canales configurables, válidos y sin credenciales; hls.js fijado con SRI', () => {
-  const datos = createContext({ console }); datos.window = datos;
+test('mini TV: tráilers oficiales doblados, válidos, sin repetidos, y un iframe silenciado en bucle', () => {
+  const datos = createContext({ console, URLSearchParams }); datos.window = datos;
   runInContext(leer('data.js'), datos);
-  runInContext(leer('clicktv-tv-en-vivo.js'), datos);
-  const canales = runInContext('CONFIG.canalesMiniTV', datos);
-  assert.ok(canales.length >= 2, 'al menos dos canales para alternar');
-  assert.equal(datos.ctvMiniTV.canalesValidos(canales).length, canales.length, 'todos los canales son válidos');
-  for (const c of canales) {
-    assert.match(c.url, /^https:\/\/.+\.m3u8$/, c.id);
-    assert.doesNotMatch(c.url, /username=|password=|get\.php/i, `${c.id}: sin credenciales ni paneles IPTV en un archivo público`);
+  runInContext(leer('clicktv-mini-tv.js'), datos);
+  const trailers = runInContext('CONFIG.trailersYouTube', datos);
+  const { trailersValidos, urlInsercion } = datos.ctvMiniTV;
+  assert.ok(trailers.length >= 2 && trailers.length <= 3, 'entre 2 y 3 tráilers');
+  assert.equal(trailersValidos(trailers).length, trailers.length);
+  const oficiales = ['Disney Studios LA', 'Warner Bros. Pictures Latinoamérica', 'Universal Pictures Latinoamérica', 'Sony Pictures Latinoamérica', 'Paramount Pictures Latinoamérica'];
+  for (const t of trailers) {
+    assert.ok(oficiales.includes(t.canal), `${t.titulo}: canal oficial del estudio`);
+    assert.match(t.version, /^(Doblado|Subtitulado)$/, `${t.titulo}: versión en español indicada`);
   }
-  assert.equal(datos.ctvMiniTV.canalesValidos([{ id: 'x', nombre: 'X', url: 'http://inseguro.example/a.m3u8' }, { id: 'y', nombre: 'Y', url: 'https://ok.example/b.m3u8' }, { id: 'y', nombre: 'Repetido', url: 'https://ok.example/c.m3u8' }]).length, 1);
-  const js = leer('clicktv-tv-en-vivo.js');
-  assert.match(js, /hls\.js\/\d+\.\d+\.\d+\/hls\.min\.js/);
-  assert.match(js, /integridad: 'sha384-[A-Za-z0-9+/=]{64}'/);
-  assert.match(leer('index.html'), /<video id="ctv-tv-video"[^>]*preload="none"/);
+  const url = new URL(urlInsercion('s_qpMMkvHYE', 'https://click-tv-streaming.vercel.app'));
+  assert.equal(url.hostname, 'www.youtube-nocookie.com');
+  for (const [k, v] of [['autoplay', '1'], ['mute', '1'], ['loop', '1'], ['playlist', 's_qpMMkvHYE'], ['playsinline', '1']]) assert.equal(url.searchParams.get(k), v, k);
+  assert.equal(trailersValidos([{ id: 'corto', titulo: 'X' }, { id: 's_qpMMkvHYE', titulo: '' }, { id: 's_qpMMkvHYE', titulo: 'A' }, { id: 's_qpMMkvHYE', titulo: 'B' }]).length, 1);
+  assert.doesNotMatch(leer('data.js'), /canalesMiniTV|\.m3u8/, 'sin restos del reproductor HLS');
 });
