@@ -70,7 +70,8 @@
 .campo-ayuda { display: block; margin: 4px 0 10px; font-size: .8rem; color: #b9d8ff; }
 .campo-check { display: flex !important; flex-direction: row !important; align-items: flex-start; gap: 10px; margin: 6px 0 10px; cursor: pointer; line-height: 1.4; }
 .campo-check input { width: 22px; height: 22px; min-height: 0 !important; flex: none; margin: 1px 0 0; accent-color: #1689ff; }
-#contacto-ubicacion [hidden] { display: none !important; }
+/* Los label del formulario tienen display propio: sin esto, [hidden] no ocultaría el correo ni la región. */
+#form-contacto-internacional [hidden] { display: none !important; }
 
 /* 4. Constructor de combos. */
 .combo-builder { display: grid; gap: 12px; margin-top: 14px; }
