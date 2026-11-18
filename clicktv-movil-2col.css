@@ -433,6 +433,21 @@ html.pestana-oculta :is(.navidad-nieve span, .navidad-santa, .navidad-santa *, .
   font-weight: 900;
   white-space: nowrap;
 }
+@media (max-width: 680px) {
+  /* El botón es un círculo de 52 px: el distintivo va como etiqueta encima. */
+  #ctv-asistente-btn.ctv-asistente-btn--promo { overflow: visible; }
+  #ctv-asistente-btn .ctv-asistente-btn__promo {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 1px 6px;
+    font-size: .6rem;
+    line-height: 1.4;
+    pointer-events: none;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .ctv-asistente__promo, #panel-carrito .carrito-item__detalle > summary::after { transition: none; }
 }

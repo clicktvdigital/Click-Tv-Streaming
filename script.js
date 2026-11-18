@@ -1389,17 +1389,16 @@ async function renovarItemTelegram(itemId) {
 }
 
 // Detalles del carrito que el cliente dejó abiertos: se conservan al volver a pintar (cantidad, cupón, moneda).
+// Se leen del DOM justo antes de pintar: el evento "toggle" llega en una tarea posterior y podía perderse.
 const detallesCarritoAbiertos = new Set();
-document.addEventListener("toggle", (evento) => {
-  const detalle = evento.target;
-  if (!detalle?.matches?.("details.carrito-item__detalle")) return;
-  if (detalle.open) detallesCarritoAbiertos.add(detalle.dataset.itemId);
-  else detallesCarritoAbiertos.delete(detalle.dataset.itemId);
-}, true);
 
 function renderCarrito() {
   const contenedor = document.getElementById("carrito-items");
   if (!contenedor) return;
+  contenedor.querySelectorAll("details.carrito-item__detalle").forEach((detalle) => {
+    if (detalle.open) detallesCarritoAbiertos.add(detalle.dataset.itemId);
+    else detallesCarritoAbiertos.delete(detalle.dataset.itemId);
+  });
 
   if (carrito.length === 0) {
     contenedor.innerHTML = `<div class="carrito-vacio"><p>Tu carrito está vacío. Explora el catálogo y agrega tus servicios favoritos. 🛍️</p><a class="btn btn--primary" href="#streaming">🎬 Explorar catálogo</a></div>`;
