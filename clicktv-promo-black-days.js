@@ -259,6 +259,8 @@
       const caja = e.target.closest('.ctv-bd');
       if (!caja) return;
       const { producto, d, promoId } = leerSeleccion(caja);
+      const normales = caja.closest('.product-card')?.querySelector('details.ctv-bd-normales');
+      if (normales) normales.open = false;
       const destino = caja.querySelector('[data-bd-desglose]');
       if (destino) destino.innerHTML = htmlDesglose(calcular(producto, d, promoId));
     });

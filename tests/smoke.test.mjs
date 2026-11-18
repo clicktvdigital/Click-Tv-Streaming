@@ -82,10 +82,18 @@ test('menú: abre y se cierra con la X', async () => {
   await pagina.context().close();
 });
 
-test('simulador: nadie preseleccionado y un combo llega al carrito', async () => {
+test('combos: el combo empieza vacío, se busca un servicio y llega al carrito', async () => {
   const { pagina, errores } = await abrirPagina({ width: 1280, height: 800 });
-  assert.equal(await pagina.locator('#ahorro-servicios input:checked').count(), 0);
-  await pagina.locator('#ahorro-servicios input').first().check({ force: true });
+  assert.equal(await pagina.locator('#ahorro-servicios .combo-builder__elegido').count(), 0);
+  await pagina.fill('#combo-buscar', 'spotify');
+  await pagina.waitForFunction(() => /Spotify/.test(document.getElementById('combo-resultados').textContent));
+  await pagina.locator('#combo-resultados [data-combo-agregar]').first().click();
+  assert.equal(await pagina.locator('#ahorro-servicios .combo-builder__elegido').count(), 1);
+  await pagina.selectOption('#combo-categoria', 'iptv');
+  await pagina.fill('#combo-buscar', '');
+  await pagina.waitForFunction(() => !/Spotify/.test(document.getElementById('combo-resultados').textContent));
+  await pagina.locator('#combo-resultados [data-combo-agregar]').first().click();
+  assert.equal(await pagina.locator('#ahorro-servicios .combo-builder__elegido').count(), 2);
   await pagina.click('#btn-ahorro-carrito');
   assert.equal((await pagina.textContent('#contador-carrito')).trim(), '1');
   assert.deepEqual(errores, []);
@@ -368,4 +376,70 @@ test('asistente: anuncia Black Days y lleva directo a IPTV Premium', async () =>
   assert.equal(await despues.pagina.locator('.ctv-asistente__promo').count(), 0);
   assert.ok(await despues.pagina.locator('#ctv-asistente .ctv-asistente__op', { hasText: 'Planes de IPTV' }).count());
   await despues.pagina.context().close();
+});
+
+test('IPTV con Black Days: precios normales plegados y la promo reemplaza el plan normal en el carrito', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 1280, height: 800 }, { fecha: new Date('2026-11-17T15:00:00Z') });
+  await pagina.evaluate(() => window.seleccionarCategoriaCatalogo('iptv'));
+  const card = '[data-producto="iptv-premium"]';
+  assert.equal(await pagina.isVisible(`${card} .ctv-bd-normales .product-plans`), false);
+  const indice = await pagina.evaluate(() => PRODUCTOS.find((p) => p.id === 'iptv-premium').planes.findIndex((p) => p.tipo === '2 dispositivos · 1 mes'));
+  assert.ok(indice >= 0);
+  await pagina.evaluate((i) => agregarPlanCatalogo('iptv-premium', i, 'compra'), indice);
+  await pagina.evaluate(() => cerrarCarrito());
+  await pagina.locator(`${card} .ctv-bd input[value="2"]`).check({ force: true });
+  await pagina.locator(`${card} .ctv-bd [data-bd-accion="carrito"]`).click();
+  const items = await pagina.evaluate(() => carrito.filter((i) => i.productoId === 'iptv-premium').map((i) => !!i.promo));
+  assert.deepEqual(items, [true], 'solo queda la promo, sin el plan normal duplicado');
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
+
+test('pagos: sin cuentas en la portada; el botón abre el carrito con la transferencia', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
+  assert.equal(await pagina.locator('.clicktv-bank').count(), 0);
+  await pagina.click('#ctv-ver-datos-pago');
+  assert.equal(await pagina.evaluate(() => document.body.classList.contains('cart-open')), true);
+  assert.match(await pagina.textContent('#carrito-pago-detalle'), /Banco Pichincha/);
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
+
+test('contacto: buscar país, región dinámica, prefijo automático y suscripción por correo', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
+  await pagina.fill('#contacto-pais-buscar', 'peru');
+  assert.equal(await pagina.inputValue('#contacto-pais'), 'Perú');
+  assert.equal((await pagina.textContent('#contacto-prefijo')).trim(), '+51');
+  assert.ok(await pagina.locator('#contacto-region option[value="Cusco"]').count());
+  await pagina.fill('#contacto-pais-buscar', '');
+  await pagina.selectOption('#contacto-pais', 'Ecuador');
+  assert.equal((await pagina.textContent('#contacto-prefijo')).trim(), '+593');
+  await pagina.selectOption('#contacto-region', 'Pichincha');
+  assert.ok(await pagina.locator('#contacto-cantones option[value="Quito"]').count());
+  await pagina.fill('#contacto-nombre', 'Ana Pérez');
+  await pagina.fill('#contacto-canton', 'Quito');
+  await pagina.fill('#contacto-telefono', '099 123 4567');
+  assert.equal(await pagina.isHidden('#contacto-email-campo'), true);
+  await pagina.check('#contacto-suscripcion');
+  await pagina.fill('#contacto-email', 'ana@example.com');
+  await pagina.fill('#contacto-mensaje', 'Quiero IPTV Premium');
+  await pagina.evaluate(() => { window.__abiertos = []; window.open = (url) => { window.__abiertos.push(String(url)); return null; }; });
+  await pagina.locator('#form-contacto-internacional button[type="submit"]').click();
+  const mensaje = decodeURIComponent(await pagina.evaluate(() => window.__abiertos[0] || ''));
+  assert.match(mensaje, /Ubicación: Quito, Pichincha, Ecuador/);
+  assert.match(mensaje, /Teléfono: \+593 991234567/);
+  assert.match(mensaje, /promociones en: ana@example\.com/);
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
+
+test('mini TV: sin red muestra un aviso claro y deja volver a intentar, sin errores', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
+  await pagina.locator('#ctv-tv-play').scrollIntoViewIfNeeded();
+  await pagina.click('#ctv-tv-play');
+  await pagina.waitForFunction(() => /⚠️/.test(document.getElementById('ctv-tv-estado').textContent), null, { timeout: 8000 });
+  assert.equal(await pagina.isVisible('#ctv-tv-play'), true);
+  assert.equal(await pagina.isEnabled('#ctv-tv-play'), true);
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
 });

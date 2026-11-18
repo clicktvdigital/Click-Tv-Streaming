@@ -56,6 +56,13 @@ const CONFIG = {
   },
   laredStreamingUrl: "https://www.lared.com.ec/streaming/",
   teleamazonasUrl: "https://www.teleamazonas.com/teleamazonas-en-vivo/",
+  // Mini reproductor: señal pública de prueba (no es un canal comercial). Para emitir un canal propio,
+  // reemplaza la URL por una .m3u8 con derechos de transmisión.
+  tvPrueba: {
+    nombre: "Canal de prueba en directo",
+    url: "https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8",
+    respaldo: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+  },
   teleamazonasSignatureUrl: "https://www.teleamazonas.com/mediastream/signature",
   teleamazonasPlayerId: "6945b9bca18f515cff51c75b",
   teleamazonasSignals: {

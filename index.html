@@ -137,6 +137,7 @@
   <link rel="stylesheet" href="clicktv-movil-mejoras-2026.css?v=20261118-1">
   <link rel="stylesheet" href="clicktv-promo-black-days.css?v=20261118-3">
   <link rel="stylesheet" href="clicktv-movil-2col.css?v=20261118-4">
+  <link rel="stylesheet" href="clicktv-ux-tienda.css?v=20261118-2">
 </head>
 <body>
 <div id="top" tabindex="-1"></div>
@@ -457,6 +458,23 @@
               Acceso directo a la fuente oficial de Teleamazonas.
             </p>
           </div>
+
+          <div id="ctv-tv-prueba" class="ctv-tv" aria-labelledby="ctv-tv-titulo">
+            <div class="ctv-tv__cabecera">
+              <span class="teleamazonas-card__label">EN VIVO</span>
+              <strong id="ctv-tv-titulo">📺 Prueba la TV por internet</strong>
+              <small>Sintoniza un canal de prueba y sigue navegando: el video se queda en una ventana pequeña.</small>
+            </div>
+            <div class="ctv-tv__marco">
+              <video id="ctv-tv-video" class="ctv-tv__video" playsinline controls preload="none" aria-label="Canal de prueba en directo"></video>
+              <button id="ctv-tv-play" class="ctv-tv__play" type="button">▶ Ver canal de prueba</button>
+              <div class="ctv-tv__mini-barra">
+                <button id="ctv-tv-volver" type="button" aria-label="Volver al reproductor">⤢</button>
+                <button id="ctv-tv-cerrar" type="button" aria-label="Cerrar el reproductor">✕</button>
+              </div>
+            </div>
+            <p id="ctv-tv-estado" class="ctv-tv__estado" role="status" aria-live="polite">Señal de demostración. El video solo se descarga si pulsas «Ver».</p>
+          </div>
         </div>
       </div>
     </section>
@@ -662,30 +680,13 @@
       <span class="eyebrow">🏦 Pagos claros y sencillos</span>
       <h2 id="ctv-pagos-titulo">Elige cómo prefieres pagar</h2>
       <p>1️⃣ Confirma tu pedido.</p>
-      <p>2️⃣ Usa el enlace de pago o copia la cuenta de destino.</p>
+      <p>2️⃣ En el carrito, elige el método y verás el enlace o la cuenta de destino.</p>
       <p>🏦 Verifica siempre el beneficiario y el total en tu banco.</p>
     </div>
-    <div class="clicktv-payment-grid">
-      <article class="clicktv-bank" id="ctv-banco-pichincha">
-        <h3>🏦 Banco Pichincha</h3>
-        <span class="clicktv-bank__name">Número de cuenta</span>
-        <p id="ctv-banco-pichincha-numero" class="clicktv-bank__number">Consultar por WhatsApp</p>
-        <div class="clicktv-bank__actions">
-          <button type="button" id="ctv-banco-pichincha-copiar" class="btn btn--primary">📋 Copiar cuenta</button>
-          <a class="btn btn--outline" href="https://www.pichincha.com/banca-web" target="_blank" rel="noopener noreferrer" aria-label="Abrir la banca web oficial de Banco Pichincha">↗ Abrir banca web</a>
-        </div>
-      </article>
-      <article class="clicktv-bank" id="ctv-banco-guayaquil">
-        <h3>🏦 Banco Guayaquil</h3>
-        <span class="clicktv-bank__name">Número de cuenta</span>
-        <p id="ctv-banco-guayaquil-numero" class="clicktv-bank__number">Consultar por WhatsApp</p>
-        <div class="clicktv-bank__actions">
-          <button type="button" id="ctv-banco-guayaquil-copiar" class="btn btn--primary">📋 Copiar cuenta</button>
-          <a class="btn btn--outline" href="https://www.bancoguayaquil.com/" target="_blank" rel="noopener noreferrer" aria-label="Abrir el sitio oficial de Banco Guayaquil">↗ Abrir banca web</a>
-        </div>
-      </article>
+    <div class="clicktv-pago-privado">
+      <p>🔒 Por seguridad, los <strong>datos bancarios</strong> se muestran solo dentro del carrito, al elegir <strong>Transferencia</strong>, junto con el total exacto de tu pedido.</p>
+      <button type="button" class="btn btn--primary" id="ctv-ver-datos-pago">🛒 Ver datos de pago en el carrito</button>
     </div>
-    <p id="ctv-estado-copia" class="clicktv-status" role="status" aria-live="polite"></p>
     <div class="clicktv-payment-guide">
       <h3>💳 Enlaces de pago disponibles</h3>
       <div class="clicktv-payment-guide__links">
@@ -746,26 +747,39 @@
               <label>Nombre y apellido
                 <input id="contacto-nombre" type="text" placeholder="Ej: Carlos Pérez" required>
               </label>
-              <label>País
+              <div class="campo-pais">
+                <label for="contacto-pais">País</label>
+                <div class="campo-pais__buscador">
+                  <span aria-hidden="true">🔎</span>
+                  <input id="contacto-pais-buscar" type="search" placeholder="Buscar país..." autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" aria-label="Buscar país" aria-controls="contacto-pais">
+                </div>
                 <select id="contacto-pais" required>
                   <option value="">Seleccionar país</option>
-                  <option value="Ecuador">Ecuador</option>
-                  <option value="Perú">Perú</option>
-                  <option value="Colombia">Colombia</option>
-                  <option value="Argentina">Argentina</option>
-                  <option value="México">México</option>
-                  <option value="Chile">Chile</option>
-                  <option value="España">España</option>
-                  <option value="Brasil">Brasil</option>
-                  <option value="Bolivia">Bolivia</option>
-                  <option value="Venezuela">Venezuela</option>
-                  <option value="Estados Unidos">Estados Unidos</option>
-                  <option value="Otro país">Otro país</option>
                 </select>
+              </div>
+            </div>
+            <div class="form-grid" id="contacto-ubicacion">
+              <label id="contacto-region-campo"><span id="contacto-region-etiqueta">Provincia / estado</span>
+                <select id="contacto-region" hidden></select>
+                <input id="contacto-region-texto" type="text" maxlength="60" autocomplete="address-level1" placeholder="Escribe tu provincia, estado o región">
+              </label>
+              <label id="contacto-canton-campo" hidden>Cantón / ciudad
+                <input id="contacto-canton" type="text" maxlength="60" list="contacto-cantones" autocomplete="address-level2" placeholder="Ej: Quito">
+                <datalist id="contacto-cantones"></datalist>
               </label>
             </div>
-            <label>Número de teléfono
-              <input id="contacto-telefono" type="tel" placeholder="Ej: +593 939166222" required>
+            <label for="contacto-telefono">Número de teléfono</label>
+            <div class="tel-con-prefijo">
+              <span id="contacto-prefijo" class="tel-con-prefijo__codigo" aria-live="polite">+593</span>
+              <input id="contacto-telefono" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Tu número local, ej. 0991234567" aria-describedby="contacto-prefijo-ayuda" required>
+            </div>
+            <small id="contacto-prefijo-ayuda" class="campo-ayuda">El código del país se agrega solo: escribe únicamente tu número local.</small>
+            <label class="campo-check">
+              <input id="contacto-suscripcion" type="checkbox">
+              <span>📧 Quiero recibir notificaciones y promociones por correo (opcional)</span>
+            </label>
+            <label id="contacto-email-campo" hidden>Correo electrónico
+              <input id="contacto-email" type="email" maxlength="120" autocomplete="email" inputmode="email" autocapitalize="none" placeholder="tucorreo@ejemplo.com">
             </label>
             <label>Mensaje
               <textarea id="contacto-mensaje" rows="4" placeholder="Hola, deseo información sobre..." required></textarea>
@@ -848,10 +862,26 @@
         <div class="savings-copy">
           <span class="eyebrow">🧮 Calculadora de ahorro</span>
           <h2>Simula tus servicios favoritos</h2>
-          <p>🧮 Elige los servicios más comprados y revisa un estimado con tu cupón.</p>
+          <p>🔎 Busca cualquier servicio del catálogo, elige su plan y arma tu combo a medida.</p>
           <p>💬 El valor final se confirma por WhatsApp, Signal o Telegram, según disponibilidad.</p>
-          <div class="savings-quick"><button id="btn-ahorro-todos" class="btn btn--ghost" type="button">Seleccionar todos</button><button id="btn-ahorro-limpiar" class="btn btn--ghost" type="button">Limpiar selección</button></div>
-          <div id="ahorro-servicios" class="savings-options"></div>
+          <div class="combo-builder" id="combo-builder">
+            <div class="combo-builder__filtros" role="search">
+              <div class="combo-builder__buscador">
+                <span aria-hidden="true">🔎</span>
+                <input id="combo-buscar" type="search" placeholder="Buscar: Netflix, IPTV, Spotify..." autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" aria-label="Buscar servicio para tu combo" aria-controls="combo-resultados">
+              </div>
+              <select id="combo-categoria" aria-label="Filtrar servicios por categoría">
+                <option value="todos">Todas las categorías</option>
+              </select>
+            </div>
+            <p id="combo-estado" class="sr-only" role="status" aria-live="polite"></p>
+            <ul id="combo-resultados" class="combo-builder__resultados" aria-label="Servicios disponibles para el combo"></ul>
+            <div class="combo-builder__seleccion">
+              <div class="combo-builder__cabecera"><strong>🧩 Tu combo</strong><span id="combo-cuenta">0 servicios</span></div>
+              <ul id="ahorro-servicios" class="combo-builder__lista" aria-label="Servicios de tu combo"></ul>
+              <div class="savings-quick"><button id="btn-ahorro-todos" class="btn btn--ghost" type="button">✨ Combo sugerido</button><button id="btn-ahorro-limpiar" class="btn btn--ghost" type="button">Vaciar combo</button></div>
+            </div>
+          </div>
         </div>
 
         <div class="savings-card glass-card">
@@ -1115,20 +1145,22 @@
       </div>
     </div>
   </footer>
-  <script src="data.js?v=20261118-1" defer></script>
+  <script src="data.js?v=20261118-2" defer></script>
   <script src="clicktv-paypal-planes.js?v=20261115-1" defer></script>
   <script src="clicktv-villancicos.js?v=20261114-1" defer></script>
   <script src="clicktv-navidad-fx.js?v=20261114-1" defer></script>
   <script src="clicktv-navidad-escena.js?v=20261114-1" defer></script>
   <script src="clicktv-precios-publico-2026.js?v=20261015-4" defer></script>
-  <script src="clicktv-promo-black-days.js?v=20261118-3" defer></script>
-  <script src="catalogo.js?v=20261117-1" defer></script>
+  <script src="clicktv-promo-black-days.js?v=20261118-4" defer></script>
+  <script src="catalogo.js?v=20261118-1" defer></script>
   <script src="clicktv-enlaces-2026.js?v=20261118-1" defer></script>
   <script src="clicktv-asistente-2026.js?v=20261118-1" defer></script>
-  <script src="script.js?v=20261118-3" defer></script>
+  <script src="script.js?v=20261118-4" defer></script>
   <script src="clicktv-navegacion-movil.js?v=20261118-3" defer></script>
+  <script src="clicktv-formulario-contacto.js?v=20261118-1" defer></script>
+  <script src="clicktv-tv-en-vivo.js?v=20261118-1" defer></script>
   <script src="clicktv-accesible.js?v=20261015-4" defer></script>
-  <script src="clicktv-atencion-pagos.js?v=20261015-2" defer></script>
+  <script src="clicktv-atencion-pagos.js?v=20261118-1" defer></script>
   <script src="clicktv-pago-producto.js?v=20261117-1" defer></script>
   <script src="clicktv-final-visual.js?v=20261118-1" defer></script>
   <script src="clicktv-logos-catalogo.js?v=20261118-1" defer></script>

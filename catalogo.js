@@ -42,14 +42,20 @@
         </div>
       </div>`;
     }).join("");
+    // Con Black Days vigente, los precios normales se pliegan para no confundirse con la promo.
+    const selectorPromo = typeof window.PromoBlackDays?.htmlSelector === "function" ? window.PromoBlackDays.htmlSelector(producto) : "";
+    const totalPlanes = (producto.planes || []).length;
+    const bloquePlanes = selectorPromo
+      ? `<details class="ctv-bd-normales"><summary>Ver precios sin promoción (${totalPlanes} ${totalPlanes === 1 ? "plan" : "planes"})</summary><div class="product-plans">${planes}</div></details>`
+      : `<div class="product-plans">${planes}</div>`;
     return `<article class="product-card reveal" data-producto="${escapar(producto.id)}">
       <button class="product-card__enlace" type="button" onclick="copiarEnlaceProducto('${escapar(producto.id)}', this)">🔗 Copiar enlace</button>
       <div class="product-card__head"><span class="product-card__icon">${producto.icono || "📺"}</span><div><h3>${escapar(producto.nombre)}</h3><div class="product-tags">${(producto.etiquetas||[]).map(e=>`<span>${escapar(e)}</span>`).join("")}</div></div></div>
       <p>${escapar(producto.descripcion || "")}</p>
-      ${typeof window.PromoBlackDays?.htmlSelector === "function" ? window.PromoBlackDays.htmlSelector(producto) : ""}
+      ${selectorPromo}
       <details class="product-plans-wrap"${(window.productoEnfocado || window.matchMedia("(min-width: 681px)").matches) ? " open" : ""}>
-        <summary>Ver ${(producto.planes || []).length} ${(producto.planes || []).length === 1 ? "plan" : "planes"} y precios</summary>
-        <div class="product-plans">${planes}</div>
+        <summary>${selectorPromo ? "Ver promo y planes" : `Ver ${totalPlanes} ${totalPlanes === 1 ? "plan" : "planes"} y precios`}</summary>
+        ${bloquePlanes}
       </details>
     </article>`;
   }

@@ -1214,6 +1214,14 @@ function agregarAlCarrito(producto, plan) {
   }
 
   const operacion = plan.operacion === "renovacion" ? "renovacion" : "compra";
+  // Una promo Black Days reemplaza el plan normal del mismo servicio y dispositivos: así no quedan dos precios.
+  if (plan.promo) {
+    const dispositivos = Number(plan.dispositivos || plan.promo.dispositivos) || 0;
+    const patron = new RegExp(`^${dispositivos} dispositivos? ·`);
+    const antes = carrito.length;
+    carrito = carrito.filter((item) => !(item.productoId === producto.id && !item.promo && patron.test(String(item.plan))));
+    if (carrito.length < antes) mostrarToast("Se reemplazó el plan normal por la promo Black Days.", "info");
+  }
   const itemId = `${producto.id}-${normalizarTexto(plan.tipo)}`;
   const existente = carrito.find((item) => item.itemId === itemId);
   itemCarritoNuevo = existente ? null : itemId;
@@ -1356,7 +1364,7 @@ function htmlPromoCarrito(item) {
       <li>💳 Pagas: ${mesesTexto(promo.mesesPagados)}</li>
       <li>🎁 Gratis: ${mesesTexto(promo.mesesGratis)}</li>
       <li>✅ Se activan: ${mesesTexto(promo.mesesActivados)} · ${promo.dispositivos} ${promo.dispositivos === 1 ? "dispositivo" : "dispositivos"}</li>
-      <li>🏷️ Precio normal ${mesesTexto(promo.mesesActivados)}: ${formatearPrecio(promo.precioReferencia * cantidad)}</li>
+      <li>🏷️ Antes, sin promo (${mesesTexto(promo.mesesActivados)}): <s>${formatearPrecio(promo.precioReferencia * cantidad)}</s></li>
       <li class="ctv-bd-item__ahorro">💸 Ahorras: ${formatearPrecio(promo.ahorro * cantidad)}</li>
     </ul>
   </div>`;
@@ -1589,41 +1597,123 @@ const SERVICIOS_AHORRO = [
   { id: "zapping-pro", plan: "Cuenta individual · 1 dispositivo · 1 mes", nombre: "Zapping Pro", precioNormal: 14.99 }
 ];
 
+// Constructor de combos: cualquier servicio del catálogo, con buscador, filtro por categoría y plan elegido.
+// Los servicios de SERVICIOS_AHORRO conservan su precio normal de referencia para estimar el ahorro.
+let comboSeleccion = [];
+
+function planesCombo(producto) {
+  return (producto?.planes || []).filter((plan) => !plan.consultar && Number(plan.precio) > 0);
+}
+
+function productosCombo(consulta = "", categoria = "todos") {
+  const catalogo = PRODUCTOS.filter((p) => planesCombo(p).length && (categoria === "todos" || p.categoria === categoria));
+  if (!String(consulta).trim()) return catalogo;
+  const motor = window.ctvBusqueda;
+  if (motor?.crearIndice) {
+    const ids = motor.buscar(motor.crearIndice(catalogo, []), consulta, 50).filter((r) => r.tipo === "producto").map((r) => r.id);
+    return ids.map((id) => catalogo.find((p) => p.id === id)).filter(Boolean);
+  }
+  const q = normalizarTexto(consulta);
+  return catalogo.filter((p) => normalizarTexto(`${p.nombre} ${p.categoria}`).includes(q));
+}
+
 function inicializarCalculadoraAhorro() {
-  const contenedor = document.getElementById("ahorro-servicios");
-  if (!contenedor || typeof PRODUCTOS === "undefined") return;
+  const lista = document.getElementById("ahorro-servicios");
+  const resultados = document.getElementById("combo-resultados");
+  const buscar = document.getElementById("combo-buscar");
+  const categoria = document.getElementById("combo-categoria");
+  if (!lista || !resultados || typeof PRODUCTOS === "undefined") return;
 
-  contenedor.innerHTML = SERVICIOS_AHORRO.map((servicio) => {
-    const data = obtenerServicioAhorro(servicio);
-    if (!data) return "";
+  const nombresCategoria = window.ctvBusqueda?.CATEGORIAS || {};
+  [...new Set(PRODUCTOS.map((p) => p.categoria))].forEach((cat) => {
+    if (!cat || categoria.querySelector(`option[value="${cat}"]`)) return;
+    const opcion = document.createElement("option");
+    opcion.value = cat;
+    opcion.textContent = nombresCategoria[cat] || cat;
+    categoria.append(opcion);
+  });
 
-    return `
-      <label class="saving-option">
-        <input type="checkbox" value="${servicio.id}">
-        <span>
-          <strong>${servicio.nombre}</strong>
-          <small>${data.plan.tipo} · Click TV ${formatearPrecio(data.plan.precio)} · Normal ref. $${servicio.precioNormal.toFixed(2)}</small>
-        </span>
-      </label>
-    `;
-  }).join("");
+  let espera = 0;
+  const pintar = () => renderResultadosCombo(buscar.value, categoria.value);
+  buscar?.addEventListener("input", () => { clearTimeout(espera); espera = setTimeout(pintar, 80); });
+  categoria?.addEventListener("change", pintar);
 
-  contenedor.querySelectorAll("input").forEach((input) => {
-    input.addEventListener("change", actualizarCalculadoraAhorro);
+  resultados.addEventListener("click", (evento) => {
+    const boton = evento.target.closest("[data-combo-agregar]");
+    if (!boton) return;
+    const fila = boton.closest("li");
+    const plan = fila.querySelector("select")?.value;
+    agregarServicioCombo(boton.dataset.comboAgregar, plan);
+  });
+  lista.addEventListener("click", (evento) => {
+    const boton = evento.target.closest("[data-combo-quitar]");
+    if (!boton) return;
+    comboSeleccion.splice(Number(boton.dataset.comboQuitar), 1);
+    renderComboSeleccion();
   });
 
   document.getElementById("btn-aplicar-cupon-ahorro")?.addEventListener("click", aplicarCuponAhorro);
   document.getElementById("btn-ahorro-todos")?.addEventListener("click", () => {
-    contenedor.querySelectorAll("input").forEach((input) => { input.checked = true; });
-    actualizarCalculadoraAhorro();
+    SERVICIOS_AHORRO.forEach((s) => { if (obtenerServicioAhorro(s)) agregarServicioCombo(s.id, s.plan, { silencioso: true }); });
+    renderComboSeleccion();
   });
   document.getElementById("btn-ahorro-limpiar")?.addEventListener("click", () => {
-    contenedor.querySelectorAll("input").forEach((input) => { input.checked = false; });
-    actualizarCalculadoraAhorro();
+    comboSeleccion = [];
+    renderComboSeleccion();
   });
   document.getElementById("btn-ahorro-whatsapp")?.addEventListener("click", () => enviarAhorroWhatsApp(CONFIG.whatsappLink));
   document.getElementById("btn-ahorro-whatsapp-atencion")?.addEventListener("click", () => enviarAhorroWhatsApp(CONFIG.whatsappAlternativoLink));
   document.getElementById("btn-ahorro-carrito")?.addEventListener("click", agregarComboAhorroAlCarrito);
+  pintar();
+  renderComboSeleccion();
+}
+
+function renderResultadosCombo(consulta = "", categoria = "todos") {
+  const resultados = document.getElementById("combo-resultados");
+  if (!resultados) return;
+  const productos = productosCombo(consulta, categoria);
+  const visibles = productos.slice(0, 8);
+  actualizarTexto("combo-estado", productos.length ? `${productos.length} servicios disponibles.` : "Sin coincidencias.");
+  if (!visibles.length) {
+    resultados.innerHTML = `<li class="combo-builder__vacio">No encontré ese servicio. Prueba con otro nombre o cambia la categoría.</li>`;
+    return;
+  }
+  resultados.innerHTML = visibles.map((p) => `
+    <li class="combo-builder__item">
+      <span class="combo-builder__nombre"><span aria-hidden="true">${p.icono || "📺"}</span> ${escaparHTML(p.nombre)}</span>
+      <select aria-label="Plan de ${escaparHTML(p.nombre)}">${planesCombo(p).map((plan) => `<option value="${escaparHTML(plan.tipo)}">${escaparHTML(plan.tipo)} · ${formatearPrecio(plan.precio)}</option>`).join("")}</select>
+      <button type="button" class="btn btn--primary btn--small" data-combo-agregar="${escaparHTML(p.id)}">➕ Añadir</button>
+    </li>`).join("") + (productos.length > visibles.length ? `<li class="combo-builder__mas">+${productos.length - visibles.length} más: escribe para afinar la búsqueda.</li>` : "");
+}
+
+function agregarServicioCombo(id, tipoPlan, { silencioso = false } = {}) {
+  const producto = PRODUCTOS.find((p) => p.id === id);
+  const plan = planesCombo(producto).find((p) => p.tipo === tipoPlan) || planesCombo(producto)[0];
+  if (!producto || !plan) return;
+  if (comboSeleccion.some((s) => s.id === id && s.plan === plan.tipo)) {
+    if (!silencioso) mostrarToast(`${producto.nombre} ya está en tu combo.`, "info");
+    return;
+  }
+  comboSeleccion.push({ id, plan: plan.tipo });
+  if (!silencioso) {
+    renderComboSeleccion();
+    mostrarToast(`${producto.nombre} añadido al combo.`, "exito");
+  }
+}
+
+function renderComboSeleccion() {
+  const lista = document.getElementById("ahorro-servicios");
+  if (!lista) return;
+  const seleccionados = obtenerServiciosAhorroSeleccionados();
+  actualizarTexto("combo-cuenta", `${seleccionados.length} ${seleccionados.length === 1 ? "servicio" : "servicios"}`);
+  lista.innerHTML = seleccionados.length
+    ? seleccionados.map((item, i) => `
+      <li class="combo-builder__elegido">
+        <span><strong>${escaparHTML(item.nombre)}</strong><small>${escaparHTML(item.data.plan.tipo)}</small></span>
+        <b>${formatearPrecio(item.data.plan.precio)}</b>
+        <button type="button" data-combo-quitar="${i}" aria-label="Quitar ${escaparHTML(item.nombre)} del combo">✕</button>
+      </li>`).join("")
+    : `<li class="combo-builder__vacio">Tu combo está vacío. Busca un servicio y pulsa «Añadir», o usa el combo sugerido.</li>`;
   actualizarCalculadoraAhorro();
 }
 
@@ -1635,11 +1725,12 @@ function obtenerServicioAhorro(servicio) {
 }
 
 function obtenerServiciosAhorroSeleccionados() {
-  const seleccionados = [...document.querySelectorAll("#ahorro-servicios input:checked")].map((input) => input.value);
-  return SERVICIOS_AHORRO
-    .filter((servicio) => seleccionados.includes(servicio.id))
-    .map((servicio) => ({ ...servicio, data: obtenerServicioAhorro(servicio) }))
-    .filter((servicio) => servicio.data);
+  return comboSeleccion.map((s) => {
+    const data = obtenerServicioAhorro(s);
+    if (!data) return null;
+    const referencia = SERVICIOS_AHORRO.find((r) => r.id === s.id && r.plan === s.plan);
+    return { id: s.id, nombre: data.producto.nombre, precioNormal: referencia ? referencia.precioNormal : Number(data.plan.precio), data };
+  }).filter(Boolean);
 }
 
 function calcularAhorroSeleccionado() {
@@ -3050,21 +3141,40 @@ async function registrarResenaCarrito(evento) {
 function enviarContactoInternacional(evento) {
   evento.preventDefault();
 
-  const nombre = document.getElementById("contacto-nombre")?.value.trim();
-  const pais = document.getElementById("contacto-pais")?.value.trim();
-  const telefono = document.getElementById("contacto-telefono")?.value.trim();
-  const mensajeCliente = document.getElementById("contacto-mensaje")?.value.trim();
+  // Formulario con país, región, prefijo automático y suscripción opcional (clicktv-formulario-contacto.js).
+  const datos = window.ctvFormularioContacto?.leer?.() || {
+    nombre: document.getElementById("contacto-nombre")?.value.trim(),
+    pais: document.getElementById("contacto-pais")?.value.trim(),
+    telefono: document.getElementById("contacto-telefono")?.value.trim(),
+    telefonoValido: true,
+    mensaje: document.getElementById("contacto-mensaje")?.value.trim()
+  };
 
-  if (!nombre || !pais || !telefono || !mensajeCliente) {
+  if (!datos.nombre || !datos.pais || !datos.telefono || !datos.mensaje) {
     mostrarToast("Completa todos los datos de contacto.", "error");
     return;
   }
+  if (!datos.telefonoValido) {
+    mostrarToast("Revisa tu número: escribe solo tu número local, sin el código del país.", "error");
+    return;
+  }
+  if (datos.suscrito && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(datos.email || "")) {
+    mostrarToast("Escribe un correo válido para recibir las promociones, o desmarca la casilla.", "error");
+    return;
+  }
 
-  const mensaje = encodeURIComponent(
-    `👋 Hola Click TV Streaming, deseo información.\n\n👤 Nombre: ${nombre}\n🌎 País: ${pais}\n📞 Teléfono: ${telefono}\n💬 Mensaje: ${mensajeCliente}`
-  );
+  const ubicacion = [datos.canton, datos.region, datos.pais].filter(Boolean).join(", ");
+  const lineas = [
+    "👋 Hola Click TV Streaming, deseo información.",
+    "",
+    `👤 Nombre: ${datos.nombre}`,
+    `🌎 Ubicación: ${ubicacion}`,
+    `📞 Teléfono: ${datos.telefono}`,
+    datos.suscrito ? `📧 Acepto recibir notificaciones y promociones en: ${datos.email}` : "",
+    `💬 Mensaje: ${datos.mensaje}`
+  ].filter((linea, i) => linea || i === 1);
 
-  window.open(`${CONFIG.whatsappLink}?text=${mensaje}`, "_blank", "noopener,noreferrer");
+  window.open(`${CONFIG.whatsappLink}?text=${encodeURIComponent(lineas.join("\n"))}`, "_blank", "noopener,noreferrer");
   mostrarToast("Consulta enviada por WhatsApp.", "exito");
   evento.target.reset();
 }
