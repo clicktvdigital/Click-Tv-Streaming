@@ -195,3 +195,61 @@ body:is(.menu-movil-abierto, .cart-open) .ctv-tv--mini .ctv-tv__marco { visibili
 @media (prefers-reduced-motion: reduce) {
   .ctv-tv__play { transition: none; }
 }
+
+/* 5b. Controles propios de la mini TV: canal, reproducir/pausa, silencio y volumen.
+   En la tarjeta van debajo del video; en la ventana pequeña flotan bajo el video, siempre a mano. */
+.ctv-tv__controles { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+.ctv-tv__controles select {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  border-radius: 10px;
+  border: 1.5px solid #3d7fc0;
+  background: #0b2140;
+  color: #fff;
+  font-size: 16px;
+  padding: 0 8px;
+}
+.ctv-tv__controles button {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(96, 165, 250, .5);
+  border-radius: 10px;
+  background: rgba(29, 95, 191, .25);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.ctv-tv__controles button:active { background: rgba(29, 95, 191, .45); }
+.ctv-tv__controles :is(button, select, input):focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
+.ctv-tv__controles input[type="range"] { flex: 0 1 110px; min-width: 70px; accent-color: #1689ff; height: 44px; }
+.ctv-tv:not(.ctv-tv--activo) :is(#ctv-tv-pausa, #ctv-tv-silencio, #ctv-tv-volumen) { display: none; }
+.ctv-tv--mini .ctv-tv__controles {
+  position: fixed;
+  z-index: 1386;
+  left: max(10px, env(safe-area-inset-left));
+  bottom: calc(var(--ctv-alto-accesos, 92px) + 10px);
+  width: min(48vw, 240px);
+  margin: 0;
+  padding: 4px;
+  gap: 4px;
+  flex-wrap: wrap;
+  border-radius: 0 0 12px 12px;
+  background: rgba(3, 12, 28, .94);
+  border: 1.5px solid #7fd0ff;
+  border-top: 0;
+}
+.ctv-tv--mini .ctv-tv__controles select { flex: 1 1 100%; min-height: 36px; font-size: 14px; }
+.ctv-tv--mini .ctv-tv__controles input[type="range"] { flex: 1; min-width: 0; height: 36px; }
+.ctv-tv--mini .ctv-tv__controles button { width: 36px; height: 36px; }
+/* La ventana sube para dejar los controles debajo del video. */
+.ctv-tv--mini .ctv-tv__marco { bottom: calc(var(--ctv-alto-accesos, 92px) + 92px); border-radius: 12px 12px 0 0; }
+body.ctv-bd-barra-visible .ctv-tv--mini .ctv-tv__marco { bottom: calc(var(--ctv-alto-accesos, 92px) + 158px); }
+body.ctv-bd-barra-visible .ctv-tv--mini .ctv-tv__controles { bottom: calc(var(--ctv-alto-accesos, 92px) + 76px); }
+@media (min-width: 921px) {
+  .ctv-tv--mini .ctv-tv__marco { left: 24px; bottom: 106px; width: 320px; }
+  .ctv-tv--mini .ctv-tv__controles { left: 24px; bottom: 24px; width: 320px; }
+}
+body:is(.menu-movil-abierto, .cart-open) .ctv-tv--mini .ctv-tv__controles { visibility: hidden; }

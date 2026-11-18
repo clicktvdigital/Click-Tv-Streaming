@@ -433,13 +433,28 @@ test('contacto: buscar país, región dinámica, prefijo automático y suscripci
   await pagina.context().close();
 });
 
-test('mini TV: sin red muestra un aviso claro y deja volver a intentar, sin errores', async () => {
+test('mini TV: selector con varios canales; sin red muestra un aviso claro y deja reintentar', async () => {
   const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
+  assert.ok(await pagina.locator('#ctv-tv-canal option').count() >= 2, 'al menos dos canales');
+  const segundo = await pagina.locator('#ctv-tv-canal option').nth(1).getAttribute('value');
+  await pagina.selectOption('#ctv-tv-canal', segundo);
   await pagina.locator('#ctv-tv-play').scrollIntoViewIfNeeded();
   await pagina.click('#ctv-tv-play');
   await pagina.waitForFunction(() => /⚠️/.test(document.getElementById('ctv-tv-estado').textContent), null, { timeout: 8000 });
   assert.equal(await pagina.isVisible('#ctv-tv-play'), true);
   assert.equal(await pagina.isEnabled('#ctv-tv-play'), true);
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
+
+test('portada en celular: estadísticas, atención, preguntas frecuentes y pagos en 2 columnas', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
+  const columnas = await pagina.evaluate(() => Object.fromEntries([
+    ['stats', '#promos .stats-grid'], ['atencion', '#clicktv-atencion .clicktv-journey__grid'],
+    ['faq', '#ayuda .faq-grid'], ['pagos', '#clicktv-pagos-faciles .clicktv-payment-guide__links']
+  ].map(([k, sel]) => [k, getComputedStyle(document.querySelector(sel)).gridTemplateColumns.split(' ').length])));
+  assert.deepEqual(columnas, { stats: 2, atencion: 2, faq: 2, pagos: 2 });
+  assert.equal(await pagina.evaluate(() => document.documentElement.scrollWidth), 390);
   assert.deepEqual(errores, []);
   await pagina.context().close();
 });

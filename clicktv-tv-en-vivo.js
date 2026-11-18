@@ -1,8 +1,9 @@
-/* CLICK TV STREAMING · Mini reproductor de TV en vivo (HLS / .m3u8) · 18/11/2026
-   - No descarga nada hasta que el cliente pulsa «Ver»: hls.js (SRI) y el video se piden en ese momento.
+/* CLICK TV STREAMING · Mini TV multicanal (HLS / .m3u8) · 18/11/2026
+   - Canales en CONFIG.canalesMiniTV: [{ id, nombre, url, respaldo? }]. Solo señales con derechos de emisión.
+   - No descarga nada hasta que el cliente pulsa «Ver»: hls.js (con SRI) y el video se piden en ese momento.
    - Safari / iPhone reproducen HLS de forma nativa; el resto usa hls.js con buffers cortos (equipos de 1 GB).
-   - Al bajar por la tienda, el video sigue en una ventana pequeña; ✕ lo cierra y libera la memoria.
-   - Se pausa con la pestaña oculta para no gastar datos ni batería. */
+   - Al bajar por la tienda sigue sonando en una ventana pequeña con selector de canal, reproducir/pausa,
+     silencio y volumen; ✕ lo cierra y libera la memoria. Se pausa con la pestaña oculta. */
 (() => {
   'use strict';
 
@@ -10,6 +11,19 @@
     src: 'https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.20/hls.min.js',
     integridad: 'sha384-V5ruNBgmYcC3SJRUQeNykAAAgde5gOFq/Hu0CZj7bygDP0yRIhkvX8+w0u/7mRvr'
   };
+
+  // Lista de canales válida: id único, nombre y URL https que termina en .m3u8.
+  function canalesValidos(lista) {
+    const vistos = new Set();
+    return (Array.isArray(lista) ? lista : []).filter((c) => {
+      const ok = c && typeof c.id === 'string' && c.id && !vistos.has(c.id) && typeof c.nombre === 'string'
+        && /^https:\/\/[^\s]+\.m3u8(\?[^\s]*)?$/i.test(String(c.url || ''));
+      if (ok) vistos.add(c.id);
+      return ok;
+    });
+  }
+  window.ctvMiniTV = { canalesValidos };
+  if (typeof document === 'undefined' || !document.addEventListener) return;
 
   let cargaHls = null;
   function cargarHlsJs() {
@@ -32,12 +46,20 @@
     const video = document.getElementById('ctv-tv-video');
     const play = document.getElementById('ctv-tv-play');
     const estado = document.getElementById('ctv-tv-estado');
+    const selector = document.getElementById('ctv-tv-canal');
+    const pausa = document.getElementById('ctv-tv-pausa');
+    const silencio = document.getElementById('ctv-tv-silencio');
+    const volumen = document.getElementById('ctv-tv-volumen');
     if (!tarjeta || !video || !play) return;
-    const canal = (typeof CONFIG !== 'undefined' && CONFIG.tvPrueba) || null;
-    if (!canal?.url) { tarjeta.hidden = true; return; }
+    const canales = canalesValidos(typeof CONFIG !== 'undefined' ? CONFIG.canalesMiniTV : []);
+    if (!canales.length) { tarjeta.hidden = true; return; }
+
+    selector?.replaceChildren(...canales.map((c) => Object.assign(document.createElement('option'), { value: c.id, textContent: c.nombre })));
 
     let hls = null;
     let activo = false;
+    let conectando = false;
+    let canal = canales[0];
     let usandoRespaldo = false;
     const avisar = (texto) => { if (estado) estado.textContent = texto; };
 
@@ -56,50 +78,88 @@
         const Hls = await cargarHlsJs();
         if (!Hls.isSupported()) throw new Error('Este navegador no reproduce TV en vivo');
         hls = new Hls({ maxBufferLength: 12, maxMaxBufferLength: 20, backBufferLength: 10, capLevelToPlayerSize: true });
-        hls.on(Hls.Events.ERROR, (_evento, datos) => {
-          if (!datos?.fatal) return;
-          if (!usandoRespaldo && canal.respaldo) { usandoRespaldo = true; avisar('La señal principal no responde: probando la señal de respaldo…'); sintonizar(canal.respaldo).catch(fallo); }
-          else fallo(new Error('Señal no disponible'));
-        });
+        hls.on(Hls.Events.ERROR, (_evento, datos) => { if (datos?.fatal) probarRespaldo(); });
         hls.loadSource(url);
         hls.attachMedia(video);
       }
-      await video.play().catch(() => { /* el usuario puede pulsar play en los controles */ });
+      await video.play().catch(() => { /* el cliente puede pulsar ▶ en los controles */ });
+    }
+
+    function probarRespaldo() {
+      if (!usandoRespaldo && canal.respaldo) {
+        usandoRespaldo = true;
+        avisar(`La señal de ${canal.nombre} no responde: probando la de respaldo…`);
+        sintonizar(canal.respaldo).catch(fallo);
+      } else {
+        fallo(new Error(`${canal.nombre} no está disponible ahora`));
+      }
+    }
+
+    function reiniciarInterfaz() {
+      tarjeta.classList.remove('ctv-tv--activo', 'ctv-tv--mini');
+      tarjeta.style.minHeight = '';
+      video.controls = true;
+      play.hidden = false;
+      play.disabled = false;
     }
 
     function fallo(error) {
       activo = false;
+      conectando = false;
       liberar();
-      tarjeta.classList.remove('ctv-tv--activo', 'ctv-tv--mini');
-      tarjeta.style.minHeight = '';
-      play.hidden = false;
-      play.disabled = false;
-      avisar(`⚠️ ${error?.message || 'No se pudo conectar'}. Revisa tu conexión e inténtalo de nuevo.`);
+      reiniciarInterfaz();
+      avisar(`⚠️ ${error?.message || 'No se pudo conectar'}. Revisa tu conexión o elige otro canal.`);
     }
 
-    play.addEventListener('click', async () => {
+    async function ver(nuevoCanal = canal) {
+      canal = nuevoCanal;
+      if (selector) selector.value = canal.id;
       play.disabled = true;
-      avisar('⏳ Conectando con el canal de prueba…');
-      document.getElementById('radio-player')?.pause();
+      conectando = true;
       usandoRespaldo = false;
+      avisar(`⏳ Conectando con ${canal.nombre}…`);
+      document.getElementById('radio-player')?.pause();
       try {
         await sintonizar(canal.url);
         activo = true;
         play.hidden = true;
         tarjeta.classList.add('ctv-tv--activo');
-        avisar(`🔴 ${canal.nombre}. Puedes seguir navegando: el video se queda en una ventana pequeña.`);
+        avisar(`🔴 ${canal.nombre}. Puedes seguir navegando: la TV se queda en una ventana pequeña.`);
       } catch (error) {
         fallo(error);
+      } finally {
+        conectando = false;
       }
+    }
+
+    play.addEventListener('click', () => ver());
+    selector?.addEventListener('change', () => {
+      const elegido = canales.find((c) => c.id === selector.value) || canales[0];
+      if (activo || conectando) ver(elegido); else canal = elegido;
     });
+
+    // Con HLS nativo (Safari y algunos Chrome) los fallos de señal llegan como error del <video>.
+    video.addEventListener('error', () => {
+      if (hls || !(activo || conectando) || !video.getAttribute('src')) return;
+      probarRespaldo();
+    });
+
+    // Controles propios: sirven también en la ventana pequeña, donde los nativos no caben.
+    const pintarControles = () => {
+      if (pausa) { pausa.textContent = video.paused ? '▶' : '⏸'; pausa.setAttribute('aria-label', video.paused ? 'Reproducir' : 'Pausar'); }
+      if (silencio) { silencio.textContent = video.muted || video.volume === 0 ? '🔇' : '🔊'; silencio.setAttribute('aria-label', video.muted ? 'Activar sonido' : 'Silenciar'); }
+      if (volumen) volumen.value = String(video.muted ? 0 : video.volume);
+    };
+    pausa?.addEventListener('click', () => { if (video.paused) video.play().catch(() => {}); else video.pause(); });
+    silencio?.addEventListener('click', () => { video.muted = !video.muted; if (!video.muted && video.volume === 0) video.volume = 0.6; });
+    volumen?.addEventListener('input', () => { video.volume = Number(volumen.value); video.muted = video.volume === 0; });
+    ['play', 'pause', 'volumechange'].forEach((tipo) => video.addEventListener(tipo, pintarControles));
+    pintarControles();
 
     function cerrar() {
       activo = false;
       liberar();
-      tarjeta.classList.remove('ctv-tv--activo', 'ctv-tv--mini');
-      tarjeta.style.minHeight = '';
-      play.hidden = false;
-      play.disabled = false;
+      reiniciarInterfaz();
       avisar('Reproductor cerrado. Pulsa «Ver» para volver a sintonizar.');
     }
     document.getElementById('ctv-tv-cerrar')?.addEventListener('click', cerrar);
@@ -107,30 +167,16 @@
       tarjeta.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
     });
 
-    // Ventana pequeña cuando la tarjeta sale de pantalla con el video activo.
+    // Ventana pequeña persistente cuando la tarjeta sale de pantalla con la TV activa.
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(([entrada]) => {
         const mini = activo && !entrada.isIntersecting;
         if (mini && !tarjeta.classList.contains('ctv-tv--mini')) tarjeta.style.minHeight = `${tarjeta.offsetHeight}px`;
         tarjeta.classList.toggle('ctv-tv--mini', mini);
+        video.controls = !mini;
         if (!mini) tarjeta.style.minHeight = '';
       }, { threshold: 0 }).observe(tarjeta);
     }
-
-    // Con HLS nativo (Safari y algunos Chrome) los fallos de señal llegan como error del <video>.
-    let conectando = false;
-    video.addEventListener('error', () => {
-      if (hls || !(activo || conectando) || !video.getAttribute('src')) return;
-      if (!usandoRespaldo && canal.respaldo) {
-        usandoRespaldo = true;
-        avisar('La señal principal no responde: probando la señal de respaldo…');
-        video.src = canal.respaldo;
-        video.play().catch(() => {});
-      } else {
-        fallo(new Error('Señal no disponible'));
-      }
-    });
-    play.addEventListener('click', () => { conectando = true; setTimeout(() => { conectando = false; }, 15000); }, { capture: true });
 
     document.addEventListener('visibilitychange', () => { if (document.hidden && activo) video.pause(); });
   }

@@ -60,11 +60,18 @@ test('IPTV con promo: precios normales plegados y la promo reemplaza el plan nor
   assert.match(leer('script.js'), /Se reemplazó el plan normal por la promo Black Days/);
 });
 
-test('mini TV: URL .m3u8 configurable y hls.js fijado con integridad (SRI)', () => {
+test('mini TV: canales configurables, válidos y sin credenciales; hls.js fijado con SRI', () => {
   const datos = createContext({ console }); datos.window = datos;
   runInContext(leer('data.js'), datos);
-  const tv = runInContext('CONFIG.tvPrueba', datos);
-  assert.match(tv.url, /^https:\/\/.+\.m3u8$/);
+  runInContext(leer('clicktv-tv-en-vivo.js'), datos);
+  const canales = runInContext('CONFIG.canalesMiniTV', datos);
+  assert.ok(canales.length >= 2, 'al menos dos canales para alternar');
+  assert.equal(datos.ctvMiniTV.canalesValidos(canales).length, canales.length, 'todos los canales son válidos');
+  for (const c of canales) {
+    assert.match(c.url, /^https:\/\/.+\.m3u8$/, c.id);
+    assert.doesNotMatch(c.url, /username=|password=|get\.php/i, `${c.id}: sin credenciales ni paneles IPTV en un archivo público`);
+  }
+  assert.equal(datos.ctvMiniTV.canalesValidos([{ id: 'x', nombre: 'X', url: 'http://inseguro.example/a.m3u8' }, { id: 'y', nombre: 'Y', url: 'https://ok.example/b.m3u8' }, { id: 'y', nombre: 'Repetido', url: 'https://ok.example/c.m3u8' }]).length, 1);
   const js = leer('clicktv-tv-en-vivo.js');
   assert.match(js, /hls\.js\/\d+\.\d+\.\d+\/hls\.min\.js/);
   assert.match(js, /integridad: 'sha384-[A-Za-z0-9+/=]{64}'/);
