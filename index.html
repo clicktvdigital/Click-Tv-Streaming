@@ -45,7 +45,7 @@
   <link rel="dns-prefetch" href="//streamingecuador.net">
   <link rel="preconnect" href="https://streamingecuador.net">
   <link rel="preload" href="click-tv-logo-horizontal-2026.jpg" as="image" type="image/jpeg">
-  <link rel="stylesheet" href="style.css?v=20261117-2">
+  <link rel="stylesheet" href="style.css?v=20261118-1">
   <link rel="stylesheet" href="responsive.css">
 
   <script type="application/ld+json">
@@ -64,21 +64,22 @@
   <link rel="stylesheet" href="clicktv-accesible-azul.css?v=20261015-4">
   <link rel="stylesheet" href="clicktv-atencion-pagos.css?v=20261015-2">
   <link rel="stylesheet" href="clicktv-pago-producto.css?v=20261015-1">
-  <link rel="stylesheet" href="clicktv-final-visual.css?v=20261015-3">
+  <link rel="stylesheet" href="clicktv-final-visual.css?v=20261118-1">
   <link rel="preload" href="clicktv-foto-cine.webp" as="image" type="image/webp">
-  <link rel="stylesheet" href="clicktv-cinematico.css?v=20261015-4">
+  <link rel="stylesheet" href="clicktv-cinematico.css?v=20261118-1">
   <!-- CLICKTV_PULIDO_AZUL_2026 -->
   <link rel="stylesheet" href="clicktv-pulido-azul.css?v=20261111-8">
   <!-- CLICKTV_CARRITO_TOAST_AZUL_2026 -->
   <link rel="stylesheet" href="clicktv-carrito-toast-azul.css?v=20261117-2">
   <!-- CLICKTV_CONTACTOS_RADIO_PREMIUM_2026 -->
-  <link rel="stylesheet" href="clicktv-contactos-radio-premium.css?v=20261015-8">
+  <link rel="stylesheet" href="clicktv-contactos-radio-premium.css?v=20261118-1">
   <link rel="stylesheet" href="clicktv-movil-2026.css?v=20261111-12">
   <link rel="stylesheet" href="clicktv-navidad-2026.css?v=20261111-4">
   <link rel="stylesheet" href="clicktv-asistente-2026.css?v=20261111-5">
   <link rel="stylesheet" href="clicktv-accesibilidad-tactil.css?v=20261113-1">
   <link rel="stylesheet" href="clicktv-movil-mejoras-2026.css?v=20261113-2">
   <link rel="stylesheet" href="clicktv-promo-black-days.css?v=20261117-1">
+  <link rel="stylesheet" href="clicktv-movil-2col.css?v=20261118-1">
 </head>
 <body>
 <div id="top" tabindex="-1"></div>
@@ -198,11 +199,19 @@
           <span class="nav-menu__titulo">Menú</span>
           <button id="btn-cerrar-menu" class="nav-menu__close" type="button" aria-label="Cerrar menú">✕</button>
         </div>
+        <div class="nav-busqueda" role="search">
+          <label class="sr-only" for="nav-busqueda-input">Buscar en toda la tienda</label>
+          <span class="nav-busqueda__lupa" aria-hidden="true">🔎</span>
+          <input id="nav-busqueda-input" class="nav-busqueda__input" type="search" placeholder="Buscar Netflix, IPTV, pagos..." autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" aria-controls="nav-busqueda-resultados" aria-describedby="nav-busqueda-estado">
+          <button id="nav-busqueda-limpiar" class="nav-busqueda__limpiar" type="button" aria-label="Limpiar búsqueda" hidden>✕</button>
+          <p id="nav-busqueda-estado" class="sr-only" role="status" aria-live="polite"></p>
+          <ul id="nav-busqueda-resultados" class="nav-busqueda__resultados" aria-label="Resultados de búsqueda" hidden></ul>
+        </div>
         <a class="nav-link" href="#inicio">🏠 Inicio</a>
-        <a class="nav-link" href="#streaming">🎬 Streaming</a>
-        <a class="nav-link" href="#iptv">📺 IPTV</a>
-        <a class="nav-link" href="#musica">🎵 Música</a>
-        <a class="nav-link" href="#apps">🎓 Premium Apps</a>
+        <a class="nav-link" href="#streaming" data-ir-categoria="streaming">🎬 Streaming</a>
+        <a class="nav-link" href="#streaming" data-ir-categoria="iptv">📺 IPTV</a>
+        <a class="nav-link" href="#streaming" data-ir-categoria="musica">🎵 Música</a>
+        <a class="nav-link" href="#streaming" data-ir-categoria="apps">🎓 Premium Apps</a>
         <a class="nav-link" href="#streaming" data-ir-categoria="proneet">🚀 PRONEET VPN</a>
         <a class="nav-link" href="#streaming" data-ir-categoria="recargas">📲 Recargas</a>
         <a class="nav-link" href="#mundial">⚽ Partidos</a>
@@ -239,7 +248,7 @@
             <button id="btn-buscar-maestro" class="btn btn--primary" type="button">Buscar</button>
           </div>
           <div class="hero__actions">
-            <a class="btn btn--primary" href="#iptv">Comprar o ver TV</a>
+            <a class="btn btn--primary" href="#streaming" data-ir-categoria="iptv">Comprar o ver TV</a>
             <a class="btn btn--outline" href="#streaming">Ver catálogo</a>
             <a class="btn btn--outline" href="#calculadora-ahorro">🧩 Armar combo</a>
             <a class="btn btn--outline" href="#radio-app">Escuchar la radio</a>
@@ -1046,11 +1055,12 @@
   <script src="catalogo.js?v=20261117-1" defer></script>
   <script src="clicktv-enlaces-2026.js?v=20261117-2" defer></script>
   <script src="clicktv-asistente-2026.js?v=20261111-4" defer></script>
-  <script src="script.js?v=20261117-2" defer></script>
+  <script src="script.js?v=20261118-1" defer></script>
+  <script src="clicktv-navegacion-movil.js?v=20261118-1" defer></script>
   <script src="clicktv-accesible.js?v=20261015-4" defer></script>
   <script src="clicktv-atencion-pagos.js?v=20261015-2" defer></script>
   <script src="clicktv-pago-producto.js?v=20261117-1" defer></script>
-  <script src="clicktv-final-visual.js?v=20261015-3" defer></script>
+  <script src="clicktv-final-visual.js?v=20261118-1" defer></script>
   <script src="clicktv-logos-catalogo.js?v=20261117-2" defer></script>
   <script src="clicktv-app-2026.js?v=20261111-4" defer></script>
 </body>

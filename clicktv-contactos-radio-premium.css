@@ -85,7 +85,9 @@ body .ctvc-utilities .quick-links :is(a,button):is(:hover,:focus-visible) {
   border-color:#98dbff !important;
   background:linear-gradient(135deg,#1a426f,#0d2c54) !important;
   box-shadow:0 8px 23px rgba(0,37,91,.3) !important;
-  transform:translateY(-2px);
+}
+@media (hover: hover) and (pointer: fine) {
+  body .ctvc-utilities .quick-links :is(a,button):hover { transform:translateY(-2px); }
 }
 /* Reproductor: verde antiguo del parlante, volumen, ecualizador y estados. */
 body .ctvc-utilities #radio-app {
