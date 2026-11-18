@@ -1,6 +1,7 @@
 /* CLICK TV STREAMING · Mini TV orientada a ventas · 18/11/2026
    Pestañas:
-   - «Click TV Streaming»: video promocional propio (CONFIG.videoPromo), en silencio, en bucle y con controles.
+   - «Click TV Streaming»: video promocional propio (CONFIG.videoPromo), en bucle; arranca en silencio y un toque
+     en el video, en ▶ o en «Toca para escuchar» activa el sonido al instante (como YouTube).
    - «Estrenos de Cine»: tráilers oficiales doblados de YouTube (CONFIG.trailersYouTube), vía youtube-nocookie.
    Sobre el video, un CTA lleva a los planes de IPTV Premium (con Black Days mientras esté vigente).
    Nada se descarga hasta llegar a la sección; al bajar por la tienda sigue en una ventana pequeña; ✕ la cierra
@@ -163,8 +164,10 @@
         liberarCine();
         if (play) play.hidden = true;
         prepararPromo();
+        // Volver a la pestaña con un clic es un gesto del cliente: el video sigue con sonido, como el tráiler.
+        if (porCliente && quiereSonido && !silenciadoPorCliente) fijarVolumen(nivel);
         if (video.getAttribute('src') && !cerradoPorCliente) video.play().catch(() => {});
-        avisar('📺 Video oficial de Click TV Streaming. Toca 🔈 para activar el sonido.');
+        avisar(video.muted ? '📺 Video oficial de Click TV Streaming. Toca el video o 🔈 para escucharlo.' : '📺 Video oficial de Click TV Streaming con sonido.');
       } else {
         video.pause();
         if (porCliente && !sinAutoplay()) cargarCine(true);
@@ -195,6 +198,8 @@
     const btnPausa = document.getElementById('ctv-tv-pausa');
     const btnSonido = document.getElementById('ctv-tv-sonido');
     const volumen = document.getElementById('ctv-tv-volumen');
+    const escuchar = document.getElementById('ctv-tv-escuchar');
+    let silenciadoPorCliente = false; // el cliente quitó el sonido a propósito: no se le vuelve a activar solo
     const CLAVE_VOLUMEN = 'clicktv_minitv_volumen';
     const leerVolumen = () => {
       try { const v = Number(localStorage.getItem(CLAVE_VOLUMEN)); return v > 0 && v <= 1 ? v : 0.7; } catch { return 0.7; }
@@ -213,6 +218,7 @@
       btnPausa?.setAttribute('aria-label', reproduciendo ? 'Pausar video' : 'Reproducir video');
       btnSonido?.setAttribute('aria-pressed', String(!mudo));
       btnSonido?.setAttribute('aria-label', mudo ? 'Activar sonido' : 'Silenciar');
+      if (escuchar) escuchar.hidden = !(reproduciendo && mudo && !silenciadoPorCliente) || pestana !== 'oficial';
       if (volumen) {
         volumen.value = String(actual);
         volumen.setAttribute('aria-valuetext', mudo ? 'Sin sonido' : `Volumen ${Math.round(actual * 100)} %`);
@@ -225,14 +231,40 @@
       video.muted = valor === 0;
       pintarControles();
     }
-    btnPausa?.addEventListener('click', () => {
+    const enSilencio = () => video.muted || video.volume === 0;
+    function reproducir() {
       if (!video.getAttribute('src')) prepararPromo();
-      if (video.paused) { cerradoPorCliente = false; video.play().catch(() => {}); } else video.pause();
+      cerradoPorCliente = false;
+      return video.play().catch(() => {});
+    }
+    // Paridad con YouTube: el gesto del cliente habilita el audio en el mismo instante (dentro del clic,
+    // que es lo que exigen Chrome/Android y Safari) y, si el video estaba detenido, lo reproduce.
+    function activarSonido() {
+      silenciadoPorCliente = false;
+      quiereSonido = true;
+      fijarVolumen(nivel);
+      if (video.paused) reproducir();
+    }
+    btnPausa?.addEventListener('click', () => {
+      if (!video.paused) { video.pause(); return; }
+      if (enSilencio() && !silenciadoPorCliente) activarSonido(); else reproducir();
     });
     // Activar sonido vuelve al último volumen elegido (no salta al máximo).
-    btnSonido?.addEventListener('click', () => fijarVolumen(video.muted || video.volume === 0 ? nivel : 0));
-    volumen?.addEventListener('input', () => fijarVolumen(volumen.value));
-    video.addEventListener('click', () => btnPausa?.click());
+    btnSonido?.addEventListener('click', () => {
+      if (enSilencio()) activarSonido();
+      else { silenciadoPorCliente = true; fijarVolumen(0); }
+    });
+    escuchar?.addEventListener('click', activarSonido);
+    volumen?.addEventListener('input', () => {
+      silenciadoPorCliente = Number(volumen.value) === 0;
+      fijarVolumen(volumen.value);
+      if (!silenciadoPorCliente && video.paused) reproducir();
+    });
+    // Tocar el video: si está en silencio, primero da sonido (como YouTube); si ya suena, pausa o reanuda.
+    video.addEventListener('click', () => {
+      if (!video.paused && enSilencio() && !silenciadoPorCliente) activarSonido();
+      else btnPausa?.click();
+    });
     ['play', 'pause', 'volumechange', 'emptied'].forEach((tipo) => video.addEventListener(tipo, pintarControles));
     pintarControles();
 

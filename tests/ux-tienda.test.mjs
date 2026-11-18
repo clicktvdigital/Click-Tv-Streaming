@@ -121,8 +121,14 @@ test('mini TV: pestaña «Click TV Oficial» con el video propio optimizado y CT
   // El volumen se recuerda, al activar sonido vuelve al último nivel, y en iOS se oculta el deslizador.
   const js = leer('clicktv-mini-tv.js');
   assert.match(js, /const CLAVE_VOLUMEN = 'clicktv_minitv_volumen';/);
-  assert.match(js, /fijarVolumen\(video\.muted \|\| video\.volume === 0 \? nivel : 0\)/);
+  assert.match(js, /btnSonido\?\.addEventListener\('click', \(\) => \{\s*if \(enSilencio\(\)\) activarSonido\(\);\s*else \{ silenciadoPorCliente = true; fijarVolumen\(0\); \}/);
   assert.match(js, /if \(volumen && video\.volume !== nivel\) volumen\.hidden = true;/);
+  // Paridad con YouTube: tocar el video o ▶ habilita el audio dentro del mismo gesto, y si estaba detenido, reproduce.
+  assert.match(js, /function activarSonido\(\) \{\s*silenciadoPorCliente = false;\s*quiereSonido = true;\s*fijarVolumen\(nivel\);\s*if \(video\.paused\) reproducir\(\);/);
+  assert.match(js, /video\.addEventListener\('click', \(\) => \{\s*if \(!video\.paused && enSilencio\(\) && !silenciadoPorCliente\) activarSonido\(\);/);
+  assert.match(js, /if \(enSilencio\(\) && !silenciadoPorCliente\) activarSonido\(\); else reproducir\(\);/);
+  assert.match(js, /escuchar\?\.addEventListener\('click', activarSonido\);/);
+  assert.match(html, /<button id="ctv-tv-escuchar" class="ctv-tv__escuchar" type="button" hidden>/);
   // Las reglas globales dan min-height 48px a button e input: los controles compactos la anulan.
   assert.match(css, /\.ctv-tv__audio-btn \{[^}]*min-height: 0;/, 'botón sin alto mínimo global');
   assert.match(css, /\.ctv-tv__volumen \{[^}]*min-height: 0;/, 'volumen sin alto mínimo global');

@@ -138,7 +138,7 @@
   <link rel="stylesheet" href="clicktv-promo-black-days.css?v=20261118-3">
   <link rel="stylesheet" href="clicktv-movil-2col.css?v=20261118-9">
   <link rel="stylesheet" href="clicktv-ux-tienda.css?v=20261118-6">
-  <link rel="stylesheet" href="clicktv-ajustes-finales-2026.css?v=20261118-4">
+  <link rel="stylesheet" href="clicktv-ajustes-finales-2026.css?v=20261118-5">
 </head>
 <body>
 <div id="top" tabindex="-1"></div>
@@ -495,6 +495,11 @@
                   </button>
                   <input id="ctv-tv-volumen" class="ctv-tv__volumen" type="range" min="0" max="1" step="0.05" value="0.7" aria-label="Volumen del video">
                 </div>
+                <!-- Como en YouTube: mientras el video corre en silencio, un toque activa el sonido. -->
+                <button id="ctv-tv-escuchar" class="ctv-tv__escuchar" type="button" hidden>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12.6 3 2.7-2.7-1.1-1.1-2.7 2.7-2.7-2.7-1.1 1.1 2.7 2.7-2.7 2.7 1.1 1.1 2.7-2.7 2.7 2.7 1.1-1.1-2.7-2.7Z"/></svg>
+                  Toca para escuchar
+                </button>
                 <div id="ctv-tv-reproductor" class="ctv-tv__reproductor" hidden></div>
                 <button id="ctv-tv-play" class="ctv-tv__play" type="button" hidden>▶ Ver tráiler</button>
               </div>
@@ -1203,10 +1208,10 @@
   <script src="catalogo.js?v=20261118-1" defer></script>
   <script src="clicktv-enlaces-2026.js?v=20261118-1" defer></script>
   <script src="clicktv-asistente-2026.js?v=20261118-1" defer></script>
-  <script src="script.js?v=20261118-6" defer></script>
+  <script src="script.js?v=20261118-7" defer></script>
   <script src="clicktv-navegacion-movil.js?v=20261118-5" defer></script>
   <script src="clicktv-formulario-contacto.js?v=20261118-1" defer></script>
-  <script src="clicktv-mini-tv.js?v=20261118-6" defer></script>
+  <script src="clicktv-mini-tv.js?v=20261118-7" defer></script>
   <script src="clicktv-acordeones.js?v=20261118-2" defer></script>
   <script src="clicktv-accesible.js?v=20261015-4" defer></script>
   <script src="clicktv-atencion-pagos.js?v=20261118-1" defer></script>

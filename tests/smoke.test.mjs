@@ -458,11 +458,17 @@ test('mini TV: video oficial y tráilers en pestañas, CTA y ✕ fuera del video
   assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').controls), false);
   const pildora = await pagina.evaluate(() => document.getElementById('ctv-tv-audio').getBoundingClientRect().height);
   assert.ok(pildora <= 40, `controles compactos (${pildora}px)`);
-  await pagina.click('#ctv-tv-sonido');
-  assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').muted), false);
+  // Como en YouTube: con el video en silencio aparece «Toca para escuchar» y un toque da sonido sin pausar.
+  assert.equal(await pagina.isVisible('#ctv-tv-escuchar'), true);
+  await pagina.click('#ctv-tv-escuchar');
+  assert.deepEqual(await pagina.evaluate(() => { const v = document.getElementById('ctv-tv-promo'); return [v.muted, v.paused]; }), [false, false]);
+  assert.equal(await pagina.isVisible('#ctv-tv-escuchar'), false);
   assert.equal(await pagina.getAttribute('#ctv-tv-sonido', 'aria-pressed'), 'true');
   await pagina.click('#ctv-tv-sonido');
   assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').muted), true);
+  assert.equal(await pagina.isVisible('#ctv-tv-escuchar'), false, 'si el cliente silencia, no se le insiste');
+  await pagina.click('#ctv-tv-sonido');
+  assert.equal(await pagina.evaluate(() => document.getElementById('ctv-tv-promo').muted), false);
   // Al salir de la sección: ventana fija y flotante, sin solapes y dentro de la pantalla.
   await pagina.evaluate(() => window.scrollTo(0, 0));
   await pagina.waitForFunction(() => document.getElementById('ctv-tv-prueba').classList.contains('ctv-tv--mini'));
@@ -532,8 +538,8 @@ test('precios en acordeón: Claro Paquetes Megas muestra 4 planes y despliega el
   await pagina.context().close();
 });
 
-test('partidos en celular: 4 por bloque en formato horizontal, el resto plegado y lo abierto se conserva', async () => {
-  const { pagina, errores } = await abrirPagina({ width: 390, height: 844 });
+test('partidos en Android de 360 px: 4 por bloque en formato horizontal, el resto plegado y lo abierto se conserva', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 360, height: 780 });
   const pintar = () => pagina.evaluate(() => {
     const base = normalizarPartidosLocales(MUNDIAL_2026)[0];
     const partidos = Array.from({ length: 7 }, (_, i) => ({ ...base, fechaUTC: new Date(Date.parse(base.fechaUTC) + i * 86400000).toISOString() }));
@@ -551,18 +557,22 @@ test('partidos en celular: 4 por bloque en formato horizontal, el resto plegado 
       columnas: getComputedStyle(grid).gridTemplateColumns.split(' ').length,
       ultimaAncha: Math.abs(ultima.offsetWidth - grid.clientWidth) < 2,
       horizontales: cards.every((c) => c.offsetWidth > c.offsetHeight),
-      duelosEnFila: cards.every((c) => {
-        const [local, , visitante] = c.querySelector('.mundial-duelo').children;
+      // Cada equipo en una fila: bandera y nombre a la misma altura, nombre en una sola línea y nada se sale.
+      duelosEnFila: cards.every((c) => [...c.querySelectorAll('.mundial-team')].every((t) => {
+        const [emblema, nombre] = t.children;
         const centro = (el) => { const r = el.getBoundingClientRect(); return r.top + r.height / 2; };
-        return Math.abs(centro(local) - centro(visitante)) < 4;
-      })
+        const linea = parseFloat(getComputedStyle(nombre).lineHeight) || 24;
+        return Math.abs(centro(emblema) - centro(nombre)) < 4 && nombre.getBoundingClientRect().height <= linea + 2;
+      })),
+      sinDesborde: cards.every((c) => c.scrollWidth <= c.clientWidth + 1)
     };
   }));
   for (const g of huecos) {
     assert.equal(g.columnas, 1, 'en celular, una tarjeta apaisada por fila');
     assert.equal(g.ultimaAncha, true);
     assert.equal(g.horizontales, true, 'cada tarjeta es más ancha que alta');
-    assert.equal(g.duelosEnFila, true, 'local y visitante en la misma fila');
+    assert.equal(g.duelosEnFila, true, 'bandera y nombre en la misma fila, en una sola línea');
+    assert.equal(g.sinDesborde, true, 'nada se sale de la tarjeta');
   }
   await pintar();
   assert.equal(await pagina.evaluate(() => document.querySelector('#mundial-grid details.mundial-mas').open), true, 'sigue abierto tras refrescar');

@@ -128,6 +128,37 @@
 }
 .ctv-tv__volumen:active::-webkit-slider-thumb { transform: scale(1.2); }
 .ctv-tv :is(.ctv-tv__audio-btn, .ctv-tv__volumen):focus-visible { outline: 2px solid #ffe38b; outline-offset: 2px; }
+/* Aviso «Toca para escuchar» (como el «Activar sonido» de YouTube en celular): arriba a la izquierda. */
+.ctv-tv__escuchar {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  min-height: 0;
+  padding: 0 12px 0 9px;
+  border: 1px solid #65c0ff;
+  border-radius: 999px;
+  background: rgba(4, 18, 40, .82);
+  color: #fff;
+  font: 700 .8rem/1 inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .35);
+  animation: ctv-escuchar-entra .2s ease-out both;
+}
+.ctv-tv__escuchar[hidden] { display: none; }
+.ctv-tv__escuchar svg { width: 16px; height: 16px; fill: currentColor; }
+.ctv-tv__escuchar:active { transform: scale(.96); }
+.ctv-tv__escuchar:focus-visible { outline: 2px solid #ffe38b; outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) { .ctv-tv__escuchar:hover { background: #0b3a74; } }
+@keyframes ctv-escuchar-entra { from { opacity: 0; transform: translateY(-4px); } }
+.ctv-tv--mini .ctv-tv__escuchar { top: 6px; left: 6px; height: 30px; font-size: .72rem; }
+@media (prefers-reduced-motion: reduce) { .ctv-tv__escuchar { animation: none; } }
 /* En la ventana pequeña solo queda el botón de sonido. */
 .ctv-tv--mini .ctv-tv__volumen,
 .ctv-tv--mini #ctv-tv-pausa { display: none; }
@@ -156,48 +187,83 @@
 #mundial .match-card > .mundial-live-status { justify-self: start; }
 #mundial .match-card > .match-group { justify-self: end; text-align: right; }
 #mundial .match-card > :is(.mundial-duelo, .match-datos) { grid-column: 1 / -1; }
-#mundial .match-group { font-size: .78rem; overflow-wrap: anywhere; }
+#mundial .match-group { min-width: 0; max-width: 100%; font-size: .78rem; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 
+/* Marcador deportivo en filas: cada equipo ocupa una fila completa [bandera  Nombre] y el marcador queda a la
+   derecha abarcando ambas filas. Los nombres tienen todo el ancho, en una línea y sin cortes a media palabra;
+   proporciones idénticas en 320-1440 px y sin desbordes en Android. */
 #mundial .mundial-duelo {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "local marcador" "visitante marcador";
   align-items: center;
-  gap: clamp(8px, 2vw, 16px);
+  column-gap: clamp(10px, 3vw, 18px);
+  row-gap: 8px;
   width: 100%;
-  max-width: 640px;
-  margin: 0 auto;
+  min-width: 0;
+  margin: 0;
 }
+#mundial .mundial-team--local { grid-area: local; }
+#mundial .mundial-team--visitante { grid-area: visitante; }
+#mundial .mundial-marcador { grid-area: marcador; }
 #mundial .mundial-team {
   display: flex;
+  flex-direction: row !important;
   align-items: center;
   gap: 10px;
   min-width: 0;
-  text-align: left;
+  height: 44px;
+  text-align: left !important;
 }
-/* Visitante en espejo: nombre y luego bandera, pegado a la derecha. */
-#mundial .mundial-duelo > .mundial-team:last-child { flex-direction: row-reverse; text-align: right; }
-#mundial .mundial-team strong { min-width: 0; font-size: clamp(.92rem, 2.4vw, 1.08rem); line-height: 1.2; overflow-wrap: anywhere; }
-#mundial .mundial-marcador { display: grid; justify-items: center; gap: 2px; min-width: 64px; text-align: center; }
-#mundial .mundial-marcador strong { font-size: clamp(1.25rem, 4vw, 1.6rem); line-height: 1.1; }
-#mundial .mundial-marcador span { font-size: .74rem; color: #b9d8ff; }
+#mundial .mundial-team strong {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-wrap: normal;
+  font-size: clamp(.95rem, 3.6vw, 1.08rem) !important;
+  line-height: 1.25;
+  color: #fff;
+}
+#mundial .mundial-marcador {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 4px;
+  min-width: 76px;
+  max-width: 34vw;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, .28);
+  border: 1px solid rgba(18, 137, 255, .28);
+  text-align: center;
+}
+#mundial .mundial-marcador strong { font-size: clamp(1.3rem, 5vw, 1.6rem) !important; line-height: 1.05; font-variant-numeric: tabular-nums; white-space: nowrap; }
+#mundial .mundial-marcador--texto strong { font-size: .95rem !important; white-space: normal; }
+#mundial .mundial-marcador span { font-size: .7rem !important; line-height: 1.2; color: #b9d8ff; font-variant-numeric: tabular-nums; }
 
+/* Banderas y escudos en una caja fija de 44×32 (los escudos 36×36): todos alineados al mismo eje. */
 #mundial .team-flag--grande {
   flex: none;
-  width: 56px;
-  height: 42px;
+  width: 44px;
+  height: 32px;
   min-width: 0;
   display: grid;
   place-items: center;
-  font-size: 2.6rem;
+  font-size: 2rem;
   line-height: 1;
-  overflow: visible;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .35));
+  overflow: hidden;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .35));
 }
 #mundial .team-flag--iniciales {
-  width: 46px;
-  height: 46px;
+  width: 36px;
+  height: 36px;
+  margin-inline: 4px;
   border-radius: 50%;
-  font-size: .95rem;
+  font-size: .8rem;
   font-weight: 900;
   color: #fff;
   background: #0b3a74;
@@ -206,11 +272,12 @@
 }
 #mundial .mundial-escudo {
   flex: none;
-  width: 52px !important;
-  height: 52px !important;
-  margin: 0;
+  width: 36px !important;
+  height: 36px !important;
+  margin: 0 4px;
   object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .35));
+  transform: none !important;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .35));
 }
 
 /* Datos del encuentro: una sola fila horizontal, 2 o 3 celdas iguales. */
@@ -229,7 +296,7 @@
   border: 1px solid rgba(127, 208, 255, .18);
 }
 #mundial .match-dato dt { font-size: .66rem; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: #9cc8f2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#mundial .match-dato dd { margin: 2px 0 0; font-size: .86rem; font-weight: 800; color: #fff; overflow-wrap: anywhere; text-transform: capitalize; }
+#mundial .match-dato dd { margin: 2px 0 0; font-size: .86rem; font-weight: 800; color: #fff; overflow-wrap: break-word; hyphens: auto; text-transform: capitalize; }
 
 /* Estados vacío y de carga: también en franja horizontal, a todo el ancho. */
 #mundial .mundial-grid > :is(.loading-card, .empty-state) {
@@ -243,12 +310,6 @@
 #mundial .mundial-empty :is(h3, p) { margin: 0; }
 
 @media (max-width: 420px) {
-  #mundial .mundial-team { gap: 6px; }
-  #mundial .team-flag--grande { width: 40px; height: 30px; font-size: 1.85rem; }
-  #mundial .team-flag--iniciales { width: 36px; height: 36px; font-size: .8rem; }
-  #mundial .mundial-escudo { width: 38px !important; height: 38px !important; }
-  #mundial .mundial-team strong { font-size: .84rem; }
-  #mundial .mundial-marcador { min-width: 52px; }
   #mundial .match-dato { padding: 6px 7px; }
   #mundial .match-dato dt { font-size: .6rem; }
   #mundial .match-dato dd { font-size: .78rem; }

@@ -60,11 +60,18 @@ test('partidos: sin mapa ni enlace de indicaciones, banderas grandes y datos en 
   const card = extraer('crearCardPartido');
   assert.doesNotMatch(card, /crearNombreEquipoConBandera/);
   const css = leer('clicktv-ajustes-finales-2026.css');
-  assert.match(css, /#mundial \.team-flag--grande \{[^}]*width: 56px;[^}]*font-size: 2\.6rem;/);
+  assert.match(css, /#mundial \.team-flag--grande \{[^}]*width: 44px;[^}]*height: 32px;[^}]*font-size: 2rem;/, 'bandera en caja fija');
   // Formato horizontal: equipos en fila (visitante en espejo) y datos en una sola fila de 2 o 3 celdas.
-  assert.match(css, /#mundial \.mundial-duelo \{[^}]*grid-template-columns: minmax\(0, 1fr\) auto minmax\(0, 1fr\);/);
-  assert.match(css, /#mundial \.mundial-team \{[^}]*display: flex;/);
-  assert.match(css, /#mundial \.mundial-duelo > \.mundial-team:last-child \{ flex-direction: row-reverse;/);
+  // Marcador deportivo en filas: [bandera Nombre] por equipo y el marcador a la derecha de ambas filas.
+  assert.match(css, /#mundial \.mundial-duelo \{[^}]*grid-template-columns: minmax\(0, 1fr\) auto;[^}]*grid-template-areas: "local marcador" "visitante marcador";/);
+  assert.match(css, /#mundial \.mundial-team \{[^}]*display: flex;[^}]*flex-direction: row !important;/);
+  assert.match(css, /#mundial \.mundial-team strong \{[^}]*min-width: 0;[^}]*white-space: nowrap;[^}]*text-overflow: ellipsis;/, 'nombre en una línea, sin desbordar');
+  assert.doesNotMatch(css, /row-reverse/, 'sin variantes en espejo');
+  assert.doesNotMatch(css, /overflow-wrap: anywhere/, 'sin cortes a media palabra');
+  // La tarjeta: clases por lado, nombres escapados con título y el contador solo antes del inicio.
+  assert.match(card, /mundial-team mundial-team--\$\{lado\}/);
+  assert.match(card, /<strong title="\$\{escaparHTML\(nombre\)\}">\$\{escaparHTML\(nombre\)\}<\/strong>/);
+  assert.match(card, /const porEmpezar = fecha\.getTime\(\) > Date\.now\(\);/);
   assert.match(css, /#mundial \.match-datos--3 \{ grid-template-columns: repeat\(3, minmax\(0, 1fr\)\); \}/);
   assert.doesNotMatch(css, /match-dato:last-child \{ grid-column/, 'sin celdas estiradas en vertical');
   const movil = leer('clicktv-movil-2col.css');

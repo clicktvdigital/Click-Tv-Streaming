@@ -2595,29 +2595,30 @@ function crearCardPartido(p) {
   const estadoTiempo = obtenerTextoTiempoPartido(p);
   const scoreTexto = obtenerScoreTexto(p, estadoTiempo);
   const sede = normalizarSedePartido(p.sede);
+  // Antes del inicio, el contador regresivo; después, el estado (en curso / terminado), nunca ambos.
+  const porEmpezar = fecha.getTime() > Date.now();
+  const estadoMarcador = porEmpezar
+    ? `<span class="mundial-cronometro" data-fecha="${escaparHTML(p.fechaUTC)}">⏱</span>`
+    : `<span>${escaparHTML(estadoTiempo.detalle)}</span>`;
+  const equipo = (lado, nombre, codigo, escudo) => `
+        <div class="mundial-team mundial-team--${lado}">
+          ${crearEmblemaEquipo(nombre, codigo, escudo)}
+          <strong title="${escaparHTML(nombre)}">${escaparHTML(nombre)}</strong>
+        </div>`;
   return `
     <article class="match-card mundial-pantalla-gigante ${estadoTiempo.estado.includes("EN VIVO") ? "mundial-live" : ""}">
       <div class="mundial-live-status">${estadoTiempo.estado}</div>
-      <p class="match-group">${p.grupo}</p>
-      <div class="mundial-duelo">
-        <div class="mundial-team">
-          ${crearEmblemaEquipo(p.local, p.codigoLocal, p.escudoLocal)}
-          <strong>${p.local}</strong>
-        </div>
-        <div class="mundial-marcador">
-          <strong>${scoreTexto}</strong>
-          <span>${estadoTiempo.detalle}</span>
-          <div class="mundial-cronometro" data-fecha="${p.fechaUTC}">⏱</div>
-        </div>
-        <div class="mundial-team">
-          ${crearEmblemaEquipo(p.visitante, p.codigoVisitante, p.escudoVisitante)}
-          <strong>${p.visitante}</strong>
-        </div>
+      <p class="match-group" title="${escaparHTML(p.grupo)}">${escaparHTML(p.grupo)}</p>
+      <div class="mundial-duelo">${equipo("local", p.local, p.codigoLocal, p.escudoLocal)}
+        <div class="mundial-marcador${/\d/.test(scoreTexto) ? "" : " mundial-marcador--texto"}">
+          <strong>${escaparHTML(scoreTexto)}</strong>
+          ${estadoMarcador}
+        </div>${equipo("visitante", p.visitante, p.codigoVisitante, p.escudoVisitante)}
       </div>
       ${crearDatosPartido(p, fecha, sede)}
     </article>`;
 }
-// Datos del encuentro en una retícula sin huecos: 2 o 3 celdas según haya estadio (la última ocupa el ancho).
+// Datos del encuentro en una sola fila horizontal: 2 o 3 celdas iguales según haya estadio.
 function crearDatosPartido(p, fecha, sede = "") {
   const datos = [
     ["📅", "Fecha", formatearFechaPartidoCliente(fecha)],
