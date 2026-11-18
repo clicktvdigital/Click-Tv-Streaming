@@ -563,5 +563,11 @@ html.pestana-oculta :is(.navidad-nieve span, .navidad-santa, .navidad-santa *, .
   main .clicktv-journey__head h2 { font-size: clamp(1.3rem, 5.8vw, 1.7rem) !important; line-height: 1.2; }
   main .section-head p { font-size: clamp(.9rem, 3.8vw, 1rem); }
   main .section { padding-block: clamp(36px, 10vw, 56px); }
-  /* El margen lateral sigue en 16 px: los bloques a sangre (filtros, categorías) usan margin -16px. */
+  /* Filtros del catálogo a sangre exacta: el contenedor deja 11 px por lado y el margen fijo de -16 px
+     cortaba 5 px de la primera categoría. Con 50% - 50vw llega justo al borde, sea cual sea el margen. */
+  #streaming .filter-tabs {
+    margin-inline: calc(50% - 50vw) !important;
+    padding-inline: calc(50vw - 50%) !important;
+    scroll-padding-inline: calc(50vw - 50%);
+  }
 }
