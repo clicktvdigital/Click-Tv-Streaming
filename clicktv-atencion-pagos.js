@@ -50,6 +50,11 @@
         });
       }
     });
+    // Los datos bancarios ya no están en la portada: el botón abre el carrito con Transferencia elegida.
+    document.getElementById('ctv-ver-datos-pago')?.addEventListener('click', () => {
+      if (typeof abrirCarrito === 'function') abrirCarrito();
+      document.querySelector('#panel-carrito .btn-pago[data-metodo="transferencia"]')?.click();
+    });
     for (const [id,key] of [['ctv-pago-deuna','deunaUrl'],['ctv-pago-payphone','payphoneUrl'],['ctv-pago-paypal','paypalUrl']]) {
       const link=document.getElementById(id);
       if(link){ const url=CONFIG[key];if(typeof url ==='string' && /^https:\/\//i.test(url)) link.href=url; else link.hidden=true; }

@@ -1,0 +1,196 @@
+/* CLICK TV STREAMING · Precios IPTV claros, pagos en el carrito, formulario, combos y mini TV · 18/11/2026
+   Paleta azul oficial, contraste alto, controles de 44 px o más e inputs de 16 px (sin zoom en iOS). */
+
+/* 1. Con Black Days vigente, los precios normales quedan plegados bajo un enlace discreto. */
+.ctv-bd-normales { margin-top: 8px; }
+.ctv-bd-normales > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px dashed rgba(150, 200, 255, .55);
+  color: #cfe6ff;
+  font-size: .86rem;
+  font-weight: 800;
+  touch-action: manipulation;
+}
+.ctv-bd-normales > summary::-webkit-details-marker { display: none; }
+.ctv-bd-normales > summary:focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
+.ctv-bd-normales[open] > summary { margin-bottom: 8px; }
+
+/* 2. Portada sin cuentas bancarias: aviso y acceso directo al carrito. */
+.clicktv-pago-privado {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+  margin: 18px 0;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1.5px solid rgba(96, 165, 250, .55);
+  background: linear-gradient(150deg, #11335e, #0a2142);
+  color: #eaf4ff;
+}
+.clicktv-pago-privado p { margin: 0; line-height: 1.5; }
+
+/* 3. Formulario de contacto: buscador de países, región, prefijo y suscripción. */
+.campo-pais { display: grid; gap: 6px; min-width: 0; }
+.campo-pais__buscador,
+.combo-builder__buscador { position: relative; }
+.campo-pais__buscador > span,
+.combo-builder__buscador > span {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.campo-pais__buscador input,
+.combo-builder__buscador input { width: 100%; padding-left: 38px !important; }
+#form-contacto-internacional :is(input, select, textarea) { font-size: 16px; min-height: 46px; }
+#form-contacto-internacional textarea { min-height: 96px; }
+.tel-con-prefijo { display: flex; align-items: stretch; gap: 0; margin-top: 6px; }
+.tel-con-prefijo__codigo {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 12px 0 0 12px;
+  border: 1.5px solid #3d7fc0;
+  border-right: 0;
+  background: #0b2140;
+  color: #fff;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.tel-con-prefijo input { flex: 1; min-width: 0; border-radius: 0 12px 12px 0 !important; }
+.campo-ayuda { display: block; margin: 4px 0 10px; font-size: .8rem; color: #b9d8ff; }
+.campo-check { display: flex !important; flex-direction: row !important; align-items: flex-start; gap: 10px; margin: 6px 0 10px; cursor: pointer; line-height: 1.4; }
+.campo-check input { width: 22px; height: 22px; min-height: 0 !important; flex: none; margin: 1px 0 0; accent-color: #1689ff; }
+#contacto-ubicacion [hidden] { display: none !important; }
+
+/* 4. Constructor de combos. */
+.combo-builder { display: grid; gap: 12px; margin-top: 14px; }
+.combo-builder__filtros { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 200px); gap: 8px; }
+.combo-builder__filtros :is(input, select) {
+  min-height: 48px;
+  border-radius: 12px;
+  border: 1.5px solid #3d7fc0;
+  background: #0b2140;
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  padding: 0 12px;
+}
+.combo-builder__resultados,
+.combo-builder__lista { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.combo-builder__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(96, 165, 250, .45);
+  background: rgba(29, 95, 191, .16);
+}
+.combo-builder__nombre { font-weight: 800; color: #fff; overflow-wrap: anywhere; }
+.combo-builder__item select {
+  min-width: 0;
+  min-height: 44px;
+  border-radius: 10px;
+  border: 1px solid #3d7fc0;
+  background: #0b2140;
+  color: #fff;
+  font-size: 16px;
+  padding: 0 8px;
+}
+.combo-builder__item .btn { min-height: 44px; white-space: nowrap; }
+.combo-builder__mas, .combo-builder__vacio { padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, .05); color: #cfe6ff; font-size: .88rem; }
+.combo-builder__seleccion { padding: 12px; border-radius: 14px; border: 1.5px solid rgba(127, 208, 255, .55); background: rgba(5, 18, 40, .6); display: grid; gap: 8px; }
+.combo-builder__cabecera { display: flex; justify-content: space-between; align-items: center; color: #fff; }
+.combo-builder__cabecera span { font-size: .84rem; color: #a9d4ff; font-weight: 800; }
+.combo-builder__elegido { display: grid; grid-template-columns: minmax(0, 1fr) auto 44px; align-items: center; gap: 8px; padding: 6px 4px 6px 10px; border-radius: 10px; background: rgba(29, 95, 191, .22); }
+.combo-builder__elegido span { display: grid; min-width: 0; }
+.combo-builder__elegido small { color: #b9d8ff; font-size: .78rem; overflow-wrap: anywhere; }
+.combo-builder__elegido b { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.combo-builder__elegido button { width: 44px; height: 44px; border: 0; border-radius: 10px; background: rgba(255, 255, 255, .08); color: #fff; cursor: pointer; touch-action: manipulation; }
+.combo-builder__elegido button:active { background: rgba(255, 255, 255, .18); }
+@media (max-width: 680px) {
+  .combo-builder__filtros { grid-template-columns: minmax(0, 1fr); }
+  .combo-builder__item { grid-template-columns: minmax(0, 1fr) auto; }
+  .combo-builder__item select { grid-column: 1 / -1; grid-row: 2; }
+  .combo-builder__item .btn { grid-column: 2; grid-row: 1; }
+}
+
+/* 5. Mini reproductor de TV en vivo. */
+.ctv-tv {
+  margin-top: 1rem;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1.5px solid rgba(96, 165, 250, .55);
+  background: linear-gradient(150deg, #0f2d55, #071a33);
+  color: #eaf4ff;
+}
+.ctv-tv__cabecera { display: grid; gap: 4px; margin-bottom: 10px; }
+.ctv-tv__cabecera small { color: #b9d8ff; line-height: 1.4; }
+.ctv-tv__marco { position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #000; }
+.ctv-tv__video { display: block; width: 100%; height: 100%; object-fit: contain; background: #000; }
+.ctv-tv__play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: max-content;
+  height: max-content;
+  min-height: 48px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1.5px solid #7fd0ff;
+  background: rgba(10, 40, 80, .92);
+  color: #fff;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.ctv-tv__play:active { transform: scale(0.97); }
+.ctv-tv__play[hidden] { display: none; }
+.ctv-tv__play:focus-visible, .ctv-tv__mini-barra button:focus-visible { outline: 3px solid #ffe38b; outline-offset: 2px; }
+.ctv-tv__estado { margin: 8px 0 0; font-size: .82rem; color: #b9d8ff; }
+.ctv-tv__mini-barra { display: none; }
+
+/* Ventana pequeña mientras se navega (encima de los accesos y de la barra de Black Days). */
+.ctv-tv--mini .ctv-tv__marco {
+  position: fixed;
+  z-index: 1385;
+  left: max(10px, env(safe-area-inset-left));
+  bottom: calc(var(--ctv-alto-accesos, 92px) + 10px);
+  width: min(48vw, 240px);
+  border: 1.5px solid #7fd0ff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .5);
+}
+body.ctv-bd-barra-visible .ctv-tv--mini .ctv-tv__marco { bottom: calc(var(--ctv-alto-accesos, 92px) + 76px); }
+.ctv-tv--mini .ctv-tv__mini-barra { display: flex; position: absolute; top: 4px; right: 4px; gap: 4px; }
+.ctv-tv--mini .ctv-tv__mini-barra button {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, .65);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+@media (min-width: 921px) {
+  .ctv-tv--mini .ctv-tv__marco { left: 24px; bottom: 24px; width: 320px; }
+}
+body:is(.menu-movil-abierto, .cart-open) .ctv-tv--mini .ctv-tv__marco { visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ctv-tv__play { transition: none; }
+}
