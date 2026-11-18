@@ -173,7 +173,7 @@
   body.ctv-bd-barra-visible #ctv-asistente-btn { bottom: calc(var(--ctv-alto-accesos, 92px) + 72px); }
   body.ctv-bd-barra-visible .ctv-asistente { bottom: calc(var(--ctv-alto-accesos, 92px) + 130px); }
   /* No compite con el menú ni con el carrito abiertos. */
-  body:is(.menu-movil-abierto, .cart-open) .ctv-bd-barra { display: none !important; }
+  body:is(.menu-movil-abierto, .cart-open, .ctv-bd-selector-visible) .ctv-bd-barra { display: none !important; }
 }
 @media (max-width: 360px) {
   .ctv-bd-barra__texto small { display: none; }

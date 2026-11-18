@@ -18,7 +18,7 @@ test('la barra viene oculta en el HTML y solo la muestra el JS de la promo vigen
 test('la barra es solo para celular y no tapa menú, carrito ni asistente', () => {
   const css = leer('clicktv-promo-black-days.css');
   assert.match(css, /\.ctv-bd-barra \{ display: none; \}\n@media \(max-width: 680px\)/);
-  assert.match(css, /body:is\(\.menu-movil-abierto, \.cart-open\) \.ctv-bd-barra \{ display: none !important; \}/);
+  assert.match(css, /body:is\(\.menu-movil-abierto, \.cart-open, \.ctv-bd-selector-visible\) \.ctv-bd-barra \{ display: none !important; \}/);
   assert.match(css, /body\.ctv-bd-barra-visible #ctv-asistente-btn/);
   assert.match(css, /\.ctv-bd-barra__cerrar \{[^}]*width: 44px;[^}]*min-height: 44px;/);
 });
