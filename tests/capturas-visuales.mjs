@@ -102,6 +102,23 @@ for (const [nombre, vista] of [['android-360', { width: 360, height: 780 }], ['e
     await pagina.evaluate(() => window.scrollBy(0, 300));
     await pagina.waitForTimeout(700);
     await pagina.screenshot({ path: join(SALIDA, `${nombre}-17-flotantes.png`) });
+    // Geometría de la ventana mini y de cualquier ancestro que pueda atrapar position: fixed.
+    informe[`${nombre}-mini`] = await pagina.evaluate(() => {
+      const tarjeta = document.getElementById('ctv-tv-prueba');
+      const ventana = tarjeta?.querySelector('.ctv-tv__ventana');
+      if (!ventana) return null;
+      const r = ventana.getBoundingClientRect();
+      const cs = getComputedStyle(ventana);
+      const props = ['transform', 'translate', 'scale', 'rotate', 'filter', 'backdrop-filter', 'perspective', 'contain', 'container-type', 'content-visibility', 'will-change'];
+      const ancestros = [];
+      for (let el = ventana.parentElement; el; el = el.parentElement) {
+        const c = getComputedStyle(el);
+        const atrapa = props.filter((p) => { const v = c.getPropertyValue(p).trim(); return v && !['none', 'auto', 'normal', 'visible', ''].includes(v); })
+          .map((p) => `${p}: ${c.getPropertyValue(p).trim()}`);
+        if (atrapa.length) ancestros.push(`${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}.${[...el.classList].join('.')} → ${atrapa.join('; ')}`);
+      }
+      return { clases: tarjeta.className, caja: [r.left, r.top, r.width, r.height].map(Math.round), position: cs.position, top: cs.top, bottom: cs.bottom, height: cs.height, ancestros, viewport: [innerWidth, innerHeight] };
+    });
   }
 
   // Carrito abierto con un producto.

@@ -579,3 +579,77 @@
 #panel-carrito:has(.carrito-vacio) :is(.cupon-box, .cart-summary, .cart-contact-options) { display: none !important; }
 #panel-carrito:has(.carrito-vacio) .cart-actions > :not(#btn-continuar-comprando) { display: none !important; }
 
+
+/* ---------------------------------------------------------------- 8. Flotantes más ligeros (mini reproductor, ✕, WhatsApp, Black Days)
+   Antes, a 360 px, la ventana del player + barra Black Days + accesos tapaban ~45 % de la pantalla y el CTA del
+   mini se partía en 4 líneas. Se reducen alturas, fuentes y sombras; los toques siguen ≥ 44 px donde son
+   acción principal y ≥ 32 px en los iconos secundarios del mini (WCAG 2.5.8 pide 24 px). */
+
+/* Player en su sección: CTA y botones de icono un escalón más bajos, brillo Pro más contenido. */
+.ctv-tv__barra { gap: 6px; padding: 6px; }
+.ctv-tv__cta { min-height: 44px; padding: 6px 12px; font-size: .88rem; border-radius: 11px; }
+.ctv-tv__icono { width: 44px; border-radius: 11px; font-size: 15px; }
+.ctv-tv__compartir { min-width: 44px; font-size: .82rem; }
+.ctv-tv__compartir svg { width: 18px; height: 18px; }
+@media (max-width: 480px) { .ctv-tv__compartir { width: 44px; } }
+.ctv-tv--promo-bd .ctv-tv__cta,
+.ctv-bd-barra .ctv-bd-barra__boton { box-shadow: inset 0 1px 0 rgba(255, 215, 122, .24), 0 3px 10px rgba(214, 28, 52, .3); }
+
+/* Ventana flotante: más estrecha, una sola fila de 32-36 px y CTA corto en una línea.
+   El nombre accesible del CTA no cambia (el texto largo sigue en el botón); el corto es solo visual. */
+.ctv-tv--mini .ctv-tv__ventana { width: min(60vw, 230px); border-width: 1px; box-shadow: 0 8px 20px rgba(0, 0, 0, .45); }
+.ctv-tv--mini .ctv-tv__barra { padding: 4px; gap: 4px; }
+.ctv-tv--mini .ctv-tv__cta {
+  min-height: 32px;
+  padding: 0 6px;
+  font-size: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 8px;
+}
+.ctv-tv--mini .ctv-tv__cta::after { content: "🔥 Activa tu IPTV"; content: "🔥 Activa tu IPTV" / ""; font-size: .7rem; }
+.ctv-tv--mini :is(.ctv-tv__icono, .ctv-tv__compartir) { width: 32px; min-width: 32px; min-height: 32px; border-radius: 8px; font-size: 13px; }
+.ctv-tv--mini .ctv-tv__compartir svg { width: 16px; height: 16px; }
+@media (max-width: 680px) {
+  body.ctv-bd-barra-visible .ctv-tv--mini .ctv-tv__ventana { bottom: calc(var(--ctv-alto-accesos, 92px) + 62px); }
+}
+@media (min-width: 921px) {
+  .ctv-tv--mini .ctv-tv__ventana { width: 300px; }
+  .ctv-tv--mini .ctv-tv__cta::after { font-size: .78rem; }
+  .ctv-tv--mini :is(.ctv-tv__icono, .ctv-tv__compartir) { width: 36px; min-width: 36px; min-height: 36px; }
+}
+
+/* Barra Black Days del celular: una fila de 44 px (antes 60), botón dorado más discreto y ✕ sin bloque gris. */
+@media (max-width: 680px) {
+  .ctv-bd-barra:not([hidden]) { padding: 4px; gap: 4px; border-radius: 14px; border-width: 1px; box-shadow: 0 6px 18px rgba(0, 0, 0, .4); }
+  .ctv-bd-barra__cta { min-height: 44px; gap: 6px; padding: 2px 2px 2px 8px; border-radius: 10px; }
+  .ctv-bd-barra__texto strong { font-size: .84rem; }
+  .ctv-bd-barra__texto small { font-size: .7rem; }
+  .ctv-bd-barra__boton { min-height: 36px; padding: 0 10px; border-radius: 9px; font-size: .78rem; }
+  .ctv-bd-barra__cerrar { background: transparent; font-size: 14px; color: rgba(255, 255, 255, .82); }
+  .ctv-bd-barra__cerrar:active { background: rgba(255, 255, 255, .14); }
+  body.ctv-bd-barra-visible { padding-bottom: calc(var(--ctv-alto-accesos, 92px) + 60px) !important; }
+  body.ctv-bd-barra-visible #ctv-asistente-btn { bottom: calc(var(--ctv-alto-accesos, 92px) + 60px); }
+  body.ctv-bd-barra-visible .ctv-asistente { bottom: calc(var(--ctv-alto-accesos, 92px) + 118px); }
+}
+
+/* Botón del aviso Black Days: mismo peso que el resto de CTA (antes ~70 px y 2 líneas grandes). */
+.ctv-bd-aviso a.btn[data-bd-ver-iptv] { min-height: 48px; padding: 10px 16px; font-size: .95rem; line-height: 1.25; }
+
+/* Barra de accesos del celular (Inicio, WhatsApp, Grupo…): 50 px de alto en vez de 58, iconos 28 px. */
+@media (max-width: 680px) {
+  body .floating-actions { padding: 4px 8px !important; gap: 2px !important; border-radius: 16px !important; }
+  body .floating-actions .float-btn { height: 50px !important; gap: 2px !important; }
+  body .floating-actions .float-btn__icon { width: 28px !important; height: 28px !important; border-radius: 9px !important; }
+  body .floating-actions .float-btn__icon svg,
+  body .floating-actions .float-btn svg { width: 20px !important; height: 20px !important; }
+}
+/* Escritorio: la columna de accesos ocupaba casi todo el alto; botones de 46 px. */
+@media (min-width: 921px) {
+  .floating-actions { gap: 6px; padding: 6px; }
+  .float-btn { width: 46px; height: 46px; border-radius: 15px; }
+  .float-btn__icon { width: 32px; height: 32px; }
+  .float-btn__icon svg, .float-btn svg { width: 21px; height: 21px; }
+}
+@media (prefers-reduced-motion: reduce) { .ctv-tv--mini .ctv-tv__cta { transition: none; } }
