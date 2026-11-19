@@ -614,6 +614,8 @@
 @media (max-width: 680px) {
   body.ctv-bd-barra-visible .ctv-tv--mini .ctv-tv__ventana { bottom: calc(var(--ctv-alto-accesos, 92px) + 62px); }
 }
+/* 721-920 px: los accesos son una columna lateral; la ventana no se apoya en su altura. */
+@media (min-width: 721px) and (max-width: 920px) { .ctv-tv--mini .ctv-tv__ventana { bottom: 16px; } }
 @media (min-width: 921px) {
   .ctv-tv--mini .ctv-tv__ventana { width: 300px; }
   .ctv-tv--mini .ctv-tv__cta::after { font-size: .78rem; }

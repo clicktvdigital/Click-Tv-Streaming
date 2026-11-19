@@ -242,7 +242,8 @@
   border: 1.5px solid #7fd0ff;
   box-shadow: 0 12px 30px rgba(0, 0, 0, .5);
 }
-body.ctv-bd-barra-visible .ctv-tv--mini .ctv-tv__ventana { bottom: calc(var(--ctv-alto-accesos, 92px) + 76px); }
+/* La barra Black Days solo existe en celular: fuera de ahí --ctv-alto-accesos mide la columna lateral de accesos. */
+@media (max-width: 680px) { body.ctv-bd-barra-visible .ctv-tv--mini .ctv-tv__ventana { bottom: calc(var(--ctv-alto-accesos, 92px) + 76px); } }
 .ctv-tv--mini .ctv-tv__barra { padding: 4px; gap: 4px; }
 .ctv-tv--mini .ctv-tv__cta { min-height: 36px; padding: 4px 8px; font-size: .72rem; border-radius: 9px; }
 .ctv-tv--mini .ctv-tv__icono { width: 36px; border-radius: 9px; font-size: 14px; }

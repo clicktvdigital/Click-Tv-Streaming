@@ -636,3 +636,20 @@ test('Android 360 px: etiquetas y botones del catálogo dentro de su tarjeta; ca
   assert.deepEqual(errores, []);
   await pagina.context().close();
 });
+
+test('Click TV Player en escritorio con Black Days: la ventana flotante queda abajo y dentro de la pantalla', async () => {
+  const { pagina, errores } = await abrirPagina({ width: 1280, height: 800 }, { fecha: new Date('2026-11-17T15:00:00Z') });
+  await pagina.locator('#ctv-tv-prueba').scrollIntoViewIfNeeded();
+  await pagina.waitForFunction(() => !document.getElementById('ctv-tv-promo').paused, null, { timeout: 8000 });
+  await pagina.evaluate(() => window.scrollTo(0, 0));
+  await pagina.waitForFunction(() => document.getElementById('ctv-tv-prueba').classList.contains('ctv-tv--mini'));
+  const r = await pagina.evaluate(() => {
+    const c = document.querySelector('.ctv-tv__ventana').getBoundingClientRect();
+    return { izquierda: Math.round(c.left), arriba: Math.round(c.top), abajo: Math.round(innerHeight - c.bottom), ancho: Math.round(c.width) };
+  });
+  assert.ok(r.arriba >= 0, `la ventana no se sale por arriba (${JSON.stringify(r)})`);
+  assert.ok(r.abajo >= 0 && r.abajo <= 40, `apoyada abajo (${JSON.stringify(r)})`);
+  assert.ok(r.ancho <= 320, `ventana discreta (${r.ancho}px)`);
+  assert.deepEqual(errores, []);
+  await pagina.context().close();
+});
