@@ -84,6 +84,26 @@ for (const [nombre, vista] of [['android-360', { width: 360, height: 780 }], ['e
     await el.screenshot({ path: join(SALIDA, `${nombre}-${archivo}.png`), animations: 'disabled' }).catch((e) => console.warn(archivo, e.message));
   }
 
+  // Flotantes en pantalla real: mini reproductor (con su ✕), barra de accesos con WhatsApp y barra Black Days.
+  // Chromium de CI no reproduce el H.264 del promo: se marca el video como «en curso» y el propio JS del
+  // player arma la ventana mini al salir de la sección (igual que en un celular).
+  await pagina.evaluate(() => {
+    const video = document.getElementById('ctv-tv-promo');
+    if (!video) return;
+    Object.defineProperty(video, 'paused', { get: () => false, configurable: true });
+    video.setAttribute('src', 'about:blank');
+    video.play = () => Promise.resolve();
+  });
+  const player = pagina.locator('#ctv-tv-prueba');
+  if (await player.count()) {
+    await player.scrollIntoViewIfNeeded();
+    await pagina.waitForTimeout(400);
+    await pagina.locator('#streaming').first().scrollIntoViewIfNeeded();
+    await pagina.evaluate(() => window.scrollBy(0, 300));
+    await pagina.waitForTimeout(700);
+    await pagina.screenshot({ path: join(SALIDA, `${nombre}-17-flotantes.png`) });
+  }
+
   // Carrito abierto con un producto.
   await pagina.evaluate(() => window.scrollTo(0, 0));
   const agregar = pagina.locator('#catalogo-grid [data-producto] button:has-text("Añadir")').first();
