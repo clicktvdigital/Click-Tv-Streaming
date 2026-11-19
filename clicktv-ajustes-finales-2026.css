@@ -597,11 +597,11 @@
 
 /* Ventana flotante: más estrecha, una sola fila de 32-36 px y CTA corto en una línea.
    El nombre accesible del CTA no cambia (el texto largo sigue en el botón); el corto es solo visual. */
-.ctv-tv--mini .ctv-tv__ventana { width: min(60vw, 230px); border-width: 1px; box-shadow: 0 8px 20px rgba(0, 0, 0, .45); }
+.ctv-tv--mini .ctv-tv__ventana { width: min(66vw, 240px); border-width: 1px; box-shadow: 0 8px 20px rgba(0, 0, 0, .45); }
 .ctv-tv--mini .ctv-tv__barra { padding: 4px; gap: 4px; }
 .ctv-tv--mini .ctv-tv__cta {
   min-height: 32px;
-  padding: 0 6px;
+  padding: 0 5px;
   font-size: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -611,6 +611,7 @@
 .ctv-tv--mini .ctv-tv__cta::after { content: "🔥 Activa tu IPTV"; content: "🔥 Activa tu IPTV" / ""; font-size: .7rem; }
 .ctv-tv--mini :is(.ctv-tv__icono, .ctv-tv__compartir) { width: 32px; min-width: 32px; min-height: 32px; border-radius: 8px; font-size: 13px; }
 .ctv-tv--mini .ctv-tv__compartir svg { width: 16px; height: 16px; }
+.ctv-tv--mini .ctv-tv__escuchar { height: 26px; padding: 0 8px; font-size: .66rem; }
 @media (max-width: 680px) {
   body.ctv-bd-barra-visible .ctv-tv--mini .ctv-tv__ventana { bottom: calc(var(--ctv-alto-accesos, 92px) + 62px); }
 }
@@ -622,14 +623,14 @@
   .ctv-tv--mini :is(.ctv-tv__icono, .ctv-tv__compartir) { width: 36px; min-width: 36px; min-height: 36px; }
 }
 
-/* Barra Black Days del celular: una fila de 44 px (antes 60), botón dorado más discreto y ✕ sin bloque gris. */
+/* Barra Black Days del celular: una fila de 44 px (antes 60), botón dorado más discreto y ✕ sin bloque gris (toque de 40×44 px). */
 @media (max-width: 680px) {
   .ctv-bd-barra:not([hidden]) { padding: 4px; gap: 4px; border-radius: 14px; border-width: 1px; box-shadow: 0 6px 18px rgba(0, 0, 0, .4); }
   .ctv-bd-barra__cta { min-height: 44px; gap: 6px; padding: 2px 2px 2px 8px; border-radius: 10px; }
-  .ctv-bd-barra__texto strong { font-size: .84rem; }
+  .ctv-bd-barra__texto strong { font-size: .8rem; }
   .ctv-bd-barra__texto small { font-size: .7rem; }
-  .ctv-bd-barra__boton { min-height: 36px; padding: 0 10px; border-radius: 9px; font-size: .78rem; }
-  .ctv-bd-barra__cerrar { background: transparent; font-size: 14px; color: rgba(255, 255, 255, .82); }
+  .ctv-bd-barra__boton { min-height: 36px; padding: 0 8px; border-radius: 9px; font-size: .74rem; }
+  .ctv-bd-barra__cerrar { width: 40px; background: transparent; font-size: 14px; color: rgba(255, 255, 255, .82); }
   .ctv-bd-barra__cerrar:active { background: rgba(255, 255, 255, .14); }
   body.ctv-bd-barra-visible { padding-bottom: calc(var(--ctv-alto-accesos, 92px) + 60px) !important; }
   body.ctv-bd-barra-visible #ctv-asistente-btn { bottom: calc(var(--ctv-alto-accesos, 92px) + 60px); }
